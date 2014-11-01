@@ -8,6 +8,7 @@
 
 #include "testLcd.c"
 #include "testRGB.c"
+#include "EAvoice.c"
 
 #include "i2c.h"
 #include "key.h"
@@ -36,6 +37,7 @@ static tU8 pid_rest;
 
 static void WyswietlNaLCD128x128(int nrTekstu);
 static void WyswietlTekstNaLCD128x128(char *s, BOOL czyZgasic);
+static void OdrwarzajDzwiek();
 
 /*
  * 0 - ok
@@ -109,8 +111,11 @@ static void ProcLCD2x16(void* arg) {
 
 static void ProcRest(void *arg) {
 
-	WyswietlNaLCD128x128(0);
 	int tekst = 0;
+	StatusOdtwarzania *status;
+	status = ZATRZYMAJ;
+
+	WyswietlNaLCD128x128(0);
 	//ZapalajDiode(kolorDiody, 0);
 
 	while (1 /*TODO: jeœli coœ nie dzia³a to przerwaæ*/) {
@@ -132,12 +137,15 @@ static void ProcRest(void *arg) {
 				if (tekst == 2) {
 					tekst = 4; // mo¿na wczytaæ kartê
 				} else if (tekst == 0) {
-					tekst = 5; // mo¿na odtworzyæ d¿wiê
+					tekst = 5; // mo¿na odtworzyæ d¿wiêk
+				} else if (tekst == 1) {
+					tekst == 6;
 				}
 				break;
 			}
 		} else {
 			if (tekst == 4 && wynikInicjalizacjiSd != FR_OK) {
+				tekst = 3;
 				wynikInicjalizacjiSd = pf_mount(&fatfs);
 
 				if (wynikInicjalizacjiSd == FR_OK) {
@@ -147,9 +155,8 @@ static void ProcRest(void *arg) {
 					kolorDiody = 1;
 				}
 
-				rc = listDir("/", TRUE); //poka¿ dok³adn¹ zawartoœæ karty
+				rc = listDir("/", TRUE); // poka¿ dok³adn¹ zawartoœæ karty
 				if (rc) {
-					tekst = 3;
 
 					lcdInit();
 					osSleep(100);
@@ -159,18 +166,69 @@ static void ProcRest(void *arg) {
 					lcdInit();
 					WyswietlNaLCD128x128(3);
 				}
-
+			} else if (tekst == 4) {
+				tekst = 3;
+				if (rc) {
+					WyswietlTekstNaLCD128x128(rc, FALSE);
+				} else {
+					WyswietlNaLCD128x128(3);
+				}
 			} else if (tekst == 5) {
-				// TODO: dŸwiêk
+				tekst = 0;
+				if (status == ZATRZYMAJ) {
+					status = GRAJ;
+					OdrwarzajDzwiek(&status);
+				}
+			} else if (tekst == 6) {
+				tekst = 1;
+				if (status == GRAJ) {
+					status = ZATRZYMAJ;
+				}
 			}
 			ZapalajDiode(kolorDiody, 0);
 		}
 	}
 }
 
+static void OdrwarzajDzwiek(StatusOdtwarzania *status) {
+	tU32 cnt = 0;
+	tU32 i;
+
+	IODIR |= 0x00000380;
+	IOCLR = 0x00000380;
+
+	//
+	//Initialize DAC: AOUT = P0.25
+	//
+	PINSEL1 &= ~0x000C0000;
+	PINSEL1 |= 0x00080000;
+
+	cnt = 0;
+	while (cnt++ < 0xF890 && status == GRAJ) {
+		tS32 val;
+
+		val = EAvoice[cnt] - 128;
+		val = val * 2;
+		if (val > 127) {
+			val = 127;
+		} else if (val < -127) {
+			val = -127;
+		}
+
+		DACR = ((val + 128) << 8) | // actual value to output
+				(1 << 16); // BIAS = 1, 2.5uS settling time
+
+		// delay 125 us = 850 for 8kHz, 600 for 11 kHz
+		for (i = 0; i < 850; i++) {
+			asm volatile (" nop");
+		}
+	}
+
+}
+
 static void WyswietlTekstNaLCD128x128(char *s, BOOL czyZgasic) {
 	lcdInit();
-	lcdColor(0x00, 0xf0);
+	lcdColor(0xff, 0x00);
 	lcdClrscr();
 	lcdGotoxy(0, 30);
 	lcdPuts(s);
@@ -188,21 +246,21 @@ static void WyswietlTekstNaLCD128x128(char *s, BOOL czyZgasic) {
  */
 static void WyswietlNaLCD128x128(int nrTekstu) {
 	lcdInit();
-	lcdColor(0x00, 0xf0);
+	lcdColor(0x00, 0xff);
 	lcdClrscr();
 
 	switch (nrTekstu) {
 	case 0:
 		lcdGotoxy(0, 30);
-		lcdPuts("Graj..");
+		lcdPuts("Testuj dŸwiêk");
 		break;
 	case 1:
 		lcdGotoxy(0, 30);
-		lcdPuts("Zatrzymaj..");
+		lcdPuts("Zatrzymaj dŸwiêk");
 		break;
 	case 2:
 		lcdGotoxy(0, 30);
-		lcdPuts("Wczytaj dane z karty..");
+		lcdPuts("Poka¿ pliki..");
 		lcdGotoxy(0, 70);
 		lcdPuts("zielona lampka - wczytano");
 		lcdGotoxy(0, 90);
