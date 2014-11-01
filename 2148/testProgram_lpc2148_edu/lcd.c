@@ -166,7 +166,7 @@ void lcdOff (void)
 /*****************************************************************************
  *
  * Description:
- *    Set current foreground and background color
+ *    Ustawienie koloró: t³a i tekstu, np. 0xff, 0x00 - czarny tekst na bia³ym tle
  *
  ****************************************************************************/
 void lcdColor (uint8 bkg, uint8 text)
