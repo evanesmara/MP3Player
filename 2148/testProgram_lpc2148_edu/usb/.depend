@@ -1,0 +1,4 @@
+LPC_USB.o: LPC_USB.c ../../startup/lpc2xxx.h ../../startup/printf_P.h \
+  ../../startup/config.h ../../startup/consol.h lpc_usb.h
+LPC_HID.o: LPC_HID.c ../../startup/lpc2xxx.h ../../startup/printf_P.h \
+  ../../startup/config.h ../../startup/consol.h lpc_hid.h lpc_usb.h

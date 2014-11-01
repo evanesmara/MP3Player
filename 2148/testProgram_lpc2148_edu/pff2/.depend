@@ -1,0 +1,8 @@
+diskio.o: src/diskio.c src/diskio.h src/integer.h src/spi.h \
+  src/../../../startup/lpc2xxx.h src/sd.h src/../../../startup/printf_P.h \
+  src/../../../startup/config.h src/../../../startup/consol.h
+pff.o: src/pff.c src/pff.h src/integer.h src/diskio.h
+sd.o: src/sd.c src/sd.h src/integer.h src/spi.h \
+  src/../../../startup/lpc2xxx.h
+spi.o: src/spi.c src/spi.h src/integer.h src/../../../startup/lpc2xxx.h \
+  src/../../../pre_emptive_os/api/general.h

@@ -1,0 +1,39 @@
+ARM GAS  /cygdrive/c/DOCUME~1/ANDERS~1/LOKALA~1/Temp/ccarNFNJ.s 			page 1
+
+
+   1              	# 1 "core/a7hal_a.S"
+   2              	# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2
+   1              	
+   1              	...
+   0              	
+   0              	
+   2              	   .file        "a7hal_a.S"
+   0              	
+ARM GAS  /cygdrive/c/DOCUME~1/ANDERS~1/LOKALA~1/Temp/ccarNFNJ.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 a7hal_a.S
+                            *ABS*:00000000 core/a7hal_a.S
+                            *ABS*:00000000 <command line>
+                            *ABS*:00000000 <built-in>
+                            *ABS*:00000000 /cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os/core/_oshal//
+                            *ABS*:00000000 core/a7hal_a.S
+           a7hal_a.S:6      .text:00000000 $a
+           a7hal_a.S:24     .text:00000000 addr_pRunProc
+           a7hal_a.S:25     .text:00000000 $d
+           a7hal_a.S:28     .text:00000004 addr_pNxtToRun
+           a7hal_a.S:32     .text:00000008 addr_isrNesting
+           a7hal_a.S:52     .text:0000000c startHighProc_oshal
+           a7hal_a.S:56     .text:0000000c $a
+           a7hal_a.S:98     .text:00000034 ctxSwitchIsr_oshal
+           a7hal_a.S:81     .text:00000014 ctxSwitch_oshal
+           a7hal_a.S:131    .text:00000054 generalIRQ_oshal
+           a7hal_a.S:175    .text:000000a8 generalIRQ_cont_oshal
+
+UNDEFINED SYMBOLS
+pRunProc
+pNxtToRun
+isrNesting
+handleIRQs_oshal
+osISRExit

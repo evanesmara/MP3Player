@@ -1,0 +1,6 @@
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os/core/_oshal//"
+a7hal.o: core/a7hal.c ./../../../startup/LPC2xxx.H core/../api/general.h \
+  core/../../../api/osapi.h core/../../../api/../api/general.h \
+  ./../../../startup/framework.h ./../../../startup/config.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os/core/_oshal//"
+a7hal_a.o: core/a7hal_a.S

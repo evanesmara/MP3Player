@@ -1,0 +1,4003 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"main.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 98010000 		.text
+   9      02008000 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.align	2
+  12              		.code 16
+  13              		.thumb_func
+  14              		.type	delay37us, %function
+  15              	delay37us:
+  16              	.LFB3:
+  17              		.file 1 "testLcd.c"
+   1:testLcd.c     **** /******************************************************************************
+   2:testLcd.c     ****  *
+   3:testLcd.c     ****  * Copyright:
+   4:testLcd.c     ****  *    (C) 2000 - 2005 Embedded Artists AB
+   5:testLcd.c     ****  *
+   6:testLcd.c     ****  *****************************************************************************/
+   7:testLcd.c     **** 
+   8:testLcd.c     **** #include "../pre_emptive_os/api/osapi.h"
+   9:testLcd.c     **** #include "../pre_emptive_os/api/general.h"
+  10:testLcd.c     **** #include <printf_P.h>
+  11:testLcd.c     **** #include <lpc2xxx.h>
+  12:testLcd.c     **** #include <consol.h>
+  13:testLcd.c     **** 
+  14:testLcd.c     **** #define LCD_DATA      0x00ff0000  //P1.16-P1.23
+  15:testLcd.c     **** #define LCD_E         0x02000000  //P1.25
+  16:testLcd.c     **** #define LCD_RW        0x00400000  //P0.22
+  17:testLcd.c     **** #define LCD_RS        0x01000000  //P1.24
+  18:testLcd.c     **** #define LCD_BACKLIGHT 0x40000000  //P0.30
+  19:testLcd.c     **** 
+  20:testLcd.c     **** static void initLCD (void)
+  21:testLcd.c     **** {
+  22:testLcd.c     **** 	IODIR1 |= (LCD_DATA | LCD_E | LCD_RS);
+  23:testLcd.c     **** 	IOCLR1 = (LCD_DATA | LCD_E | LCD_RS);
+  24:testLcd.c     **** 
+  25:testLcd.c     **** 	IODIR0 |= LCD_RW;
+  26:testLcd.c     **** 	IOCLR0 = LCD_RW;
+  27:testLcd.c     **** 
+  28:testLcd.c     **** 	IODIR0 |= LCD_BACKLIGHT;
+  29:testLcd.c     **** 	IOCLR0 = LCD_BACKLIGHT;
+  30:testLcd.c     **** }
+  31:testLcd.c     **** 
+  32:testLcd.c     **** /*
+  33:testLcd.c     ****  * Wywo³anie przerwania opóŸniaj¹cego na oko³o 37 mikrosekund.
+  34:testLcd.c     ****  * nop - No Operation
+  35:testLcd.c     ****  */
+  36:testLcd.c     **** static void delay37us (void)
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 2
+
+
+  37:testLcd.c     **** {
+  18              		.loc 1 37 0
+  19 0000 81B0     		sub	sp, sp, #4
+  20              	.LCFI0:
+  38:testLcd.c     **** 	volatile tU32 i;
+  39:testLcd.c     **** 
+  40:testLcd.c     **** 	for (i = 0; i < 15 * 2500; ++i)
+  21              		.loc 1 40 0
+  22 0002 0023     		mov	r3, #0
+  23              		.loc 1 37 0
+  24              		@ lr needed for prologue
+  25 0004 02E0     		b	.L6
+  26              	.LVL0:
+  27              	.L3:
+  41:testLcd.c     **** 	{
+  42:testLcd.c     **** 		asm volatile (" nop");
+  28              		.loc 1 42 0
+  29 0006 C046     		 nop
+  30              		.loc 1 40 0
+  31              		.code	16
+  32 0008 009B     		ldr	r3, [sp]
+  33 000a 0133     		add	r3, r3, #1
+  34              	.L6:
+  35 000c 0093     		str	r3, [sp]
+  36 000e 009A     		ldr	r2, [sp]
+  37 0010 024B     		ldr	r3, .L7
+  38 0012 9A42     		cmp	r2, r3
+  39 0014 F7D9     		bls	.L3
+  43:testLcd.c     **** 		//delay 15 ns x 2500 = about 37,5 us delay
+  44:testLcd.c     **** 	}
+  45:testLcd.c     **** }
+  40              		.loc 1 45 0
+  41 0016 01B0     		add	sp, sp, #4
+  42              		@ sp needed for prologue
+  43 0018 7047     		bx	lr
+  44              	.L8:
+  45 001a 0000     		.align	2
+  46              	.L7:
+  47 001c 7B920000 		.word	37499
+  48              	.LFE3:
+  49              		.size	delay37us, .-delay37us
+  50              		.align	2
+  51              		.code 16
+  52              		.thumb_func
+  53              		.type	WypiszZnakNaEkran, %function
+  54              	WypiszZnakNaEkran:
+  55              	.LFB5:
+  46:testLcd.c     **** 
+  47:testLcd.c     **** /*
+  48:testLcd.c     ****  * W³¹cza (TRUE) lub wy³¹cza (FALSE) podœwielenie ekranu.
+  49:testLcd.c     ****  */
+  50:testLcd.c     **** static void PodswietlEkran (tU8 onOff)
+  51:testLcd.c     **** {
+  52:testLcd.c     **** 	if (onOff == TRUE)
+  53:testLcd.c     **** 	{
+  54:testLcd.c     **** 		IOSET0 = LCD_BACKLIGHT;
+  55:testLcd.c     **** 	} else
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 3
+
+
+  56:testLcd.c     **** 	{
+  57:testLcd.c     **** 		IOCLR0 = LCD_BACKLIGHT;
+  58:testLcd.c     **** 	}
+  59:testLcd.c     **** }
+  60:testLcd.c     **** 
+  61:testLcd.c     **** /*
+  62:testLcd.c     ****  * Zainicjownie poprzez rejestry kerunek pinów jako wyjœcia (dla wypisania tekstu)
+  63:testLcd.c     ****  */
+  64:testLcd.c     **** static void WypiszZnakNaEkran (tU8 reg, tU8 data)
+  65:testLcd.c     **** {
+  56              		.loc 1 65 0
+  57              	.LVL1:
+  58 0020 0906     		lsl	r1, r1, #24
+  59              	.LVL2:
+  60 0022 0006     		lsl	r0, r0, #24
+  61              	.LVL3:
+  62 0024 81B0     		sub	sp, sp, #4
+  63              	.LCFI1:
+  64              		@ lr needed for prologue
+  65              		.loc 1 65 0
+  66 0026 090E     		lsr	r1, r1, #24
+  67              	.LVL4:
+  66:testLcd.c     **** 	volatile tU8 i;
+  67:testLcd.c     **** 
+  68:testLcd.c     **** 	if (reg == 0)
+  68              		.loc 1 68 0
+  69 0028 0028     		cmp	r0, #0
+  70 002a 03D1     		bne	.L10
+  69:testLcd.c     **** 	{
+  70:testLcd.c     **** 		IOCLR1 = LCD_RS;
+  71              		.loc 1 70 0
+  72 002c 8023     		mov	r3, #128
+  73 002e 1D4A     		ldr	r2, .L21
+  74 0030 5B04     		lsl	r3, r3, #17
+  75 0032 02E0     		b	.L20
+  76              	.L10:
+  71:testLcd.c     **** 	} else
+  72:testLcd.c     **** 	{
+  73:testLcd.c     **** 		IOSET1 = LCD_RS;
+  77              		.loc 1 73 0
+  78 0034 8023     		mov	r3, #128
+  79 0036 1C4A     		ldr	r2, .L21+4
+  80 0038 5B04     		lsl	r3, r3, #17
+  81              	.L20:
+  82 003a 1360     		str	r3, [r2]
+  74:testLcd.c     **** 	}
+  75:testLcd.c     **** 
+  76:testLcd.c     **** 	IOCLR0 = LCD_RW;
+  83              		.loc 1 76 0
+  84 003c 1B4A     		ldr	r2, .L21+8
+  85 003e 8023     		mov	r3, #128
+  86 0040 DB03     		lsl	r3, r3, #15
+  87 0042 1360     		str	r3, [r2]
+  77:testLcd.c     **** 	IOCLR1 = LCD_DATA;
+  88              		.loc 1 77 0
+  89 0044 174B     		ldr	r3, .L21
+  90 0046 FF22     		mov	r2, #255
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 4
+
+
+  91 0048 1204     		lsl	r2, r2, #16
+  92 004a 1A60     		str	r2, [r3]
+  78:testLcd.c     **** 	IOSET1 = ((tU32) data << 16) & LCD_DATA;
+  93              		.loc 1 78 0
+  94 004c 0B04     		lsl	r3, r1, #16
+  95 004e 1340     		and	r3, r3, r2
+  96 0050 154A     		ldr	r2, .L21+4
+  97 0052 1360     		str	r3, [r2]
+  79:testLcd.c     **** 	IOSET1 = LCD_E;
+  98              		.loc 1 79 0
+  99 0054 8023     		mov	r3, #128
+ 100 0056 9B04     		lsl	r3, r3, #18
+ 101 0058 1360     		str	r3, [r2]
+  80:testLcd.c     **** 
+  81:testLcd.c     **** 	for (i = 0; i < 16; ++i)
+ 102              		.loc 1 81 0
+ 103 005a 6B46     		mov	r3, sp
+ 104 005c 0022     		mov	r2, #0
+ 105 005e 0333     		add	r3, r3, #3
+ 106 0060 1A70     		strb	r2, [r3]
+ 107              	.LVL5:
+ 108 0062 05E0     		b	.L13
+ 109              	.LVL6:
+ 110              	.L14:
+  82:testLcd.c     **** 	{
+  83:testLcd.c     **** 		asm volatile (" nop");
+ 111              		.loc 1 83 0
+ 112 0064 C046     		 nop
+ 113              		.loc 1 81 0
+ 114              		.code	16
+ 115 0066 0B78     		ldrb	r3, [r1]
+ 116 0068 0133     		add	r3, r3, #1
+ 117              	.LVL7:
+ 118 006a 1B06     		lsl	r3, r3, #24
+ 119 006c 1B0E     		lsr	r3, r3, #24
+ 120 006e 0B70     		strb	r3, [r1]
+ 121              	.LVL8:
+ 122              	.L13:
+ 123 0070 6946     		mov	r1, sp
+ 124              	.LVL9:
+ 125 0072 0331     		add	r1, r1, #3
+ 126 0074 0B78     		ldrb	r3, [r1]
+ 127 0076 0F2B     		cmp	r3, #15
+ 128 0078 F4D9     		bls	.L14
+ 129              	.LVL10:
+  84:testLcd.c     **** 		//delay 15 ns x 16 = about 240 ns delay
+  85:testLcd.c     **** 	}
+  86:testLcd.c     **** 	IOCLR1 = LCD_E;
+ 130              		.loc 1 86 0
+ 131 007a 8023     		mov	r3, #128
+ 132              	.LVL11:
+ 133 007c 094A     		ldr	r2, .L21
+ 134 007e 9B04     		lsl	r3, r3, #18
+ 135 0080 1360     		str	r3, [r2]
+  87:testLcd.c     **** 
+  88:testLcd.c     **** 	for (i = 0; i < 16; ++i)
+ 136              		.loc 1 88 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 5
+
+
+ 137 0082 0023     		mov	r3, #0
+ 138 0084 0B70     		strb	r3, [r1]
+ 139 0086 05E0     		b	.L16
+ 140              	.LVL12:
+ 141              	.L17:
+  89:testLcd.c     **** 	{
+  90:testLcd.c     **** 		asm volatile (" nop");
+ 142              		.loc 1 90 0
+ 143 0088 C046     		 nop
+ 144              		.loc 1 88 0
+ 145              		.code	16
+ 146 008a 1378     		ldrb	r3, [r2]
+ 147 008c 0133     		add	r3, r3, #1
+ 148              	.LVL13:
+ 149 008e 1B06     		lsl	r3, r3, #24
+ 150 0090 1B0E     		lsr	r3, r3, #24
+ 151 0092 1370     		strb	r3, [r2]
+ 152              	.LVL14:
+ 153              	.L16:
+ 154 0094 6A46     		mov	r2, sp
+ 155 0096 0332     		add	r2, r2, #3
+ 156 0098 1378     		ldrb	r3, [r2]
+ 157 009a 0F2B     		cmp	r3, #15
+ 158 009c F4D9     		bls	.L17
+ 159              	.LVL15:
+  91:testLcd.c     **** 		//delay 15 ns x 16 = about 240 ns delay
+  92:testLcd.c     **** 	}
+  93:testLcd.c     **** }
+ 160              		.loc 1 93 0
+ 161 009e 01B0     		add	sp, sp, #4
+ 162              		@ sp needed for prologue
+ 163 00a0 7047     		bx	lr
+ 164              	.L22:
+ 165 00a2 0000     		.align	2
+ 166              	.L21:
+ 167 00a4 1C8002E0 		.word	-536707044
+ 168 00a8 148002E0 		.word	-536707052
+ 169 00ac 0C8002E0 		.word	-536707060
+ 170              	.LFE5:
+ 171              		.size	WypiszZnakNaEkran, .-WypiszZnakNaEkran
+ 172              		.align	2
+ 173              		.code 16
+ 174              		.thumb_func
+ 175              		.type	WypiszCiag, %function
+ 176              	WypiszCiag:
+ 177              	.LFB6:
+  94:testLcd.c     **** 
+  95:testLcd.c     **** /*
+  96:testLcd.c     ****  * Wypisuje ci¹g znaków w linii na ekranie.
+  97:testLcd.c     ****  */
+  98:testLcd.c     **** static void WypiszCiag (const char* tekst)
+  99:testLcd.c     **** {
+ 178              		.loc 1 99 0
+ 179 00b0 10B5     		push	{r4, lr}
+ 180              	.LCFI2:
+ 181              	.LVL16:
+ 182              		.loc 1 99 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 6
+
+
+ 183 00b2 041C     		mov	r4, r0
+ 184 00b4 05E0     		b	.L24
+ 185              	.LVL17:
+ 186              	.L25:
+ 100:testLcd.c     **** 	while (*tekst != '\0')
+ 101:testLcd.c     **** 	{
+ 102:testLcd.c     **** 		WypiszZnakNaEkran (1, *tekst);
+ 187              		.loc 1 102 0
+ 188 00b6 0120     		mov	r0, #1
+ 189 00b8 FFF7B2FF 		bl	WypiszZnakNaEkran
+ 103:testLcd.c     **** 		delay37us ();
+ 190              		.loc 1 103 0
+ 191 00bc FFF7A0FF 		bl	delay37us
+ 104:testLcd.c     **** 
+ 105:testLcd.c     **** 		tekst++;
+ 192              		.loc 1 105 0
+ 193 00c0 0134     		add	r4, r4, #1
+ 194              	.LVL18:
+ 195              	.L24:
+ 196              		.loc 1 100 0
+ 197 00c2 2178     		ldrb	r1, [r4]
+ 198 00c4 0029     		cmp	r1, #0
+ 199 00c6 F6D1     		bne	.L25
+ 106:testLcd.c     **** 	}
+ 107:testLcd.c     **** }
+ 200              		.loc 1 107 0
+ 201              		@ sp needed for prologue
+ 202              	.LVL19:
+ 203 00c8 10BC     		pop	{r4}
+ 204 00ca 01BC     		pop	{r0}
+ 205 00cc 0047     		bx	r0
+ 206              	.LFE6:
+ 207              		.size	WypiszCiag, .-WypiszCiag
+ 208 00ce 0000     		.align	2
+ 209              		.global	appTick
+ 210              		.code 16
+ 211              		.thumb_func
+ 212              		.type	appTick, %function
+ 213              	appTick:
+ 214              	.LFB18:
+ 215              		.file 2 "main.c"
+   1:main.c        **** #include "../pre_emptive_os/api/osapi.h"
+   2:main.c        **** #include "../pre_emptive_os/api/general.h"
+   3:main.c        **** 
+   4:main.c        **** #include <printf_P.h>
+   5:main.c        **** #include <ea_init.h>
+   6:main.c        **** #include <lpc2xxx.h>
+   7:main.c        **** #include <consol.h>
+   8:main.c        **** 
+   9:main.c        **** #include "testLcd.c"
+  10:main.c        **** #include "testRGB.c"
+  11:main.c        **** 
+  12:main.c        **** #include "i2c.h"
+  13:main.c        **** #include "key.h"
+  14:main.c        **** 
+  15:main.c        **** #include "usb/lpc_usb.h"
+  16:main.c        **** #include "usb/lpc_hid.h"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 7
+
+
+  17:main.c        **** 
+  18:main.c        **** #include "pff2/src/diskio.h"
+  19:main.c        **** #include "pff2/src/pff.h"
+  20:main.c        **** 
+  21:main.c        **** #include "functions.h"
+  22:main.c        **** 
+  23:main.c        **** static void ProceduraGlowna(void* arg);
+  24:main.c        **** #define PAMIEC_PROCEDURA_GLOWNA  400
+  25:main.c        **** static tU8 ProceduraGlownaPamiec[PAMIEC_PROCEDURA_GLOWNA];
+  26:main.c        **** 
+  27:main.c        **** static void ObslugaEkranuLcd1(void* arg);
+  28:main.c        **** #define ObslugaEkranuLcd1_STACK_SIZE 2048
+  29:main.c        **** static tU8 ObslugaEkranuLcd1Stack[ObslugaEkranuLcd1_STACK_SIZE];
+  30:main.c        **** static tU8 pid1;
+  31:main.c        **** 
+  32:main.c        **** static void ObslugaWyswietlacza128(void* arg);
+  33:main.c        **** #define ObslugaWyswietlacza128_STACK_SIZE 2048
+  34:main.c        **** static tU8 ObslugaWyswietlacza128Stack[ObslugaWyswietlacza128_STACK_SIZE];
+  35:main.c        **** static tU8 pid3;
+  36:main.c        **** 
+  37:main.c        **** static void ZapalajDiodeProces(void* arg);
+  38:main.c        **** #define ZAPALAJDIODE_STACK_SIZE 256
+  39:main.c        **** static tU8 zapalajDiode[ZAPALAJDIODE_STACK_SIZE];
+  40:main.c        **** static tU8 pidZapalajDiode;
+  41:main.c        **** FRESULT wynikInicjalizacjiSd = 2;
+  42:main.c        **** 
+  43:main.c        **** void PoinformujZeWczytanoSd();
+  44:main.c        **** void PoinformujZeNieWczytanoSd();
+  45:main.c        **** void OdtwarzajDzwiek();
+  46:main.c        **** static void WyswietlTekst(int _ktory);
+  47:main.c        **** FATFS fatfs;
+  48:main.c        **** DWORD rc;
+  49:main.c        **** 
+  50:main.c        **** volatile tU32 msClock = 0;
+  51:main.c        **** 
+  52:main.c        **** //0 - niebieska
+  53:main.c        **** //1 - czerwona
+  54:main.c        **** //2 - zielona
+  55:main.c        **** int kolorDiody = 0;
+  56:main.c        **** 
+  57:main.c        **** /*
+  58:main.c        ****  * Funkcja wejœciowa programu.
+  59:main.c        ****  */
+  60:main.c        **** int main(void) {
+  61:main.c        **** 	tU8 error;
+  62:main.c        **** 	tU8 pid;
+  63:main.c        **** 
+  64:main.c        **** 	//immediately turn off buzzer (if connected)
+  65:main.c        **** 	IODIR0 |= 0x00000080;
+  66:main.c        **** 	IOSET0 = 0x00000080;
+  67:main.c        **** 
+  68:main.c        **** 	osInit();
+  69:main.c        **** 
+  70:main.c        **** 	//	InicjalizacjaKonsoli();
+  71:main.c        **** 
+  72:main.c        **** 	osCreateProcess(ProceduraGlowna, ProceduraGlownaPamiec,
+  73:main.c        **** 			PAMIEC_PROCEDURA_GLOWNA, &pid, 1, NULL, &error);
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 8
+
+
+  74:main.c        **** 	osStartProcess(pid, &error);
+  75:main.c        **** 
+  76:main.c        **** 	osStart();
+  77:main.c        **** 	return 0;
+  78:main.c        **** }
+  79:main.c        **** 
+  80:main.c        **** /*
+  81:main.c        ****  * Procedura g³ówna programu odpalaj¹ca pozosta³e procedury.
+  82:main.c        ****  */
+  83:main.c        **** static void ProceduraGlowna(void* arg) {
+  84:main.c        **** 	tU8 error;
+  85:main.c        **** 
+  86:main.c        **** 	//InicjalizacjaKonsoli();
+  87:main.c        **** 
+  88:main.c        **** 	lcdInit();
+  89:main.c        **** 	lcdColor(0xff, 0x00);
+  90:main.c        **** 	lcdClrscr();
+  91:main.c        **** 	lcdGotoxy(0, 30);
+  92:main.c        **** 	lcdPuts("Inicjalizacja");
+  93:main.c        **** 	osSleep(200);
+  94:main.c        **** 	lcdClrscr();
+  95:main.c        **** 
+  96:main.c        **** 	// Wyœwietlacz 1.
+  97:main.c        **** 	osCreateProcess(ObslugaEkranuLcd1, ObslugaEkranuLcd1Stack,
+  98:main.c        **** 			ObslugaEkranuLcd1_STACK_SIZE, &pid1, 3, NULL, &error);
+  99:main.c        **** 	osStartProcess(pid1, &error);
+ 100:main.c        **** 
+ 101:main.c        **** 	//	if (kolorDiody == 0) {
+ 102:main.c        **** 	//		wynikInicjalizacjiSd = pf_mount(&fatfs);
+ 103:main.c        **** 	//
+ 104:main.c        **** 	//		if (wynikInicjalizacjiSd == FR_OK)
+ 105:main.c        **** 	//			kolorDiody = 2;
+ 106:main.c        **** 	//		else
+ 107:main.c        **** 	//			kolorDiody = 1;
+ 108:main.c        **** 	//		ZapalajDiode(kolorDiody, 1);
+ 109:main.c        **** 	//	}
+ 110:main.c        **** 	// Stworzenie procesu obs³uguj¹cego migaj¹c¹ diodê (na zielono, czerwono lub niebiesko).
+ 111:main.c        **** 	//	osCreateProcess(ZapalajDiodeProces, zapalajDiode, ZAPALAJDIODE_STACK_SIZE,
+ 112:main.c        **** 	//			&pidZapalajDiode, 3, NULL, &error);
+ 113:main.c        **** 	//	osStartProcess(pidZapalajDiode, &error);
+ 114:main.c        **** 
+ 115:main.c        **** 	initKeyProc();
+ 116:main.c        **** 
+ 117:main.c        **** 	// Wyœwietlacz 128x128
+ 118:main.c        **** 	osCreateProcess(ObslugaWyswietlacza128, ObslugaWyswietlacza128Stack,
+ 119:main.c        **** 			ObslugaWyswietlacza128_STACK_SIZE, &pid3, 3, NULL, &error);
+ 120:main.c        **** 	osStartProcess(pid3, &error);
+ 121:main.c        **** 
+ 122:main.c        **** 	// Zakoñczenie procesów.
+ 123:main.c        **** 	osDeleteProcess();
+ 124:main.c        **** }
+ 125:main.c        **** 
+ 126:main.c        **** static void ObslugaEkranuLcd1(void* arg) {
+ 127:main.c        **** 	WyswietlTekstNaLcd();
+ 128:main.c        **** }
+ 129:main.c        **** 
+ 130:main.c        **** static void ObslugaWyswietlacza128(void *arg) {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 9
+
+
+ 131:main.c        **** 	//Inicjalizacja ekranu LCD i ustawienie kolorów wyœwietlacza i tekstu.
+ 132:main.c        **** 
+ 133:main.c        **** 	WyswietlTekst(0);
+ 134:main.c        **** 	int tekst = 0;
+ 135:main.c        **** 	//ZapalajDiode(kolorDiody, 0);
+ 136:main.c        **** 
+ 137:main.c        **** 	while (1) {
+ 138:main.c        **** 		tU8 ruchJoysticka = checkKey();
+ 139:main.c        **** 
+ 140:main.c        **** 		if (ruchJoysticka != KEY_NOTHING) {
+ 141:main.c        **** 			switch (ruchJoysticka) {
+ 142:main.c        **** 			case KEY_UP:
+ 143:main.c        **** 
+ 144:main.c        **** 				//				kolorDiody = 2; // dzia³a
+ 145:main.c        **** 				tekst = (++tekst % 3);
+ 146:main.c        **** 				WyswietlTekst(tekst);
+ 147:main.c        **** 				break;
+ 148:main.c        **** 			case KEY_DOWN:
+ 149:main.c        **** 				//				kolorDiody = 1;// dzia³a
+ 150:main.c        **** 				tekst = (++tekst % 3);
+ 151:main.c        **** 				WyswietlTekst(tekst);
+ 152:main.c        **** 				break;
+ 153:main.c        **** 			case KEY_RIGHT:
+ 154:main.c        **** 				if (tekst == 2) {
+ 155:main.c        **** 					tekst = 4;
+ 156:main.c        **** 				}
+ 157:main.c        **** 				break;
+ 158:main.c        **** 			}
+ 159:main.c        **** 		} else {
+ 160:main.c        **** 			if (tekst == 4 && wynikInicjalizacjiSd != FR_OK) {
+ 161:main.c        **** 				wynikInicjalizacjiSd = pf_mount(&fatfs);
+ 162:main.c        **** 
+ 163:main.c        **** 				if (wynikInicjalizacjiSd == FR_OK) {
+ 164:main.c        **** 					kolorDiody = 2;
+ 165:main.c        **** 
+ 166:main.c        **** 				} else {
+ 167:main.c        **** 					kolorDiody = 1;
+ 168:main.c        **** 				}
+ 169:main.c        **** 
+ 170:main.c        **** 				rc = listDir("/", TRUE); //poka¿ dok³adn¹ zawartoœæ karty
+ 171:main.c        **** 				if (rc) {
+ 172:main.c        **** 					tekst = 3;
+ 173:main.c        **** 
+ 174:main.c        **** 					lcdInit();
+ 175:main.c        **** 					osSleep(100);
+ 176:main.c        **** 					lcdInit();
+ 177:main.c        **** 					//						WyswietlTekst(3);
+ 178:main.c        **** 					lcdColor(0x00, 0xf0);
+ 179:main.c        **** 					lcdClrscr();
+ 180:main.c        **** 					lcdPuts(rc);
+ 181:main.c        **** 					//printf("listDir, rc=%x\n", rc);
+ 182:main.c        **** 				} else {
+ 183:main.c        **** 					lcdInit();
+ 184:main.c        **** 					WyswietlTekst(3);
+ 185:main.c        **** 				}
+ 186:main.c        **** 
+ 187:main.c        **** 			} else if (tekst == 1) {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 10
+
+
+ 188:main.c        **** 				// TODO: dŸwiêk
+ 189:main.c        **** 			}
+ 190:main.c        **** 			ZapalajDiode(kolorDiody, 0);
+ 191:main.c        **** 		}
+ 192:main.c        **** 	}
+ 193:main.c        **** }
+ 194:main.c        **** 
+ 195:main.c        **** static void WyswietlTekst(int _ktory) {
+ 196:main.c        **** 	lcdInit();
+ 197:main.c        **** 	lcdColor(0x00, 0xf0);
+ 198:main.c        **** 	lcdClrscr();
+ 199:main.c        **** 	//ZapalajDiode(1, 0);
+ 200:main.c        **** 	switch (_ktory) {
+ 201:main.c        **** 	case 0:
+ 202:main.c        **** 		lcdGotoxy(0, 30);
+ 203:main.c        **** 		lcdPuts("Graj");
+ 204:main.c        **** 		break;
+ 205:main.c        **** 	case 1:
+ 206:main.c        **** 		lcdGotoxy(0, 30);
+ 207:main.c        **** 		lcdPuts("Zatrzymaj");
+ 208:main.c        **** 		//		lcdGotoxy(0, 50);
+ 209:main.c        **** 		//		lcdPuts("Zatrzymaj");
+ 210:main.c        **** 		break;
+ 211:main.c        **** 	case 2:
+ 212:main.c        **** 		lcdGotoxy(0, 30);
+ 213:main.c        **** 		lcdPuts("Brak plików");
+ 214:main.c        **** 		//		lcdGotoxy(0, 50);
+ 215:main.c        **** 		//		lcdPuts("Zatrzymaj");
+ 216:main.c        **** 
+ 217:main.c        **** 		break;
+ 218:main.c        **** 	case 3:
+ 219:main.c        **** 		lcdGotoxy(0, 30);
+ 220:main.c        **** 		lcdPuts("Nie wczytano"/*fatfs.buf*/);
+ 221:main.c        **** 		// TODO: poka¿ zawartoœæ
+ 222:main.c        **** 		break;
+ 223:main.c        **** 	default:
+ 224:main.c        **** 		break;
+ 225:main.c        **** 	}
+ 226:main.c        **** }
+ 227:main.c        **** 
+ 228:main.c        **** static void ZapalajDiodeProces(void* arg) {
+ 229:main.c        **** 
+ 230:main.c        **** }
+ 231:main.c        **** 
+ 232:main.c        **** /*****************************************************************************
+ 233:main.c        ****  *
+ 234:main.c        ****  * Description:
+ 235:main.c        ****  *    The timer tick entry function that is called once every timer tick
+ 236:main.c        ****  *    interrupt in the RTOS. Observe that any processing in this
+ 237:main.c        ****  *    function must be kept as short as possible since this function
+ 238:main.c        ****  *    execute in interrupt context.
+ 239:main.c        ****  *
+ 240:main.c        ****  * Params:
+ 241:main.c        ****  *    [in] elapsedTime - The number of elapsed milliseconds since last call.
+ 242:main.c        ****  *
+ 243:main.c        ****  ****************************************************************************/
+ 244:main.c        **** void appTick(tU32 elapsedTime) {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 11
+
+
+ 216              		.loc 2 244 0
+ 217              	.LVL20:
+ 245:main.c        **** 	msClock += elapsedTime;
+ 218              		.loc 2 245 0
+ 219 00d0 024A     		ldr	r2, .L30
+ 220 00d2 1368     		ldr	r3, [r2]
+ 221 00d4 1B18     		add	r3, r3, r0
+ 222              		.loc 2 244 0
+ 223              		@ lr needed for prologue
+ 224              		.loc 2 245 0
+ 225 00d6 1360     		str	r3, [r2]
+ 246:main.c        **** }
+ 226              		.loc 2 246 0
+ 227              		@ sp needed for prologue
+ 228 00d8 7047     		bx	lr
+ 229              	.L31:
+ 230 00da 0000     		.align	2
+ 231              	.L30:
+ 232 00dc 00000000 		.word	msClock
+ 233              	.LFE18:
+ 234              		.size	appTick, .-appTick
+ 235              		.align	2
+ 236              		.global	main
+ 237              		.code 16
+ 238              		.thumb_func
+ 239              		.type	main, %function
+ 240              	main:
+ 241              	.LFB12:
+ 242              		.loc 2 60 0
+ 243 00e0 30B5     		push	{r4, r5, lr}
+ 244              	.LCFI3:
+ 245              		.loc 2 65 0
+ 246 00e2 124A     		ldr	r2, .L34
+ 247 00e4 1368     		ldr	r3, [r2]
+ 248 00e6 8021     		mov	r1, #128
+ 249 00e8 0B43     		orr	r3, r3, r1
+ 250 00ea 1360     		str	r3, [r2]
+ 251              		.loc 2 66 0
+ 252 00ec 104B     		ldr	r3, .L34+4
+ 253              		.loc 2 60 0
+ 254 00ee 84B0     		sub	sp, sp, #16
+ 255              	.LCFI4:
+ 256              		.loc 2 66 0
+ 257 00f0 1960     		str	r1, [r3]
+ 258              		.loc 2 68 0
+ 259 00f2 FFF7FEFF 		bl	osInit
+ 260              		.loc 2 72 0
+ 261 00f6 6D46     		mov	r5, sp
+ 262 00f8 0123     		mov	r3, #1
+ 263 00fa 0E35     		add	r5, r5, #14
+ 264 00fc 0093     		str	r3, [sp]
+ 265 00fe 6C46     		mov	r4, sp
+ 266 0100 0023     		mov	r3, #0
+ 267 0102 C822     		mov	r2, #200
+ 268 0104 5200     		lsl	r2, r2, #1
+ 269 0106 0193     		str	r3, [sp, #4]
+ 270 0108 0F34     		add	r4, r4, #15
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 12
+
+
+ 271 010a 2B1C     		mov	r3, r5
+ 272 010c 0948     		ldr	r0, .L34+8
+ 273 010e 0A49     		ldr	r1, .L34+12
+ 274 0110 0294     		str	r4, [sp, #8]
+ 275 0112 FFF7FEFF 		bl	osCreateProcess
+ 276              	.LVL21:
+ 277              		.loc 2 74 0
+ 278 0116 2878     		ldrb	r0, [r5]
+ 279 0118 211C     		mov	r1, r4
+ 280 011a FFF7FEFF 		bl	osStartProcess
+ 281              		.loc 2 76 0
+ 282 011e FFF7FEFF 		bl	osStart
+ 283              		.loc 2 78 0
+ 284 0122 0020     		mov	r0, #0
+ 285 0124 04B0     		add	sp, sp, #16
+ 286              		@ sp needed for prologue
+ 287 0126 30BC     		pop	{r4, r5}
+ 288 0128 02BC     		pop	{r1}
+ 289 012a 0847     		bx	r1
+ 290              	.L35:
+ 291              		.align	2
+ 292              	.L34:
+ 293 012c 088002E0 		.word	-536707064
+ 294 0130 048002E0 		.word	-536707068
+ 295 0134 00000000 		.word	ProceduraGlowna
+ 296 0138 09000000 		.word	ProceduraGlownaPamiec
+ 297              	.LFE12:
+ 298              		.size	main, .-main
+ 299              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 300              		.align	2
+ 301              	.LC3:
+ 302 0000 4772616A 		.ascii	"Graj\000"
+ 302      00
+ 303 0005 000000   		.align	2
+ 304              	.LC5:
+ 305 0008 5A617472 		.ascii	"Zatrzymaj\000"
+ 305      7A796D61 
+ 305      6A00
+ 306 0012 0000     		.align	2
+ 307              	.LC7:
+ 308 0014 4272616B 		.ascii	"Brak plik\363w\000"
+ 308      20706C69 
+ 308      6BF37700 
+ 309              		.align	2
+ 310              	.LC9:
+ 311 0020 4E696520 		.ascii	"Nie wczytano\000"
+ 311      77637A79 
+ 311      74616E6F 
+ 311      00
+ 312              		.text
+ 313              		.align	2
+ 314              		.code 16
+ 315              		.thumb_func
+ 316              		.type	WyswietlTekst, %function
+ 317              	WyswietlTekst:
+ 318              	.LFB16:
+ 319              		.loc 2 195 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 13
+
+
+ 320 013c 10B5     		push	{r4, lr}
+ 321              	.LCFI5:
+ 322              	.LVL22:
+ 323              		.loc 2 195 0
+ 324 013e 041C     		mov	r4, r0
+ 325              		.loc 2 196 0
+ 326 0140 FFF7FEFF 		bl	lcdInit
+ 327              	.LVL23:
+ 328              		.loc 2 197 0
+ 329 0144 F021     		mov	r1, #240
+ 330 0146 0020     		mov	r0, #0
+ 331 0148 FFF7FEFF 		bl	lcdColor
+ 332              		.loc 2 198 0
+ 333 014c FFF7FEFF 		bl	lcdClrscr
+ 334              		.loc 2 200 0
+ 335 0150 012C     		cmp	r4, #1
+ 336 0152 0FD0     		beq	.L39
+ 337 0154 012C     		cmp	r4, #1
+ 338 0156 02DC     		bgt	.L42
+ 339 0158 002C     		cmp	r4, #0
+ 340 015a 05D0     		beq	.L38
+ 341 015c 1DE0     		b	.L43
+ 342              	.L42:
+ 343 015e 022C     		cmp	r4, #2
+ 344 0160 0ED0     		beq	.L40
+ 345 0162 032C     		cmp	r4, #3
+ 346 0164 19D1     		bne	.L43
+ 347 0166 11E0     		b	.L41
+ 348              	.L38:
+ 349              		.loc 2 202 0
+ 350 0168 0020     		mov	r0, #0
+ 351 016a 1E21     		mov	r1, #30
+ 352 016c FFF7FEFF 		bl	lcdGotoxy
+ 353              		.loc 2 203 0
+ 354 0170 0B48     		ldr	r0, .L45
+ 355 0172 10E0     		b	.L44
+ 356              	.L39:
+ 357              		.loc 2 206 0
+ 358 0174 0020     		mov	r0, #0
+ 359 0176 1E21     		mov	r1, #30
+ 360 0178 FFF7FEFF 		bl	lcdGotoxy
+ 361              		.loc 2 207 0
+ 362 017c 0948     		ldr	r0, .L45+4
+ 363 017e 0AE0     		b	.L44
+ 364              	.L40:
+ 365              		.loc 2 212 0
+ 366 0180 0020     		mov	r0, #0
+ 367 0182 1E21     		mov	r1, #30
+ 368 0184 FFF7FEFF 		bl	lcdGotoxy
+ 369              		.loc 2 213 0
+ 370 0188 0748     		ldr	r0, .L45+8
+ 371 018a 04E0     		b	.L44
+ 372              	.L41:
+ 373              		.loc 2 219 0
+ 374 018c 0020     		mov	r0, #0
+ 375 018e 1E21     		mov	r1, #30
+ 376 0190 FFF7FEFF 		bl	lcdGotoxy
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 14
+
+
+ 377              		.loc 2 220 0
+ 378 0194 0548     		ldr	r0, .L45+12
+ 379              	.L44:
+ 380 0196 FFF7FEFF 		bl	lcdPuts
+ 381              	.L43:
+ 382              		.loc 2 226 0
+ 383              		@ sp needed for prologue
+ 384              	.LVL24:
+ 385 019a 10BC     		pop	{r4}
+ 386 019c 01BC     		pop	{r0}
+ 387 019e 0047     		bx	r0
+ 388              	.L46:
+ 389              		.align	2
+ 390              	.L45:
+ 391 01a0 00000000 		.word	.LC3
+ 392 01a4 08000000 		.word	.LC5
+ 393 01a8 14000000 		.word	.LC7
+ 394 01ac 20000000 		.word	.LC9
+ 395              	.LFE16:
+ 396              		.size	WyswietlTekst, .-WyswietlTekst
+ 397              		.align	2
+ 398              		.code 16
+ 399              		.thumb_func
+ 400              		.type	WyczyscEkran, %function
+ 401              	WyczyscEkran:
+ 402              	.LFB7:
+ 108:testLcd.c     **** 
+ 109:testLcd.c     **** /*
+ 110:testLcd.c     ****  * Funkcja czyszcz¹ca ekran wyœwietlacza.
+ 111:testLcd.c     ****  */
+ 112:testLcd.c     **** static void WyczyscEkran ()
+ 113:testLcd.c     **** {
+ 403              		.loc 1 113 0
+ 404 01b0 00B5     		push	{lr}
+ 405              	.LCFI6:
+ 114:testLcd.c     **** 	WypiszZnakNaEkran (0, 0x01);
+ 406              		.loc 1 114 0
+ 407 01b2 0020     		mov	r0, #0
+ 408 01b4 0121     		mov	r1, #1
+ 409 01b6 FFF733FF 		bl	WypiszZnakNaEkran
+ 115:testLcd.c     **** 	osSleep (50);
+ 410              		.loc 1 115 0
+ 411 01ba 3220     		mov	r0, #50
+ 412 01bc FFF7FEFF 		bl	osSleep
+ 116:testLcd.c     **** }
+ 413              		.loc 1 116 0
+ 414              		@ sp needed for prologue
+ 415 01c0 01BC     		pop	{r0}
+ 416 01c2 0047     		bx	r0
+ 417              	.LFE7:
+ 418              		.size	WyczyscEkran, .-WyczyscEkran
+ 419              		.align	2
+ 420              		.code 16
+ 421              		.thumb_func
+ 422              		.type	PoczekajIWyczyscEkran, %function
+ 423              	PoczekajIWyczyscEkran:
+ 424              	.LFB8:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 15
+
+
+ 117:testLcd.c     **** 
+ 118:testLcd.c     **** static void PoczekajIWyczyscEkran (int ileCzekac)
+ 119:testLcd.c     **** {
+ 425              		.loc 1 119 0
+ 426 01c4 10B5     		push	{r4, lr}
+ 427              	.LCFI7:
+ 428              	.LVL25:
+ 120:testLcd.c     **** 	//OpóŸnienie przed znikniêciem.
+ 121:testLcd.c     **** 	osSleep (ileCzekac);
+ 429              		.loc 1 121 0
+ 430 01c6 FFF7FEFF 		bl	osSleep
+ 431              	.LVL26:
+ 432              	.LBB6:
+ 433              	.LBB7:
+ 434              		.loc 1 57 0
+ 435 01ca 8024     		mov	r4, #128
+ 436 01cc 044B     		ldr	r3, .L51
+ 437 01ce E405     		lsl	r4, r4, #23
+ 438 01d0 1C60     		str	r4, [r3]
+ 439              	.LBE7:
+ 440              	.LBE6:
+ 122:testLcd.c     **** 	//Wy³¹czenie podœwietlenia monitora przed wyczyszczeniem.
+ 123:testLcd.c     **** 	PodswietlEkran (FALSE);
+ 124:testLcd.c     **** 
+ 125:testLcd.c     **** 	WyczyscEkran();
+ 441              		.loc 1 125 0
+ 442 01d2 FFF7EDFF 		bl	WyczyscEkran
+ 443              	.LBB8:
+ 444              	.LBB9:
+ 445              		.loc 1 54 0
+ 446 01d6 034B     		ldr	r3, .L51+4
+ 447              	.LBE9:
+ 448              	.LBE8:
+ 126:testLcd.c     **** 
+ 127:testLcd.c     **** 	PodswietlEkran (TRUE);
+ 128:testLcd.c     **** }
+ 449              		.loc 1 128 0
+ 450              		@ sp needed for prologue
+ 451              	.LBB10:
+ 452              	.LBB11:
+ 453              		.loc 1 54 0
+ 454 01d8 1C60     		str	r4, [r3]
+ 455              	.LBE11:
+ 456              	.LBE10:
+ 457              		.loc 1 128 0
+ 458 01da 10BC     		pop	{r4}
+ 459 01dc 01BC     		pop	{r0}
+ 460 01de 0047     		bx	r0
+ 461              	.L52:
+ 462              		.align	2
+ 463              	.L51:
+ 464 01e0 0C8002E0 		.word	-536707060
+ 465 01e4 048002E0 		.word	-536707068
+ 466              	.LFE8:
+ 467              		.size	PoczekajIWyczyscEkran, .-PoczekajIWyczyscEkran
+ 468              		.section	.rodata.str1.4
+ 469 002d 000000   		.align	2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 16
+
+
+ 470              	.LC11:
+ 471 0030 2020204F 		.ascii	"   Odtwarzacz\000"
+ 471      64747761 
+ 471      727A6163 
+ 471      7A00
+ 472 003e 0000     		.align	2
+ 473              	.LC13:
+ 474 0040 20202020 		.ascii	"       MP3\000"
+ 474      2020204D 
+ 474      503300
+ 475              		.text
+ 476              		.align	2
+ 477              		.code 16
+ 478              		.thumb_func
+ 479              		.type	ObslugaEkranuLcd1, %function
+ 480              	ObslugaEkranuLcd1:
+ 481              	.LFB14:
+ 482              		.loc 2 126 0
+ 483 01e8 00B5     		push	{lr}
+ 484              	.LCFI8:
+ 485              	.LVL27:
+ 486              	.LBB18:
+ 487              	.LBB19:
+ 488              	.LBB20:
+ 489              	.LBB21:
+ 490              		.loc 1 22 0
+ 491 01ea 2E4A     		ldr	r2, .L57
+ 492 01ec 2E49     		ldr	r1, .L57+4
+ 493 01ee 1368     		ldr	r3, [r2]
+ 494 01f0 0B43     		orr	r3, r3, r1
+ 495 01f2 1360     		str	r3, [r2]
+ 496              		.loc 1 23 0
+ 497 01f4 2D4B     		ldr	r3, .L57+8
+ 498 01f6 1960     		str	r1, [r3]
+ 499              		.loc 1 25 0
+ 500 01f8 2D49     		ldr	r1, .L57+12
+ 501 01fa 8022     		mov	r2, #128
+ 502 01fc 0B68     		ldr	r3, [r1]
+ 503 01fe D203     		lsl	r2, r2, #15
+ 504              		.loc 1 26 0
+ 505 0200 2C48     		ldr	r0, .L57+16
+ 506              	.LVL28:
+ 507              		.loc 1 25 0
+ 508 0202 1343     		orr	r3, r3, r2
+ 509 0204 0B60     		str	r3, [r1]
+ 510              		.loc 1 26 0
+ 511 0206 0260     		str	r2, [r0]
+ 512              		.loc 1 28 0
+ 513 0208 8023     		mov	r3, #128
+ 514 020a 0A68     		ldr	r2, [r1]
+ 515 020c DB05     		lsl	r3, r3, #23
+ 516 020e 1A43     		orr	r2, r2, r3
+ 517 0210 0A60     		str	r2, [r1]
+ 518              		.loc 1 29 0
+ 519 0212 0360     		str	r3, [r0]
+ 520              	.LBE21:
+ 521              	.LBE20:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 17
+
+
+ 129:testLcd.c     **** 
+ 130:testLcd.c     **** /*
+ 131:testLcd.c     ****  * Przenosi kursor wyœwietlacza do nastêpnej linii.
+ 132:testLcd.c     ****  */
+ 133:testLcd.c     **** static void PrzejdzDoNastepnejLinii ()
+ 134:testLcd.c     **** {
+ 135:testLcd.c     **** 	WypiszZnakNaEkran (0, 0xC0);
+ 136:testLcd.c     **** 	delay37us ();
+ 137:testLcd.c     **** }
+ 138:testLcd.c     **** 
+ 139:testLcd.c     **** /*
+ 140:testLcd.c     ****  * Wyœwietlenie na ekranie LCD napisów.
+ 141:testLcd.c     ****  */
+ 142:testLcd.c     **** static void WyswietlTekstNaLcd (void)
+ 143:testLcd.c     **** {
+ 144:testLcd.c     **** 	initLCD ();
+ 145:testLcd.c     **** 	PoczekajIWyczyscEkran (1);
+ 522              		.loc 1 145 0
+ 523 0214 0120     		mov	r0, #1
+ 524              	.L56:
+ 525 0216 FFF7D5FF 		bl	PoczekajIWyczyscEkran
+ 146:testLcd.c     **** 
+ 147:testLcd.c     **** 	while (1)
+ 148:testLcd.c     **** 	{
+ 149:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x30);
+ 526              		.loc 1 149 0
+ 527 021a 3021     		mov	r1, #48
+ 528 021c 0020     		mov	r0, #0
+ 529 021e FFF7FFFE 		bl	WypiszZnakNaEkran
+ 150:testLcd.c     **** 		osSleep (1);
+ 530              		.loc 1 150 0
+ 531 0222 0120     		mov	r0, #1
+ 532 0224 FFF7FEFF 		bl	osSleep
+ 151:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x30);
+ 533              		.loc 1 151 0
+ 534 0228 0020     		mov	r0, #0
+ 535 022a 3021     		mov	r1, #48
+ 536 022c FFF7F8FE 		bl	WypiszZnakNaEkran
+ 152:testLcd.c     **** 		delay37us ();
+ 537              		.loc 1 152 0
+ 538 0230 FFF7E6FE 		bl	delay37us
+ 153:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x30);
+ 539              		.loc 1 153 0
+ 540 0234 0020     		mov	r0, #0
+ 541 0236 3021     		mov	r1, #48
+ 542 0238 FFF7F2FE 		bl	WypiszZnakNaEkran
+ 154:testLcd.c     **** 		delay37us ();
+ 543              		.loc 1 154 0
+ 544 023c FFF7E0FE 		bl	delay37us
+ 155:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x38);
+ 545              		.loc 1 155 0
+ 546 0240 0020     		mov	r0, #0
+ 547 0242 3821     		mov	r1, #56
+ 548 0244 FFF7ECFE 		bl	WypiszZnakNaEkran
+ 156:testLcd.c     **** 		delay37us ();
+ 549              		.loc 1 156 0
+ 550 0248 FFF7DAFE 		bl	delay37us
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 18
+
+
+ 157:testLcd.c     **** 
+ 158:testLcd.c     **** 		//display off
+ 159:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x08);
+ 551              		.loc 1 159 0
+ 552 024c 0020     		mov	r0, #0
+ 553 024e 0821     		mov	r1, #8
+ 554 0250 FFF7E6FE 		bl	WypiszZnakNaEkran
+ 160:testLcd.c     **** 		delay37us ();
+ 555              		.loc 1 160 0
+ 556 0254 FFF7D4FE 		bl	delay37us
+ 161:testLcd.c     **** 
+ 162:testLcd.c     **** 		WyczyscEkran ();
+ 557              		.loc 1 162 0
+ 558 0258 FFF7AAFF 		bl	WyczyscEkran
+ 163:testLcd.c     **** 
+ 164:testLcd.c     **** 		//display control set
+ 165:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x06);
+ 559              		.loc 1 165 0
+ 560 025c 0621     		mov	r1, #6
+ 561 025e 0020     		mov	r0, #0
+ 562 0260 FFF7DEFE 		bl	WypiszZnakNaEkran
+ 166:testLcd.c     **** 		osSleep (1);
+ 563              		.loc 1 166 0
+ 564 0264 0120     		mov	r0, #1
+ 565 0266 FFF7FEFF 		bl	osSleep
+ 167:testLcd.c     **** 
+ 168:testLcd.c     **** 		//display control set
+ 169:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x0c);
+ 566              		.loc 1 169 0
+ 567 026a 0020     		mov	r0, #0
+ 568 026c 0C21     		mov	r1, #12
+ 569 026e FFF7D7FE 		bl	WypiszZnakNaEkran
+ 170:testLcd.c     **** 		delay37us ();
+ 570              		.loc 1 170 0
+ 571 0272 FFF7C5FE 		bl	delay37us
+ 171:testLcd.c     **** 
+ 172:testLcd.c     **** 		//cursor home
+ 173:testLcd.c     **** 		WypiszZnakNaEkran (0, 0x02);
+ 572              		.loc 1 173 0
+ 573 0276 0221     		mov	r1, #2
+ 574 0278 0020     		mov	r0, #0
+ 575 027a FFF7D1FE 		bl	WypiszZnakNaEkran
+ 174:testLcd.c     **** 		osSleep (1);
+ 576              		.loc 1 174 0
+ 577 027e 0120     		mov	r0, #1
+ 578 0280 FFF7FEFF 		bl	osSleep
+ 175:testLcd.c     **** 
+ 176:testLcd.c     **** 		WypiszCiag ("   Odtwarzacz");
+ 579              		.loc 1 176 0
+ 580 0284 0C48     		ldr	r0, .L57+20
+ 581 0286 FFF713FF 		bl	WypiszCiag
+ 582              	.LBB22:
+ 583              	.LBB23:
+ 584              		.loc 1 135 0
+ 585 028a 0020     		mov	r0, #0
+ 586 028c C021     		mov	r1, #192
+ 587 028e FFF7C7FE 		bl	WypiszZnakNaEkran
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 19
+
+
+ 588              		.loc 1 136 0
+ 589 0292 FFF7B5FE 		bl	delay37us
+ 590              	.LBE23:
+ 591              	.LBE22:
+ 177:testLcd.c     **** 
+ 178:testLcd.c     **** 		PrzejdzDoNastepnejLinii ();
+ 179:testLcd.c     **** 
+ 180:testLcd.c     **** 		WypiszCiag ("       MP3");
+ 592              		.loc 1 180 0
+ 593 0296 0948     		ldr	r0, .L57+24
+ 594 0298 FFF70AFF 		bl	WypiszCiag
+ 181:testLcd.c     **** 
+ 182:testLcd.c     **** 		PoczekajIWyczyscEkran (500);
+ 595              		.loc 1 182 0
+ 596 029c FA20     		mov	r0, #250
+ 597 029e 4000     		lsl	r0, r0, #1
+ 598 02a0 B9E7     		b	.L56
+ 599              	.L58:
+ 600 02a2 0000     		.align	2
+ 601              	.L57:
+ 602 02a4 188002E0 		.word	-536707048
+ 603 02a8 0000FF03 		.word	67043328
+ 604 02ac 1C8002E0 		.word	-536707044
+ 605 02b0 088002E0 		.word	-536707064
+ 606 02b4 0C8002E0 		.word	-536707060
+ 607 02b8 30000000 		.word	.LC11
+ 608 02bc 40000000 		.word	.LC13
+ 609              	.LBE19:
+ 610              	.LBE18:
+ 611              	.LFE14:
+ 612              		.size	ObslugaEkranuLcd1, .-ObslugaEkranuLcd1
+ 613              		.section	.rodata.str1.4
+ 614 004b 00       		.align	2
+ 615              	.LC15:
+ 616 004c 496E6963 		.ascii	"Inicjalizacja\000"
+ 616      6A616C69 
+ 616      7A61636A 
+ 616      6100
+ 617              		.text
+ 618              		.align	2
+ 619              		.code 16
+ 620              		.thumb_func
+ 621              		.type	ProceduraGlowna, %function
+ 622              	ProceduraGlowna:
+ 623              	.LFB13:
+ 624              		.loc 2 83 0
+ 625 02c0 F0B5     		push	{r4, r5, r6, r7, lr}
+ 626              	.LCFI9:
+ 627              	.LVL29:
+ 628 02c2 84B0     		sub	sp, sp, #16
+ 629              	.LCFI10:
+ 630              		.loc 2 88 0
+ 631 02c4 FFF7FEFF 		bl	lcdInit
+ 632              	.LVL30:
+ 633              		.loc 2 89 0
+ 634 02c8 0021     		mov	r1, #0
+ 635 02ca FF20     		mov	r0, #255
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 20
+
+
+ 636 02cc FFF7FEFF 		bl	lcdColor
+ 637              		.loc 2 90 0
+ 638 02d0 FFF7FEFF 		bl	lcdClrscr
+ 639              		.loc 2 91 0
+ 640 02d4 1E21     		mov	r1, #30
+ 641 02d6 0020     		mov	r0, #0
+ 642 02d8 FFF7FEFF 		bl	lcdGotoxy
+ 643              		.loc 2 92 0
+ 644 02dc 1948     		ldr	r0, .L61
+ 645 02de FFF7FEFF 		bl	lcdPuts
+ 646              		.loc 2 93 0
+ 647 02e2 C820     		mov	r0, #200
+ 648 02e4 FFF7FEFF 		bl	osSleep
+ 649              		.loc 2 97 0
+ 650 02e8 8025     		mov	r5, #128
+ 651              		.loc 2 94 0
+ 652 02ea FFF7FEFF 		bl	lcdClrscr
+ 653              		.loc 2 97 0
+ 654 02ee 164E     		ldr	r6, .L61+4
+ 655 02f0 2D01     		lsl	r5, r5, #4
+ 656 02f2 0323     		mov	r3, #3
+ 657 02f4 6C46     		mov	r4, sp
+ 658 02f6 2A1C     		mov	r2, r5
+ 659 02f8 0F34     		add	r4, r4, #15
+ 660 02fa 0027     		mov	r7, #0
+ 661 02fc 0093     		str	r3, [sp]
+ 662 02fe 1348     		ldr	r0, .L61+8
+ 663 0300 331C     		mov	r3, r6
+ 664 0302 1349     		ldr	r1, .L61+12
+ 665 0304 0197     		str	r7, [sp, #4]
+ 666 0306 0294     		str	r4, [sp, #8]
+ 667 0308 FFF7FEFF 		bl	osCreateProcess
+ 668              		.loc 2 99 0
+ 669 030c 3078     		ldrb	r0, [r6]
+ 670 030e 211C     		mov	r1, r4
+ 671 0310 FFF7FEFF 		bl	osStartProcess
+ 672              		.loc 2 115 0
+ 673 0314 FFF7FEFF 		bl	initKeyProc
+ 674              		.loc 2 118 0
+ 675 0318 0E4E     		ldr	r6, .L61+16
+ 676 031a 0323     		mov	r3, #3
+ 677 031c 2A1C     		mov	r2, r5
+ 678 031e 0093     		str	r3, [sp]
+ 679 0320 0D48     		ldr	r0, .L61+20
+ 680 0322 331C     		mov	r3, r6
+ 681 0324 0D49     		ldr	r1, .L61+24
+ 682 0326 0197     		str	r7, [sp, #4]
+ 683 0328 0294     		str	r4, [sp, #8]
+ 684 032a FFF7FEFF 		bl	osCreateProcess
+ 685              		.loc 2 120 0
+ 686 032e 3078     		ldrb	r0, [r6]
+ 687 0330 211C     		mov	r1, r4
+ 688 0332 FFF7FEFF 		bl	osStartProcess
+ 689              		.loc 2 123 0
+ 690 0336 FFF7FEFF 		bl	osDeleteProcess
+ 691              		.loc 2 124 0
+ 692 033a 04B0     		add	sp, sp, #16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 21
+
+
+ 693              		@ sp needed for prologue
+ 694 033c F0BC     		pop	{r4, r5, r6, r7}
+ 695 033e 01BC     		pop	{r0}
+ 696 0340 0047     		bx	r0
+ 697              	.L62:
+ 698 0342 0000     		.align	2
+ 699              	.L61:
+ 700 0344 4C000000 		.word	.LC15
+ 701 0348 99090000 		.word	pid1
+ 702 034c 00000000 		.word	ObslugaEkranuLcd1
+ 703 0350 99010000 		.word	ObslugaEkranuLcd1Stack
+ 704 0354 9A110000 		.word	pid3
+ 705 0358 00000000 		.word	ObslugaWyswietlacza128
+ 706 035c 9A090000 		.word	ObslugaWyswietlacza128Stack
+ 707              	.LFE13:
+ 708              		.size	ProceduraGlowna, .-ProceduraGlowna
+ 709              		.global	__modsi3
+ 710              		.section	.rodata.str1.4
+ 711 005a 0000     		.align	2
+ 712              	.LC26:
+ 713 005c 2F00     		.ascii	"/\000"
+ 714 005e 0000     		.text
+ 715              		.align	2
+ 716              		.code 16
+ 717              		.thumb_func
+ 718              		.type	ObslugaWyswietlacza128, %function
+ 719              	ObslugaWyswietlacza128:
+ 720              	.LFB15:
+ 721              		.loc 2 130 0
+ 722 0360 F0B5     		push	{r4, r5, r6, r7, lr}
+ 723              	.LCFI11:
+ 724              	.LVL31:
+ 725 0362 81B0     		sub	sp, sp, #4
+ 726              	.LCFI12:
+ 727              		.loc 2 133 0
+ 728 0364 0020     		mov	r0, #0
+ 729              	.LVL32:
+ 730 0366 FFF7E9FE 		bl	WyswietlTekst
+ 731 036a 0023     		mov	r3, #0
+ 732 036c 00E0     		b	.L90
+ 733              	.LVL33:
+ 734              	.L65:
+ 735 036e 0423     		mov	r3, #4
+ 736              	.L90:
+ 737 0370 0093     		str	r3, [sp]
+ 738              	.L95:
+ 739              	.LBB27:
+ 740              		.loc 2 138 0
+ 741 0372 FFF7FEFF 		bl	checkKey
+ 742              		.loc 2 140 0
+ 743 0376 0028     		cmp	r0, #0
+ 744 0378 12D0     		beq	.L66
+ 745              		.loc 2 141 0
+ 746 037a 0228     		cmp	r0, #2
+ 747 037c 0CD0     		beq	.L69
+ 748 037e 0428     		cmp	r0, #4
+ 749 0380 01D0     		beq	.L70
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 22
+
+
+ 750 0382 0128     		cmp	r0, #1
+ 751 0384 F5D1     		bne	.L95
+ 752              	.L70:
+ 753              		.loc 2 150 0
+ 754 0386 0098     		ldr	r0, [sp]
+ 755              	.LVL34:
+ 756 0388 0321     		mov	r1, #3
+ 757 038a 0130     		add	r0, r0, #1
+ 758 038c FFF7FEFF 		bl	__modsi3
+ 759              	.LVL35:
+ 760 0390 0090     		str	r0, [sp]
+ 761              		.loc 2 151 0
+ 762 0392 FFF7D3FE 		bl	WyswietlTekst
+ 763 0396 ECE7     		b	.L95
+ 764              	.L69:
+ 765              		.loc 2 154 0
+ 766 0398 009B     		ldr	r3, [sp]
+ 767 039a 022B     		cmp	r3, #2
+ 768 039c E9D1     		bne	.L95
+ 769 039e E6E7     		b	.L65
+ 770              	.L66:
+ 771              		.loc 2 160 0
+ 772 03a0 009B     		ldr	r3, [sp]
+ 773 03a2 042B     		cmp	r3, #4
+ 774 03a4 2ED1     		bne	.L71
+ 775 03a6 3A4C     		ldr	r4, .L96
+ 776 03a8 2368     		ldr	r3, [r4]
+ 777 03aa 002B     		cmp	r3, #0
+ 778 03ac 2AD0     		beq	.L71
+ 779              		.loc 2 161 0
+ 780 03ae 3948     		ldr	r0, .L96+4
+ 781 03b0 FFF7FEFF 		bl	pf_mount
+ 782 03b4 384A     		ldr	r2, .L96+8
+ 783 03b6 2060     		str	r0, [r4]
+ 784              		.loc 2 163 0
+ 785 03b8 0028     		cmp	r0, #0
+ 786 03ba 01D1     		bne	.L74
+ 787              		.loc 2 164 0
+ 788 03bc 0223     		mov	r3, #2
+ 789 03be 00E0     		b	.L91
+ 790              	.L74:
+ 791              		.loc 2 167 0
+ 792 03c0 0123     		mov	r3, #1
+ 793              	.L91:
+ 794 03c2 1360     		str	r3, [r2]
+ 795              		.loc 2 170 0
+ 796 03c4 3548     		ldr	r0, .L96+12
+ 797 03c6 0121     		mov	r1, #1
+ 798 03c8 FFF7FEFF 		bl	listDir
+ 799 03cc 344C     		ldr	r4, .L96+16
+ 800 03ce 2060     		str	r0, [r4]
+ 801              		.loc 2 171 0
+ 802 03d0 0028     		cmp	r0, #0
+ 803 03d2 12D0     		beq	.L77
+ 804              		.loc 2 174 0
+ 805 03d4 FFF7FEFF 		bl	lcdInit
+ 806              		.loc 2 175 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 23
+
+
+ 807 03d8 6420     		mov	r0, #100
+ 808 03da FFF7FEFF 		bl	osSleep
+ 809              		.loc 2 176 0
+ 810 03de FFF7FEFF 		bl	lcdInit
+ 811              		.loc 2 178 0
+ 812 03e2 F021     		mov	r1, #240
+ 813 03e4 0020     		mov	r0, #0
+ 814 03e6 FFF7FEFF 		bl	lcdColor
+ 815              		.loc 2 179 0
+ 816 03ea FFF7FEFF 		bl	lcdClrscr
+ 817              		.loc 2 180 0
+ 818 03ee 2068     		ldr	r0, [r4]
+ 819 03f0 FFF7FEFF 		bl	lcdPuts
+ 820 03f4 0323     		mov	r3, #3
+ 821 03f6 0093     		str	r3, [sp]
+ 822 03f8 04E0     		b	.L71
+ 823              	.L77:
+ 824              		.loc 2 183 0
+ 825 03fa FFF7FEFF 		bl	lcdInit
+ 826              		.loc 2 184 0
+ 827 03fe 0320     		mov	r0, #3
+ 828 0400 FFF79CFE 		bl	WyswietlTekst
+ 829              	.L71:
+ 830              	.LBB28:
+ 831              	.LBB29:
+ 832              		.file 3 "testRGB.c"
+   1:testRGB.c     **** /******************************************************************************
+   2:testRGB.c     ****  *
+   3:testRGB.c     ****  * Copyright:
+   4:testRGB.c     ****  *    (C) 2000 - 2005 Embedded Artists AB
+   5:testRGB.c     ****  *
+   6:testRGB.c     ****  *****************************************************************************/
+   7:testRGB.c     **** 
+   8:testRGB.c     **** #include "../pre_emptive_os/api/osapi.h"
+   9:testRGB.c     **** #include "../pre_emptive_os/api/general.h"
+  10:testRGB.c     **** #include <printf_P.h>
+  11:testRGB.c     **** #include <lpc2xxx.h>
+  12:testRGB.c     **** 
+  13:testRGB.c     **** //extern tU8 xbeePresent;
+  14:testRGB.c     **** 
+  15:testRGB.c     **** /*****************************************************************************
+  16:testRGB.c     ****  *
+  17:testRGB.c     ****  * Description:
+  18:testRGB.c     ****  *    A process entry function. 
+  19:testRGB.c     ****  *
+  20:testRGB.c     ****  ****************************************************************************/
+  21:testRGB.c     **** 
+  22:testRGB.c     **** static tU8 inicjalizacjaZakonczona = 0;
+  23:testRGB.c     **** /*
+  24:testRGB.c     ****  * 0x04 - czerwona
+  25:testRGB.c     ****  * 0x10 - niebieska
+  26:testRGB.c     ****  * 0x40 - zielona
+  27:testRGB.c     ****  */
+  28:testRGB.c     **** static void ZapalajDiode (tU8 kolor, int ifInit)
+  29:testRGB.c     **** {
+  30:testRGB.c     **** 	if (ifInit == 0)
+  31:testRGB.c     **** 	{
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 24
+
+
+  32:testRGB.c     **** 		PINSEL0 &= 0xfff03fff; //Enable PWM2 on P0.7, PWM4 on P0.8, and PWM6 on P0.9
+ 833              		.loc 3 32 0
+ 834 0404 2749     		ldr	r1, .L96+20
+ 835              	.LBE29:
+ 836              	.LBE28:
+ 837              		.loc 2 184 0
+ 838 0406 244B     		ldr	r3, .L96+8
+ 839              	.LBB30:
+ 840              	.LBB31:
+ 841              		.loc 3 32 0
+ 842 0408 274A     		ldr	r2, .L96+24
+ 843              	.LBE31:
+ 844              	.LBE30:
+ 845              		.loc 2 184 0
+ 846 040a 1D78     		ldrb	r5, [r3]
+ 847              	.LBB32:
+ 848              	.LBB33:
+ 849              		.loc 3 32 0
+ 850 040c 0B68     		ldr	r3, [r1]
+ 851 040e 1340     		and	r3, r3, r2
+ 852 0410 0B60     		str	r3, [r1]
+  33:testRGB.c     **** 		PINSEL0 |= 0x000a8000; //Enable PWM2 on P0.7, PWM4 on P0.8, and PWM6 on P0.9
+ 853              		.loc 3 33 0
+ 854 0412 A823     		mov	r3, #168
+ 855 0414 0A68     		ldr	r2, [r1]
+ 856 0416 1B03     		lsl	r3, r3, #12
+ 857 0418 1A43     		orr	r2, r2, r3
+  34:testRGB.c     **** 
+  35:testRGB.c     **** 		//PULSE WIDTH MODULATION INIT*********************************************
+  36:testRGB.c     **** 		PWM_PR = 0x00; // Prescale Register
+ 858              		.loc 3 36 0
+ 859 041a 244B     		ldr	r3, .L96+28
+ 860              		.loc 3 33 0
+ 861 041c 0A60     		str	r2, [r1]
+ 862              		.loc 3 36 0
+ 863 041e 0021     		mov	r1, #0
+ 864 0420 1960     		str	r1, [r3]
+  37:testRGB.c     **** 		PWM_MCR = 0x02; // Match Control Register
+ 865              		.loc 3 37 0
+ 866 0422 0222     		mov	r2, #2
+ 867 0424 0833     		add	r3, r3, #8
+ 868 0426 1A60     		str	r2, [r3]
+  38:testRGB.c     **** 		PWM_MR0 = 0x1000; // TOTAL PERIODTID   T
+ 869              		.loc 3 38 0
+ 870 0428 214A     		ldr	r2, .L96+32
+ 871 042a 8023     		mov	r3, #128
+ 872 042c 5B01     		lsl	r3, r3, #5
+  39:testRGB.c     **** 		PWM_MR2 = 0x0000; // HÖG SIGNAL        t
+ 873              		.loc 3 39 0
+ 874 042e 2148     		ldr	r0, .L96+36
+  40:testRGB.c     **** 		PWM_MR4 = 0x0000; // HÖG SIGNAL        t
+ 875              		.loc 3 40 0
+ 876 0430 214C     		ldr	r4, .L96+40
+  41:testRGB.c     **** 		PWM_MR6 = 0x0000; // HÖG SIGNAL        t
+ 877              		.loc 3 41 0
+ 878 0432 224E     		ldr	r6, .L96+44
+  42:testRGB.c     **** 		PWM_LER = 0x55; // Latch Enable Register
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 25
+
+
+ 879              		.loc 3 42 0
+ 880 0434 224F     		ldr	r7, .L96+48
+ 881              		.loc 3 38 0
+ 882 0436 1360     		str	r3, [r2]
+ 883              		.loc 3 42 0
+ 884 0438 5523     		mov	r3, #85
+ 885              		.loc 3 39 0
+ 886 043a 0160     		str	r1, [r0]
+ 887              		.loc 3 40 0
+ 888 043c 2160     		str	r1, [r4]
+ 889              		.loc 3 41 0
+ 890 043e 3160     		str	r1, [r6]
+ 891              		.loc 3 42 0
+ 892 0440 3B60     		str	r3, [r7]
+  43:testRGB.c     **** 		PWM_PCR = 0x5400; // Prescale Counter Register PWMENA2, PWMENA4, PWMENA6
+ 893              		.loc 3 43 0
+ 894 0442 A823     		mov	r3, #168
+ 895 0444 DB01     		lsl	r3, r3, #7
+ 896 0446 3432     		add	r2, r2, #52
+ 897 0448 1360     		str	r3, [r2]
+  44:testRGB.c     **** 		PWM_TCR = 0x09; // Counter Enable och PWM Enable
+ 898              		.loc 3 44 0
+ 899 044a 1E4B     		ldr	r3, .L96+52
+ 900 044c 0922     		mov	r2, #9
+ 901 044e 1A60     		str	r2, [r3]
+  45:testRGB.c     **** 		//************************************************************************
+  46:testRGB.c     **** 
+  47:testRGB.c     **** 		inicjalizacjaZakonczona = 1;
+ 902              		.loc 3 47 0
+ 903 0450 1D4B     		ldr	r3, .L96+56
+ 904 0452 0122     		mov	r2, #1
+ 905 0454 1A70     		strb	r2, [r3]
+  48:testRGB.c     **** 	}
+  49:testRGB.c     **** 
+  50:testRGB.c     **** 	switch (kolor)
+ 906              		.loc 3 50 0
+ 907 0456 022D     		cmp	r5, #2
+ 908 0458 07D0     		beq	.L81
+ 909 045a 032D     		cmp	r5, #3
+ 910 045c 09D0     		beq	.L82
+ 911 045e 012D     		cmp	r5, #1
+ 912 0460 0CD1     		bne	.L79
+  51:testRGB.c     **** 	{
+  52:testRGB.c     **** 	case 1: //czerwony
+  53:testRGB.c     **** 		PWM_MR2 = 100;
+ 913              		.loc 3 53 0
+ 914 0462 6423     		mov	r3, #100
+ 915 0464 0360     		str	r3, [r0]
+  54:testRGB.c     **** 		PWM_MR4 = 0;
+ 916              		.loc 3 54 0
+ 917 0466 2160     		str	r1, [r4]
+ 918 0468 0BE0     		b	.L92
+ 919              	.L81:
+  55:testRGB.c     **** 		PWM_MR6 = 0;
+  56:testRGB.c     **** 		PWM_LER = 0x01;
+  57:testRGB.c     **** 		break;
+  58:testRGB.c     **** 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 26
+
+
+  59:testRGB.c     **** 	case 2: //zielony
+  60:testRGB.c     **** 		PWM_MR2 = 0;
+  61:testRGB.c     **** 		PWM_MR4 = 0;
+  62:testRGB.c     **** 		PWM_MR6 = 100;
+ 920              		.loc 3 62 0
+ 921 046a 6423     		mov	r3, #100
+ 922              		.loc 3 60 0
+ 923 046c 0160     		str	r1, [r0]
+ 924              		.loc 3 61 0
+ 925 046e 2160     		str	r1, [r4]
+ 926 0470 02E0     		b	.L94
+ 927              	.L82:
+  63:testRGB.c     **** 		PWM_LER = 0x01;
+  64:testRGB.c     **** 		break;
+  65:testRGB.c     **** 
+  66:testRGB.c     **** 	case 3: // z³ó³ty
+  67:testRGB.c     **** 		PWM_MR2 = 100;
+ 928              		.loc 3 67 0
+ 929 0472 6423     		mov	r3, #100
+ 930 0474 0360     		str	r3, [r0]
+  68:testRGB.c     **** 		PWM_MR4 = 0;
+ 931              		.loc 3 68 0
+ 932 0476 2160     		str	r1, [r4]
+ 933              	.L94:
+  69:testRGB.c     **** 		PWM_MR6 = 100;
+ 934              		.loc 3 69 0
+ 935 0478 3360     		str	r3, [r6]
+ 936 047a 03E0     		b	.L93
+ 937              	.L79:
+  70:testRGB.c     **** 		PWM_LER = 0x01;
+  71:testRGB.c     **** 		break;
+  72:testRGB.c     **** 
+  73:testRGB.c     **** 	default:
+  74:testRGB.c     **** 		PWM_MR2 = 0;
+  75:testRGB.c     **** 		PWM_MR4 = 100;
+ 938              		.loc 3 75 0
+ 939 047c 6423     		mov	r3, #100
+ 940              		.loc 3 74 0
+ 941 047e 0160     		str	r1, [r0]
+ 942              		.loc 3 75 0
+ 943 0480 2360     		str	r3, [r4]
+ 944              	.L92:
+  76:testRGB.c     **** 		PWM_MR6 = 0;
+ 945              		.loc 3 76 0
+ 946 0482 3160     		str	r1, [r6]
+ 947              	.L93:
+  77:testRGB.c     **** 		PWM_LER = 0x01;
+ 948              		.loc 3 77 0
+ 949 0484 3A60     		str	r2, [r7]
+  78:testRGB.c     **** 	}
+  79:testRGB.c     **** 
+  80:testRGB.c     **** 	osSleep (10);
+ 950              		.loc 3 80 0
+ 951 0486 0A20     		mov	r0, #10
+ 952 0488 FFF7FEFF 		bl	osSleep
+ 953 048c 71E7     		b	.L95
+ 954              	.L97:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 27
+
+
+ 955 048e 0000     		.align	2
+ 956              	.L96:
+ 957 0490 00000000 		.word	wynikInicjalizacjiSd
+ 958 0494 00000000 		.word	fatfs
+ 959 0498 00000000 		.word	kolorDiody
+ 960 049c 5C000000 		.word	.LC26
+ 961 04a0 00000000 		.word	rc
+ 962 04a4 00C002E0 		.word	-536690688
+ 963 04a8 FF3FF0FF 		.word	-1032193
+ 964 04ac 0C4001E0 		.word	-536788980
+ 965 04b0 184001E0 		.word	-536788968
+ 966 04b4 204001E0 		.word	-536788960
+ 967 04b8 404001E0 		.word	-536788928
+ 968 04bc 484001E0 		.word	-536788920
+ 969 04c0 504001E0 		.word	-536788912
+ 970 04c4 044001E0 		.word	-536788988
+ 971 04c8 08000000 		.word	inicjalizacjaZakonczona
+ 972              	.LBE33:
+ 973              	.LBE32:
+ 974              	.LBE27:
+ 975              	.LFE15:
+ 976              		.size	ObslugaWyswietlacza128, .-ObslugaWyswietlacza128
+ 977              		.global	wynikInicjalizacjiSd
+ 978              		.data
+ 979              		.align	2
+ 980              		.type	wynikInicjalizacjiSd, %object
+ 981              		.size	wynikInicjalizacjiSd, 4
+ 982              	wynikInicjalizacjiSd:
+ 983 0000 02000000 		.word	2
+ 984              		.global	msClock
+ 985              		.bss
+ 986              		.align	2
+ 987              		.type	msClock, %object
+ 988              		.size	msClock, 4
+ 989              	msClock:
+ 990 0000 00000000 		.space	4
+ 991              		.global	kolorDiody
+ 992              		.align	2
+ 993              		.type	kolorDiody, %object
+ 994              		.size	kolorDiody, 4
+ 995              	kolorDiody:
+ 996 0004 00000000 		.space	4
+ 997              	inicjalizacjaZakonczona:
+ 998 0008 00       		.space	1
+ 999              	ProceduraGlownaPamiec:
+ 1000 0009 00000000 		.space	400
+ 1000      00000000 
+ 1000      00000000 
+ 1000      00000000 
+ 1000      00000000 
+ 1001              	ObslugaEkranuLcd1Stack:
+ 1002 0199 00000000 		.space	2048
+ 1002      00000000 
+ 1002      00000000 
+ 1002      00000000 
+ 1002      00000000 
+ 1003              	pid1:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 28
+
+
+ 1004 0999 00       		.space	1
+ 1005              	ObslugaWyswietlacza128Stack:
+ 1006 099a 00000000 		.space	2048
+ 1006      00000000 
+ 1006      00000000 
+ 1006      00000000 
+ 1006      00000000 
+ 1007              	pid3:
+ 1008 119a 00       		.space	1
+ 1009              		.comm	fatfs,48,4
+ 1010              		.comm	rc,4,4
+ 1011 119b 00       		.section	.debug_frame,"",%progbits
+ 1012              	.Lframe0:
+ 1013 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 1014              	.LSCIE0:
+ 1015 0004 FFFFFFFF 		.4byte	0xffffffff
+ 1016 0008 01       		.byte	0x1
+ 1017 0009 00       		.ascii	"\000"
+ 1018 000a 01       		.uleb128 0x1
+ 1019 000b 7C       		.sleb128 -4
+ 1020 000c 0E       		.byte	0xe
+ 1021 000d 0C       		.byte	0xc
+ 1022 000e 0D       		.uleb128 0xd
+ 1023 000f 00       		.uleb128 0x0
+ 1024              		.align	2
+ 1025              	.LECIE0:
+ 1026              	.LSFDE0:
+ 1027 0010 10000000 		.4byte	.LEFDE0-.LASFDE0
+ 1028              	.LASFDE0:
+ 1029 0014 00000000 		.4byte	.Lframe0
+ 1030 0018 00000000 		.4byte	.LFB3
+ 1031 001c 20000000 		.4byte	.LFE3-.LFB3
+ 1032 0020 42       		.byte	0x4
+ 1033              		.4byte	.LCFI0-.LFB3
+ 1034 0021 0E       		.byte	0xe
+ 1035 0022 04       		.uleb128 0x4
+ 1036 0023 00       		.align	2
+ 1037              	.LEFDE0:
+ 1038              	.LSFDE2:
+ 1039 0024 10000000 		.4byte	.LEFDE2-.LASFDE2
+ 1040              	.LASFDE2:
+ 1041 0028 00000000 		.4byte	.Lframe0
+ 1042 002c 20000000 		.4byte	.LFB5
+ 1043 0030 90000000 		.4byte	.LFE5-.LFB5
+ 1044 0034 46       		.byte	0x4
+ 1045              		.4byte	.LCFI1-.LFB5
+ 1046 0035 0E       		.byte	0xe
+ 1047 0036 04       		.uleb128 0x4
+ 1048 0037 00       		.align	2
+ 1049              	.LEFDE2:
+ 1050              	.LSFDE4:
+ 1051 0038 14000000 		.4byte	.LEFDE4-.LASFDE4
+ 1052              	.LASFDE4:
+ 1053 003c 00000000 		.4byte	.Lframe0
+ 1054 0040 B0000000 		.4byte	.LFB6
+ 1055 0044 1E000000 		.4byte	.LFE6-.LFB6
+ 1056 0048 42       		.byte	0x4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 29
+
+
+ 1057              		.4byte	.LCFI2-.LFB6
+ 1058 0049 0E       		.byte	0xe
+ 1059 004a 08       		.uleb128 0x8
+ 1060 004b 84       		.byte	0x84
+ 1061 004c 02       		.uleb128 0x2
+ 1062 004d 8E       		.byte	0x8e
+ 1063 004e 01       		.uleb128 0x1
+ 1064 004f 00       		.align	2
+ 1065              	.LEFDE4:
+ 1066              	.LSFDE6:
+ 1067 0050 0C000000 		.4byte	.LEFDE6-.LASFDE6
+ 1068              	.LASFDE6:
+ 1069 0054 00000000 		.4byte	.Lframe0
+ 1070 0058 D0000000 		.4byte	.LFB18
+ 1071 005c 10000000 		.4byte	.LFE18-.LFB18
+ 1072              		.align	2
+ 1073              	.LEFDE6:
+ 1074              	.LSFDE8:
+ 1075 0060 18000000 		.4byte	.LEFDE8-.LASFDE8
+ 1076              	.LASFDE8:
+ 1077 0064 00000000 		.4byte	.Lframe0
+ 1078 0068 E0000000 		.4byte	.LFB12
+ 1079 006c 5C000000 		.4byte	.LFE12-.LFB12
+ 1080 0070 42       		.byte	0x4
+ 1081              		.4byte	.LCFI3-.LFB12
+ 1082 0071 0E       		.byte	0xe
+ 1083 0072 0C       		.uleb128 0xc
+ 1084 0073 84       		.byte	0x84
+ 1085 0074 03       		.uleb128 0x3
+ 1086 0075 85       		.byte	0x85
+ 1087 0076 02       		.uleb128 0x2
+ 1088 0077 8E       		.byte	0x8e
+ 1089 0078 01       		.uleb128 0x1
+ 1090 0079 4E       		.byte	0x4
+ 1091              		.4byte	.LCFI4-.LCFI3
+ 1092 007a 0E       		.byte	0xe
+ 1093 007b 1C       		.uleb128 0x1c
+ 1094              		.align	2
+ 1095              	.LEFDE8:
+ 1096              	.LSFDE10:
+ 1097 007c 14000000 		.4byte	.LEFDE10-.LASFDE10
+ 1098              	.LASFDE10:
+ 1099 0080 00000000 		.4byte	.Lframe0
+ 1100 0084 3C010000 		.4byte	.LFB16
+ 1101 0088 74000000 		.4byte	.LFE16-.LFB16
+ 1102 008c 42       		.byte	0x4
+ 1103              		.4byte	.LCFI5-.LFB16
+ 1104 008d 0E       		.byte	0xe
+ 1105 008e 08       		.uleb128 0x8
+ 1106 008f 84       		.byte	0x84
+ 1107 0090 02       		.uleb128 0x2
+ 1108 0091 8E       		.byte	0x8e
+ 1109 0092 01       		.uleb128 0x1
+ 1110 0093 00       		.align	2
+ 1111              	.LEFDE10:
+ 1112              	.LSFDE12:
+ 1113 0094 14000000 		.4byte	.LEFDE12-.LASFDE12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 30
+
+
+ 1114              	.LASFDE12:
+ 1115 0098 00000000 		.4byte	.Lframe0
+ 1116 009c B0010000 		.4byte	.LFB7
+ 1117 00a0 14000000 		.4byte	.LFE7-.LFB7
+ 1118 00a4 42       		.byte	0x4
+ 1119              		.4byte	.LCFI6-.LFB7
+ 1120 00a5 0E       		.byte	0xe
+ 1121 00a6 04       		.uleb128 0x4
+ 1122 00a7 8E       		.byte	0x8e
+ 1123 00a8 01       		.uleb128 0x1
+ 1124 00a9 000000   		.align	2
+ 1125              	.LEFDE12:
+ 1126              	.LSFDE14:
+ 1127 00ac 14000000 		.4byte	.LEFDE14-.LASFDE14
+ 1128              	.LASFDE14:
+ 1129 00b0 00000000 		.4byte	.Lframe0
+ 1130 00b4 C4010000 		.4byte	.LFB8
+ 1131 00b8 24000000 		.4byte	.LFE8-.LFB8
+ 1132 00bc 42       		.byte	0x4
+ 1133              		.4byte	.LCFI7-.LFB8
+ 1134 00bd 0E       		.byte	0xe
+ 1135 00be 08       		.uleb128 0x8
+ 1136 00bf 84       		.byte	0x84
+ 1137 00c0 02       		.uleb128 0x2
+ 1138 00c1 8E       		.byte	0x8e
+ 1139 00c2 01       		.uleb128 0x1
+ 1140 00c3 00       		.align	2
+ 1141              	.LEFDE14:
+ 1142              	.LSFDE16:
+ 1143 00c4 14000000 		.4byte	.LEFDE16-.LASFDE16
+ 1144              	.LASFDE16:
+ 1145 00c8 00000000 		.4byte	.Lframe0
+ 1146 00cc E8010000 		.4byte	.LFB14
+ 1147 00d0 D8000000 		.4byte	.LFE14-.LFB14
+ 1148 00d4 42       		.byte	0x4
+ 1149              		.4byte	.LCFI8-.LFB14
+ 1150 00d5 0E       		.byte	0xe
+ 1151 00d6 04       		.uleb128 0x4
+ 1152 00d7 8E       		.byte	0x8e
+ 1153 00d8 01       		.uleb128 0x1
+ 1154 00d9 000000   		.align	2
+ 1155              	.LEFDE16:
+ 1156              	.LSFDE18:
+ 1157 00dc 1C000000 		.4byte	.LEFDE18-.LASFDE18
+ 1158              	.LASFDE18:
+ 1159 00e0 00000000 		.4byte	.Lframe0
+ 1160 00e4 C0020000 		.4byte	.LFB13
+ 1161 00e8 A0000000 		.4byte	.LFE13-.LFB13
+ 1162 00ec 42       		.byte	0x4
+ 1163              		.4byte	.LCFI9-.LFB13
+ 1164 00ed 0E       		.byte	0xe
+ 1165 00ee 14       		.uleb128 0x14
+ 1166 00ef 84       		.byte	0x84
+ 1167 00f0 05       		.uleb128 0x5
+ 1168 00f1 85       		.byte	0x85
+ 1169 00f2 04       		.uleb128 0x4
+ 1170 00f3 86       		.byte	0x86
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 31
+
+
+ 1171 00f4 03       		.uleb128 0x3
+ 1172 00f5 87       		.byte	0x87
+ 1173 00f6 02       		.uleb128 0x2
+ 1174 00f7 8E       		.byte	0x8e
+ 1175 00f8 01       		.uleb128 0x1
+ 1176 00f9 42       		.byte	0x4
+ 1177              		.4byte	.LCFI10-.LCFI9
+ 1178 00fa 0E       		.byte	0xe
+ 1179 00fb 24       		.uleb128 0x24
+ 1180              		.align	2
+ 1181              	.LEFDE18:
+ 1182              	.LSFDE20:
+ 1183 00fc 1C000000 		.4byte	.LEFDE20-.LASFDE20
+ 1184              	.LASFDE20:
+ 1185 0100 00000000 		.4byte	.Lframe0
+ 1186 0104 60030000 		.4byte	.LFB15
+ 1187 0108 6C010000 		.4byte	.LFE15-.LFB15
+ 1188 010c 42       		.byte	0x4
+ 1189              		.4byte	.LCFI11-.LFB15
+ 1190 010d 0E       		.byte	0xe
+ 1191 010e 14       		.uleb128 0x14
+ 1192 010f 84       		.byte	0x84
+ 1193 0110 05       		.uleb128 0x5
+ 1194 0111 85       		.byte	0x85
+ 1195 0112 04       		.uleb128 0x4
+ 1196 0113 86       		.byte	0x86
+ 1197 0114 03       		.uleb128 0x3
+ 1198 0115 87       		.byte	0x87
+ 1199 0116 02       		.uleb128 0x2
+ 1200 0117 8E       		.byte	0x8e
+ 1201 0118 01       		.uleb128 0x1
+ 1202 0119 42       		.byte	0x4
+ 1203              		.4byte	.LCFI12-.LCFI11
+ 1204 011a 0E       		.byte	0xe
+ 1205 011b 18       		.uleb128 0x18
+ 1206              		.align	2
+ 1207              	.LEFDE20:
+ 1208              		.file 4 "../pre_emptive_os/api/../api/general.h"
+ 1209              		.file 5 "pff2/src/pff.h"
+ 1210              		.file 6 "pff2/src/integer.h"
+ 1211              		.text
+ 1212              	.Letext0:
+ 1213              		.section	.debug_loc,"",%progbits
+ 1214              	.Ldebug_loc0:
+ 1215              	.LLST0:
+ 1216 0000 00000000 		.4byte	.LFB3-.Ltext0
+ 1217 0004 02000000 		.4byte	.LCFI0-.Ltext0
+ 1218 0008 0100     		.2byte	0x1
+ 1219 000a 5D       		.byte	0x5d
+ 1220 000b 02000000 		.4byte	.LCFI0-.Ltext0
+ 1221 000f 20000000 		.4byte	.LFE3-.Ltext0
+ 1222 0013 0200     		.2byte	0x2
+ 1223 0015 7D       		.byte	0x7d
+ 1224 0016 04       		.sleb128 4
+ 1225 0017 00000000 		.4byte	0x0
+ 1226 001b 00000000 		.4byte	0x0
+ 1227              	.LLST1:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 32
+
+
+ 1228 001f 20000000 		.4byte	.LFB5-.Ltext0
+ 1229 0023 26000000 		.4byte	.LCFI1-.Ltext0
+ 1230 0027 0100     		.2byte	0x1
+ 1231 0029 5D       		.byte	0x5d
+ 1232 002a 26000000 		.4byte	.LCFI1-.Ltext0
+ 1233 002e B0000000 		.4byte	.LFE5-.Ltext0
+ 1234 0032 0200     		.2byte	0x2
+ 1235 0034 7D       		.byte	0x7d
+ 1236 0035 04       		.sleb128 4
+ 1237 0036 00000000 		.4byte	0x0
+ 1238 003a 00000000 		.4byte	0x0
+ 1239              	.LLST2:
+ 1240 003e 20000000 		.4byte	.LVL1-.Ltext0
+ 1241 0042 24000000 		.4byte	.LVL3-.Ltext0
+ 1242 0046 0100     		.2byte	0x1
+ 1243 0048 50       		.byte	0x50
+ 1244 0049 00000000 		.4byte	0x0
+ 1245 004d 00000000 		.4byte	0x0
+ 1246              	.LLST3:
+ 1247 0051 20000000 		.4byte	.LVL1-.Ltext0
+ 1248 0055 22000000 		.4byte	.LVL2-.Ltext0
+ 1249 0059 0100     		.2byte	0x1
+ 1250 005b 51       		.byte	0x51
+ 1251 005c 28000000 		.4byte	.LVL4-.Ltext0
+ 1252 0060 64000000 		.4byte	.LVL6-.Ltext0
+ 1253 0064 0100     		.2byte	0x1
+ 1254 0066 51       		.byte	0x51
+ 1255 0067 70000000 		.4byte	.LVL8-.Ltext0
+ 1256 006b 72000000 		.4byte	.LVL9-.Ltext0
+ 1257 006f 0100     		.2byte	0x1
+ 1258 0071 51       		.byte	0x51
+ 1259 0072 00000000 		.4byte	0x0
+ 1260 0076 00000000 		.4byte	0x0
+ 1261              	.LLST4:
+ 1262 007a 62000000 		.4byte	.LVL5-.Ltext0
+ 1263 007e 64000000 		.4byte	.LVL6-.Ltext0
+ 1264 0082 0200     		.2byte	0x2
+ 1265 0084 73       		.byte	0x73
+ 1266 0085 00       		.sleb128 0
+ 1267 0086 64000000 		.4byte	.LVL6-.Ltext0
+ 1268 008a 6A000000 		.4byte	.LVL7-.Ltext0
+ 1269 008e 0100     		.2byte	0x1
+ 1270 0090 53       		.byte	0x53
+ 1271 0091 6A000000 		.4byte	.LVL7-.Ltext0
+ 1272 0095 70000000 		.4byte	.LVL8-.Ltext0
+ 1273 0099 0200     		.2byte	0x2
+ 1274 009b 71       		.byte	0x71
+ 1275 009c 00       		.sleb128 0
+ 1276 009d 70000000 		.4byte	.LVL8-.Ltext0
+ 1277 00a1 7A000000 		.4byte	.LVL10-.Ltext0
+ 1278 00a5 0200     		.2byte	0x2
+ 1279 00a7 73       		.byte	0x73
+ 1280 00a8 00       		.sleb128 0
+ 1281 00a9 7A000000 		.4byte	.LVL10-.Ltext0
+ 1282 00ad 7C000000 		.4byte	.LVL11-.Ltext0
+ 1283 00b1 0100     		.2byte	0x1
+ 1284 00b3 53       		.byte	0x53
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 33
+
+
+ 1285 00b4 7C000000 		.4byte	.LVL11-.Ltext0
+ 1286 00b8 88000000 		.4byte	.LVL12-.Ltext0
+ 1287 00bc 0200     		.2byte	0x2
+ 1288 00be 71       		.byte	0x71
+ 1289 00bf 00       		.sleb128 0
+ 1290 00c0 88000000 		.4byte	.LVL12-.Ltext0
+ 1291 00c4 8E000000 		.4byte	.LVL13-.Ltext0
+ 1292 00c8 0100     		.2byte	0x1
+ 1293 00ca 53       		.byte	0x53
+ 1294 00cb 8E000000 		.4byte	.LVL13-.Ltext0
+ 1295 00cf 94000000 		.4byte	.LVL14-.Ltext0
+ 1296 00d3 0200     		.2byte	0x2
+ 1297 00d5 72       		.byte	0x72
+ 1298 00d6 00       		.sleb128 0
+ 1299 00d7 94000000 		.4byte	.LVL14-.Ltext0
+ 1300 00db 9E000000 		.4byte	.LVL15-.Ltext0
+ 1301 00df 0200     		.2byte	0x2
+ 1302 00e1 71       		.byte	0x71
+ 1303 00e2 00       		.sleb128 0
+ 1304 00e3 9E000000 		.4byte	.LVL15-.Ltext0
+ 1305 00e7 B0000000 		.4byte	.LFE5-.Ltext0
+ 1306 00eb 0100     		.2byte	0x1
+ 1307 00ed 53       		.byte	0x53
+ 1308 00ee 00000000 		.4byte	0x0
+ 1309 00f2 00000000 		.4byte	0x0
+ 1310              	.LLST5:
+ 1311 00f6 B0000000 		.4byte	.LFB6-.Ltext0
+ 1312 00fa B2000000 		.4byte	.LCFI2-.Ltext0
+ 1313 00fe 0100     		.2byte	0x1
+ 1314 0100 5D       		.byte	0x5d
+ 1315 0101 B2000000 		.4byte	.LCFI2-.Ltext0
+ 1316 0105 CE000000 		.4byte	.LFE6-.Ltext0
+ 1317 0109 0200     		.2byte	0x2
+ 1318 010b 7D       		.byte	0x7d
+ 1319 010c 08       		.sleb128 8
+ 1320 010d 00000000 		.4byte	0x0
+ 1321 0111 00000000 		.4byte	0x0
+ 1322              	.LLST6:
+ 1323 0115 B2000000 		.4byte	.LVL16-.Ltext0
+ 1324 0119 B6000000 		.4byte	.LVL17-.Ltext0
+ 1325 011d 0100     		.2byte	0x1
+ 1326 011f 50       		.byte	0x50
+ 1327 0120 B6000000 		.4byte	.LVL17-.Ltext0
+ 1328 0124 C8000000 		.4byte	.LVL19-.Ltext0
+ 1329 0128 0100     		.2byte	0x1
+ 1330 012a 54       		.byte	0x54
+ 1331 012b C8000000 		.4byte	.LVL19-.Ltext0
+ 1332 012f CE000000 		.4byte	.LFE6-.Ltext0
+ 1333 0133 0100     		.2byte	0x1
+ 1334 0135 50       		.byte	0x50
+ 1335 0136 00000000 		.4byte	0x0
+ 1336 013a 00000000 		.4byte	0x0
+ 1337              	.LLST8:
+ 1338 013e E0000000 		.4byte	.LFB12-.Ltext0
+ 1339 0142 E2000000 		.4byte	.LCFI3-.Ltext0
+ 1340 0146 0100     		.2byte	0x1
+ 1341 0148 5D       		.byte	0x5d
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 34
+
+
+ 1342 0149 E2000000 		.4byte	.LCFI3-.Ltext0
+ 1343 014d F0000000 		.4byte	.LCFI4-.Ltext0
+ 1344 0151 0200     		.2byte	0x2
+ 1345 0153 7D       		.byte	0x7d
+ 1346 0154 0C       		.sleb128 12
+ 1347 0155 F0000000 		.4byte	.LCFI4-.Ltext0
+ 1348 0159 3C010000 		.4byte	.LFE12-.Ltext0
+ 1349 015d 0200     		.2byte	0x2
+ 1350 015f 7D       		.byte	0x7d
+ 1351 0160 1C       		.sleb128 28
+ 1352 0161 00000000 		.4byte	0x0
+ 1353 0165 00000000 		.4byte	0x0
+ 1354              	.LLST9:
+ 1355 0169 3C010000 		.4byte	.LFB16-.Ltext0
+ 1356 016d 3E010000 		.4byte	.LCFI5-.Ltext0
+ 1357 0171 0100     		.2byte	0x1
+ 1358 0173 5D       		.byte	0x5d
+ 1359 0174 3E010000 		.4byte	.LCFI5-.Ltext0
+ 1360 0178 B0010000 		.4byte	.LFE16-.Ltext0
+ 1361 017c 0200     		.2byte	0x2
+ 1362 017e 7D       		.byte	0x7d
+ 1363 017f 08       		.sleb128 8
+ 1364 0180 00000000 		.4byte	0x0
+ 1365 0184 00000000 		.4byte	0x0
+ 1366              	.LLST10:
+ 1367 0188 3E010000 		.4byte	.LVL22-.Ltext0
+ 1368 018c 44010000 		.4byte	.LVL23-.Ltext0
+ 1369 0190 0100     		.2byte	0x1
+ 1370 0192 50       		.byte	0x50
+ 1371 0193 44010000 		.4byte	.LVL23-.Ltext0
+ 1372 0197 9A010000 		.4byte	.LVL24-.Ltext0
+ 1373 019b 0100     		.2byte	0x1
+ 1374 019d 54       		.byte	0x54
+ 1375 019e 00000000 		.4byte	0x0
+ 1376 01a2 00000000 		.4byte	0x0
+ 1377              	.LLST11:
+ 1378 01a6 B0010000 		.4byte	.LFB7-.Ltext0
+ 1379 01aa B2010000 		.4byte	.LCFI6-.Ltext0
+ 1380 01ae 0100     		.2byte	0x1
+ 1381 01b0 5D       		.byte	0x5d
+ 1382 01b1 B2010000 		.4byte	.LCFI6-.Ltext0
+ 1383 01b5 C4010000 		.4byte	.LFE7-.Ltext0
+ 1384 01b9 0200     		.2byte	0x2
+ 1385 01bb 7D       		.byte	0x7d
+ 1386 01bc 04       		.sleb128 4
+ 1387 01bd 00000000 		.4byte	0x0
+ 1388 01c1 00000000 		.4byte	0x0
+ 1389              	.LLST12:
+ 1390 01c5 C4010000 		.4byte	.LFB8-.Ltext0
+ 1391 01c9 C6010000 		.4byte	.LCFI7-.Ltext0
+ 1392 01cd 0100     		.2byte	0x1
+ 1393 01cf 5D       		.byte	0x5d
+ 1394 01d0 C6010000 		.4byte	.LCFI7-.Ltext0
+ 1395 01d4 E8010000 		.4byte	.LFE8-.Ltext0
+ 1396 01d8 0200     		.2byte	0x2
+ 1397 01da 7D       		.byte	0x7d
+ 1398 01db 08       		.sleb128 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 35
+
+
+ 1399 01dc 00000000 		.4byte	0x0
+ 1400 01e0 00000000 		.4byte	0x0
+ 1401              	.LLST13:
+ 1402 01e4 C6010000 		.4byte	.LVL25-.Ltext0
+ 1403 01e8 CA010000 		.4byte	.LVL26-.Ltext0
+ 1404 01ec 0100     		.2byte	0x1
+ 1405 01ee 50       		.byte	0x50
+ 1406 01ef 00000000 		.4byte	0x0
+ 1407 01f3 00000000 		.4byte	0x0
+ 1408              	.LLST14:
+ 1409 01f7 E8010000 		.4byte	.LFB14-.Ltext0
+ 1410 01fb EA010000 		.4byte	.LCFI8-.Ltext0
+ 1411 01ff 0100     		.2byte	0x1
+ 1412 0201 5D       		.byte	0x5d
+ 1413 0202 EA010000 		.4byte	.LCFI8-.Ltext0
+ 1414 0206 C0020000 		.4byte	.LFE14-.Ltext0
+ 1415 020a 0200     		.2byte	0x2
+ 1416 020c 7D       		.byte	0x7d
+ 1417 020d 04       		.sleb128 4
+ 1418 020e 00000000 		.4byte	0x0
+ 1419 0212 00000000 		.4byte	0x0
+ 1420              	.LLST15:
+ 1421 0216 EA010000 		.4byte	.LVL27-.Ltext0
+ 1422 021a 02020000 		.4byte	.LVL28-.Ltext0
+ 1423 021e 0100     		.2byte	0x1
+ 1424 0220 50       		.byte	0x50
+ 1425 0221 00000000 		.4byte	0x0
+ 1426 0225 00000000 		.4byte	0x0
+ 1427              	.LLST16:
+ 1428 0229 C0020000 		.4byte	.LFB13-.Ltext0
+ 1429 022d C2020000 		.4byte	.LCFI9-.Ltext0
+ 1430 0231 0100     		.2byte	0x1
+ 1431 0233 5D       		.byte	0x5d
+ 1432 0234 C2020000 		.4byte	.LCFI9-.Ltext0
+ 1433 0238 C4020000 		.4byte	.LCFI10-.Ltext0
+ 1434 023c 0200     		.2byte	0x2
+ 1435 023e 7D       		.byte	0x7d
+ 1436 023f 14       		.sleb128 20
+ 1437 0240 C4020000 		.4byte	.LCFI10-.Ltext0
+ 1438 0244 60030000 		.4byte	.LFE13-.Ltext0
+ 1439 0248 0200     		.2byte	0x2
+ 1440 024a 7D       		.byte	0x7d
+ 1441 024b 24       		.sleb128 36
+ 1442 024c 00000000 		.4byte	0x0
+ 1443 0250 00000000 		.4byte	0x0
+ 1444              	.LLST17:
+ 1445 0254 C2020000 		.4byte	.LVL29-.Ltext0
+ 1446 0258 C8020000 		.4byte	.LVL30-.Ltext0
+ 1447 025c 0100     		.2byte	0x1
+ 1448 025e 50       		.byte	0x50
+ 1449 025f 00000000 		.4byte	0x0
+ 1450 0263 00000000 		.4byte	0x0
+ 1451              	.LLST18:
+ 1452 0267 60030000 		.4byte	.LFB15-.Ltext0
+ 1453 026b 62030000 		.4byte	.LCFI11-.Ltext0
+ 1454 026f 0100     		.2byte	0x1
+ 1455 0271 5D       		.byte	0x5d
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 36
+
+
+ 1456 0272 62030000 		.4byte	.LCFI11-.Ltext0
+ 1457 0276 64030000 		.4byte	.LCFI12-.Ltext0
+ 1458 027a 0200     		.2byte	0x2
+ 1459 027c 7D       		.byte	0x7d
+ 1460 027d 14       		.sleb128 20
+ 1461 027e 64030000 		.4byte	.LCFI12-.Ltext0
+ 1462 0282 CC040000 		.4byte	.LFE15-.Ltext0
+ 1463 0286 0200     		.2byte	0x2
+ 1464 0288 7D       		.byte	0x7d
+ 1465 0289 18       		.sleb128 24
+ 1466 028a 00000000 		.4byte	0x0
+ 1467 028e 00000000 		.4byte	0x0
+ 1468              	.LLST19:
+ 1469 0292 62030000 		.4byte	.LVL31-.Ltext0
+ 1470 0296 66030000 		.4byte	.LVL32-.Ltext0
+ 1471 029a 0100     		.2byte	0x1
+ 1472 029c 50       		.byte	0x50
+ 1473 029d 00000000 		.4byte	0x0
+ 1474 02a1 00000000 		.4byte	0x0
+ 1475              	.LLST20:
+ 1476 02a5 6E030000 		.4byte	.LVL33-.Ltext0
+ 1477 02a9 88030000 		.4byte	.LVL34-.Ltext0
+ 1478 02ad 0200     		.2byte	0x2
+ 1479 02af 91       		.byte	0x91
+ 1480 02b0 7C       		.sleb128 -4
+ 1481 02b1 88030000 		.4byte	.LVL34-.Ltext0
+ 1482 02b5 90030000 		.4byte	.LVL35-.Ltext0
+ 1483 02b9 0100     		.2byte	0x1
+ 1484 02bb 50       		.byte	0x50
+ 1485 02bc 00000000 		.4byte	0x0
+ 1486 02c0 00000000 		.4byte	0x0
+ 1487              		.section	.debug_info
+ 1488 0000 DA050000 		.4byte	0x5da
+ 1489 0004 0200     		.2byte	0x2
+ 1490 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1491 000a 04       		.byte	0x4
+ 1492 000b 01       		.uleb128 0x1
+ 1493 000c 00000000 		.4byte	.Ldebug_line0
+ 1494 0010 CC040000 		.4byte	.Letext0
+ 1495 0014 00000000 		.4byte	.Ltext0
+ 1496 0018 83020000 		.4byte	.LASF78
+ 1497 001c 01       		.byte	0x1
+ 1498 001d C6010000 		.4byte	.LASF79
+ 1499 0021 1C030000 		.4byte	.LASF80
+ 1500 0025 02       		.uleb128 0x2
+ 1501 0026 74553800 		.ascii	"tU8\000"
+ 1502 002a 04       		.byte	0x4
+ 1503 002b 49       		.byte	0x49
+ 1504 002c 30000000 		.4byte	0x30
+ 1505 0030 03       		.uleb128 0x3
+ 1506 0031 75020000 		.4byte	.LASF0
+ 1507 0035 01       		.byte	0x1
+ 1508 0036 08       		.byte	0x8
+ 1509 0037 03       		.uleb128 0x3
+ 1510 0038 A2010000 		.4byte	.LASF1
+ 1511 003c 02       		.byte	0x2
+ 1512 003d 07       		.byte	0x7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 37
+
+
+ 1513 003e 04       		.uleb128 0x4
+ 1514 003f E1010000 		.4byte	.LASF2
+ 1515 0043 04       		.byte	0x4
+ 1516 0044 4B       		.byte	0x4b
+ 1517 0045 49000000 		.4byte	0x49
+ 1518 0049 03       		.uleb128 0x3
+ 1519 004a 8F020000 		.4byte	.LASF3
+ 1520 004e 04       		.byte	0x4
+ 1521 004f 07       		.byte	0x7
+ 1522 0050 03       		.uleb128 0x3
+ 1523 0051 44000000 		.4byte	.LASF4
+ 1524 0055 01       		.byte	0x1
+ 1525 0056 06       		.byte	0x6
+ 1526 0057 03       		.uleb128 0x3
+ 1527 0058 9C020000 		.4byte	.LASF5
+ 1528 005c 02       		.byte	0x2
+ 1529 005d 05       		.byte	0x5
+ 1530 005e 05       		.uleb128 0x5
+ 1531 005f 696E7400 		.ascii	"int\000"
+ 1532 0063 04       		.byte	0x4
+ 1533 0064 05       		.byte	0x5
+ 1534 0065 04       		.uleb128 0x4
+ 1535 0066 21010000 		.4byte	.LASF6
+ 1536 006a 04       		.byte	0x4
+ 1537 006b 58       		.byte	0x58
+ 1538 006c 30000000 		.4byte	0x30
+ 1539 0070 03       		.uleb128 0x3
+ 1540 0071 96000000 		.4byte	.LASF7
+ 1541 0075 08       		.byte	0x8
+ 1542 0076 05       		.byte	0x5
+ 1543 0077 03       		.uleb128 0x3
+ 1544 0078 5A000000 		.4byte	.LASF8
+ 1545 007c 08       		.byte	0x8
+ 1546 007d 07       		.byte	0x7
+ 1547 007e 03       		.uleb128 0x3
+ 1548 007f 90010000 		.4byte	.LASF9
+ 1549 0083 04       		.byte	0x4
+ 1550 0084 07       		.byte	0x7
+ 1551 0085 06       		.uleb128 0x6
+ 1552 0086 04       		.byte	0x4
+ 1553 0087 04       		.uleb128 0x4
+ 1554 0088 6C010000 		.4byte	.LASF10
+ 1555 008c 06       		.byte	0x6
+ 1556 008d 15       		.byte	0x15
+ 1557 008e 30000000 		.4byte	0x30
+ 1558 0092 04       		.uleb128 0x4
+ 1559 0093 15020000 		.4byte	.LASF11
+ 1560 0097 06       		.byte	0x6
+ 1561 0098 1A       		.byte	0x1a
+ 1562 0099 37000000 		.4byte	0x37
+ 1563 009d 03       		.uleb128 0x3
+ 1564 009e 02010000 		.4byte	.LASF12
+ 1565 00a2 04       		.byte	0x4
+ 1566 00a3 05       		.byte	0x5
+ 1567 00a4 03       		.uleb128 0x3
+ 1568 00a5 90010000 		.4byte	.LASF9
+ 1569 00a9 04       		.byte	0x4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 38
+
+
+ 1570 00aa 07       		.byte	0x7
+ 1571 00ab 04       		.uleb128 0x4
+ 1572 00ac 4A010000 		.4byte	.LASF13
+ 1573 00b0 06       		.byte	0x6
+ 1574 00b1 20       		.byte	0x20
+ 1575 00b2 A4000000 		.4byte	0xa4
+ 1576 00b6 07       		.uleb128 0x7
+ 1577 00b7 95010000 		.4byte	0x195
+ 1578 00bb DB020000 		.4byte	.LASF81
+ 1579 00bf 30       		.byte	0x30
+ 1580 00c0 05       		.byte	0x5
+ 1581 00c1 4B       		.byte	0x4b
+ 1582 00c2 08       		.uleb128 0x8
+ 1583 00c3 29000000 		.4byte	.LASF14
+ 1584 00c7 05       		.byte	0x5
+ 1585 00c8 4C       		.byte	0x4c
+ 1586 00c9 87000000 		.4byte	0x87
+ 1587 00cd 02       		.byte	0x2
+ 1588 00ce 23       		.byte	0x23
+ 1589 00cf 00       		.uleb128 0x0
+ 1590 00d0 08       		.uleb128 0x8
+ 1591 00d1 50010000 		.4byte	.LASF15
+ 1592 00d5 05       		.byte	0x5
+ 1593 00d6 4D       		.byte	0x4d
+ 1594 00d7 87000000 		.4byte	0x87
+ 1595 00db 02       		.byte	0x2
+ 1596 00dc 23       		.byte	0x23
+ 1597 00dd 01       		.uleb128 0x1
+ 1598 00de 08       		.uleb128 0x8
+ 1599 00df A6020000 		.4byte	.LASF16
+ 1600 00e3 05       		.byte	0x5
+ 1601 00e4 4E       		.byte	0x4e
+ 1602 00e5 87000000 		.4byte	0x87
+ 1603 00e9 02       		.byte	0x2
+ 1604 00ea 23       		.byte	0x23
+ 1605 00eb 02       		.uleb128 0x2
+ 1606 00ec 08       		.uleb128 0x8
+ 1607 00ed 31000000 		.4byte	.LASF17
+ 1608 00f1 05       		.byte	0x5
+ 1609 00f2 4F       		.byte	0x4f
+ 1610 00f3 87000000 		.4byte	0x87
+ 1611 00f7 02       		.byte	0x2
+ 1612 00f8 23       		.byte	0x23
+ 1613 00f9 03       		.uleb128 0x3
+ 1614 00fa 08       		.uleb128 0x8
+ 1615 00fb 50000000 		.4byte	.LASF18
+ 1616 00ff 05       		.byte	0x5
+ 1617 0100 50       		.byte	0x50
+ 1618 0101 92000000 		.4byte	0x92
+ 1619 0105 02       		.byte	0x2
+ 1620 0106 23       		.byte	0x23
+ 1621 0107 04       		.uleb128 0x4
+ 1622 0108 09       		.uleb128 0x9
+ 1623 0109 62756600 		.ascii	"buf\000"
+ 1624 010d 05       		.byte	0x5
+ 1625 010e 51       		.byte	0x51
+ 1626 010f 95010000 		.4byte	0x195
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 39
+
+
+ 1627 0113 02       		.byte	0x2
+ 1628 0114 23       		.byte	0x23
+ 1629 0115 08       		.uleb128 0x8
+ 1630 0116 08       		.uleb128 0x8
+ 1631 0117 05020000 		.4byte	.LASF19
+ 1632 011b 05       		.byte	0x5
+ 1633 011c 52       		.byte	0x52
+ 1634 011d AB000000 		.4byte	0xab
+ 1635 0121 02       		.byte	0x2
+ 1636 0122 23       		.byte	0x23
+ 1637 0123 0C       		.uleb128 0xc
+ 1638 0124 08       		.uleb128 0x8
+ 1639 0125 42010000 		.4byte	.LASF20
+ 1640 0129 05       		.byte	0x5
+ 1641 012a 53       		.byte	0x53
+ 1642 012b AB000000 		.4byte	0xab
+ 1643 012f 02       		.byte	0x2
+ 1644 0130 23       		.byte	0x23
+ 1645 0131 10       		.uleb128 0x10
+ 1646 0132 08       		.uleb128 0x8
+ 1647 0133 7E000000 		.4byte	.LASF21
+ 1648 0137 05       		.byte	0x5
+ 1649 0138 54       		.byte	0x54
+ 1650 0139 AB000000 		.4byte	0xab
+ 1651 013d 02       		.byte	0x2
+ 1652 013e 23       		.byte	0x23
+ 1653 013f 14       		.uleb128 0x14
+ 1654 0140 08       		.uleb128 0x8
+ 1655 0141 ED000000 		.4byte	.LASF22
+ 1656 0145 05       		.byte	0x5
+ 1657 0146 55       		.byte	0x55
+ 1658 0147 AB000000 		.4byte	0xab
+ 1659 014b 02       		.byte	0x2
+ 1660 014c 23       		.byte	0x23
+ 1661 014d 18       		.uleb128 0x18
+ 1662 014e 08       		.uleb128 0x8
+ 1663 014f F2010000 		.4byte	.LASF23
+ 1664 0153 05       		.byte	0x5
+ 1665 0154 56       		.byte	0x56
+ 1666 0155 AB000000 		.4byte	0xab
+ 1667 0159 02       		.byte	0x2
+ 1668 015a 23       		.byte	0x23
+ 1669 015b 1C       		.uleb128 0x1c
+ 1670 015c 08       		.uleb128 0x8
+ 1671 015d E7000000 		.4byte	.LASF24
+ 1672 0161 05       		.byte	0x5
+ 1673 0162 57       		.byte	0x57
+ 1674 0163 AB000000 		.4byte	0xab
+ 1675 0167 02       		.byte	0x2
+ 1676 0168 23       		.byte	0x23
+ 1677 0169 20       		.uleb128 0x20
+ 1678 016a 08       		.uleb128 0x8
+ 1679 016b 38010000 		.4byte	.LASF25
+ 1680 016f 05       		.byte	0x5
+ 1681 0170 58       		.byte	0x58
+ 1682 0171 AB000000 		.4byte	0xab
+ 1683 0175 02       		.byte	0x2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 40
+
+
+ 1684 0176 23       		.byte	0x23
+ 1685 0177 24       		.uleb128 0x24
+ 1686 0178 08       		.uleb128 0x8
+ 1687 0179 5C030000 		.4byte	.LASF26
+ 1688 017d 05       		.byte	0x5
+ 1689 017e 59       		.byte	0x59
+ 1690 017f AB000000 		.4byte	0xab
+ 1691 0183 02       		.byte	0x2
+ 1692 0184 23       		.byte	0x23
+ 1693 0185 28       		.uleb128 0x28
+ 1694 0186 08       		.uleb128 0x8
+ 1695 0187 6F020000 		.4byte	.LASF27
+ 1696 018b 05       		.byte	0x5
+ 1697 018c 5A       		.byte	0x5a
+ 1698 018d AB000000 		.4byte	0xab
+ 1699 0191 02       		.byte	0x2
+ 1700 0192 23       		.byte	0x23
+ 1701 0193 2C       		.uleb128 0x2c
+ 1702 0194 00       		.byte	0x0
+ 1703 0195 0A       		.uleb128 0xa
+ 1704 0196 04       		.byte	0x4
+ 1705 0197 87000000 		.4byte	0x87
+ 1706 019b 04       		.uleb128 0x4
+ 1707 019c EC010000 		.4byte	.LASF28
+ 1708 01a0 05       		.byte	0x5
+ 1709 01a1 5B       		.byte	0x5b
+ 1710 01a2 B6000000 		.4byte	0xb6
+ 1711 01a6 03       		.uleb128 0x3
+ 1712 01a7 D6020000 		.4byte	.LASF29
+ 1713 01ab 01       		.byte	0x1
+ 1714 01ac 08       		.byte	0x8
+ 1715 01ad 0B       		.uleb128 0xb
+ 1716 01ae E6010000 		.4byte	0x1e6
+ 1717 01b2 04       		.byte	0x4
+ 1718 01b3 05       		.byte	0x5
+ 1719 01b4 79       		.byte	0x79
+ 1720 01b5 0C       		.uleb128 0xc
+ 1721 01b6 08030000 		.4byte	.LASF30
+ 1722 01ba 00       		.sleb128 0
+ 1723 01bb 0C       		.uleb128 0xc
+ 1724 01bc CD010000 		.4byte	.LASF31
+ 1725 01c0 01       		.sleb128 1
+ 1726 01c1 0C       		.uleb128 0xc
+ 1727 01c2 00000000 		.4byte	.LASF32
+ 1728 01c6 02       		.sleb128 2
+ 1729 01c7 0C       		.uleb128 0xc
+ 1730 01c8 1A020000 		.4byte	.LASF33
+ 1731 01cc 03       		.sleb128 3
+ 1732 01cd 0C       		.uleb128 0xc
+ 1733 01ce BC030000 		.4byte	.LASF34
+ 1734 01d2 04       		.sleb128 4
+ 1735 01d3 0C       		.uleb128 0xc
+ 1736 01d4 F7010000 		.4byte	.LASF35
+ 1737 01d8 05       		.sleb128 5
+ 1738 01d9 0C       		.uleb128 0xc
+ 1739 01da 43020000 		.4byte	.LASF36
+ 1740 01de 06       		.sleb128 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 41
+
+
+ 1741 01df 0C       		.uleb128 0xc
+ 1742 01e0 27010000 		.4byte	.LASF37
+ 1743 01e4 07       		.sleb128 7
+ 1744 01e5 00       		.byte	0x0
+ 1745 01e6 04       		.uleb128 0x4
+ 1746 01e7 79030000 		.4byte	.LASF38
+ 1747 01eb 05       		.byte	0x5
+ 1748 01ec 82       		.byte	0x82
+ 1749 01ed AD010000 		.4byte	0x1ad
+ 1750 01f1 0D       		.uleb128 0xd
+ 1751 01f2 0A020000 		.4byte	0x20a
+ 1752 01f6 5D010000 		.4byte	.LASF39
+ 1753 01fa 01       		.byte	0x1
+ 1754 01fb 33       		.byte	0x33
+ 1755 01fc 01       		.byte	0x1
+ 1756 01fd 01       		.byte	0x1
+ 1757 01fe 0E       		.uleb128 0xe
+ 1758 01ff 3D020000 		.4byte	.LASF42
+ 1759 0203 01       		.byte	0x1
+ 1760 0204 32       		.byte	0x32
+ 1761 0205 25000000 		.4byte	0x25
+ 1762 0209 00       		.byte	0x0
+ 1763 020a 0F       		.uleb128 0xf
+ 1764 020b 2F020000 		.4byte	0x22f
+ 1765 020f A4000000 		.4byte	.LASF40
+ 1766 0213 01       		.byte	0x1
+ 1767 0214 25       		.byte	0x25
+ 1768 0215 01       		.byte	0x1
+ 1769 0216 00000000 		.4byte	.LFB3
+ 1770 021a 20000000 		.4byte	.LFE3
+ 1771 021e 00000000 		.4byte	.LLST0
+ 1772 0222 10       		.uleb128 0x10
+ 1773 0223 6900     		.ascii	"i\000"
+ 1774 0225 01       		.byte	0x1
+ 1775 0226 26       		.byte	0x26
+ 1776 0227 2F020000 		.4byte	0x22f
+ 1777 022b 02       		.byte	0x2
+ 1778 022c 91       		.byte	0x91
+ 1779 022d 7C       		.sleb128 -4
+ 1780 022e 00       		.byte	0x0
+ 1781 022f 11       		.uleb128 0x11
+ 1782 0230 3E000000 		.4byte	0x3e
+ 1783 0234 0F       		.uleb128 0xf
+ 1784 0235 78020000 		.4byte	0x278
+ 1785 0239 67030000 		.4byte	.LASF41
+ 1786 023d 01       		.byte	0x1
+ 1787 023e 41       		.byte	0x41
+ 1788 023f 01       		.byte	0x1
+ 1789 0240 20000000 		.4byte	.LFB5
+ 1790 0244 B0000000 		.4byte	.LFE5
+ 1791 0248 1F000000 		.4byte	.LLST1
+ 1792 024c 12       		.uleb128 0x12
+ 1793 024d 72656700 		.ascii	"reg\000"
+ 1794 0251 01       		.byte	0x1
+ 1795 0252 40       		.byte	0x40
+ 1796 0253 25000000 		.4byte	0x25
+ 1797 0257 3E000000 		.4byte	.LLST2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 42
+
+
+ 1798 025b 13       		.uleb128 0x13
+ 1799 025c 79000000 		.4byte	.LASF43
+ 1800 0260 01       		.byte	0x1
+ 1801 0261 40       		.byte	0x40
+ 1802 0262 25000000 		.4byte	0x25
+ 1803 0266 51000000 		.4byte	.LLST3
+ 1804 026a 14       		.uleb128 0x14
+ 1805 026b 6900     		.ascii	"i\000"
+ 1806 026d 01       		.byte	0x1
+ 1807 026e 42       		.byte	0x42
+ 1808 026f 78020000 		.4byte	0x278
+ 1809 0273 7A000000 		.4byte	.LLST4
+ 1810 0277 00       		.byte	0x0
+ 1811 0278 11       		.uleb128 0x11
+ 1812 0279 25000000 		.4byte	0x25
+ 1813 027d 0F       		.uleb128 0xf
+ 1814 027e A5020000 		.4byte	0x2a5
+ 1815 0282 DC000000 		.4byte	.LASF44
+ 1816 0286 01       		.byte	0x1
+ 1817 0287 63       		.byte	0x63
+ 1818 0288 01       		.byte	0x1
+ 1819 0289 B0000000 		.4byte	.LFB6
+ 1820 028d CE000000 		.4byte	.LFE6
+ 1821 0291 F6000000 		.4byte	.LLST5
+ 1822 0295 13       		.uleb128 0x13
+ 1823 0296 E6010000 		.4byte	.LASF45
+ 1824 029a 01       		.byte	0x1
+ 1825 029b 62       		.byte	0x62
+ 1826 029c A5020000 		.4byte	0x2a5
+ 1827 02a0 15010000 		.4byte	.LLST6
+ 1828 02a4 00       		.byte	0x0
+ 1829 02a5 0A       		.uleb128 0xa
+ 1830 02a6 04       		.byte	0x4
+ 1831 02a7 AB020000 		.4byte	0x2ab
+ 1832 02ab 15       		.uleb128 0x15
+ 1833 02ac A6010000 		.4byte	0x1a6
+ 1834 02b0 16       		.uleb128 0x16
+ 1835 02b1 D5020000 		.4byte	0x2d5
+ 1836 02b5 01       		.byte	0x1
+ 1837 02b6 D9010000 		.4byte	.LASF47
+ 1838 02ba 02       		.byte	0x2
+ 1839 02bb F4       		.byte	0xf4
+ 1840 02bc 01       		.byte	0x1
+ 1841 02bd D0000000 		.4byte	.LFB18
+ 1842 02c1 E0000000 		.4byte	.LFE18
+ 1843 02c5 01       		.byte	0x1
+ 1844 02c6 5D       		.byte	0x5d
+ 1845 02c7 17       		.uleb128 0x17
+ 1846 02c8 52020000 		.4byte	.LASF46
+ 1847 02cc 02       		.byte	0x2
+ 1848 02cd F4       		.byte	0xf4
+ 1849 02ce 3E000000 		.4byte	0x3e
+ 1850 02d2 01       		.byte	0x1
+ 1851 02d3 50       		.byte	0x50
+ 1852 02d4 00       		.byte	0x0
+ 1853 02d5 18       		.uleb128 0x18
+ 1854 02d6 0F030000 		.4byte	0x30f
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 43
+
+
+ 1855 02da 01       		.byte	0x1
+ 1856 02db C7030000 		.4byte	.LASF48
+ 1857 02df 02       		.byte	0x2
+ 1858 02e0 3C       		.byte	0x3c
+ 1859 02e1 01       		.byte	0x1
+ 1860 02e2 5E000000 		.4byte	0x5e
+ 1861 02e6 E0000000 		.4byte	.LFB12
+ 1862 02ea 3C010000 		.4byte	.LFE12
+ 1863 02ee 3E010000 		.4byte	.LLST8
+ 1864 02f2 19       		.uleb128 0x19
+ 1865 02f3 69020000 		.4byte	.LASF49
+ 1866 02f7 02       		.byte	0x2
+ 1867 02f8 3D       		.byte	0x3d
+ 1868 02f9 25000000 		.4byte	0x25
+ 1869 02fd 02       		.byte	0x2
+ 1870 02fe 91       		.byte	0x91
+ 1871 02ff 73       		.sleb128 -13
+ 1872 0300 10       		.uleb128 0x10
+ 1873 0301 70696400 		.ascii	"pid\000"
+ 1874 0305 02       		.byte	0x2
+ 1875 0306 3E       		.byte	0x3e
+ 1876 0307 25000000 		.4byte	0x25
+ 1877 030b 02       		.byte	0x2
+ 1878 030c 75       		.byte	0x75
+ 1879 030d 00       		.sleb128 0
+ 1880 030e 00       		.byte	0x0
+ 1881 030f 0F       		.uleb128 0xf
+ 1882 0310 37030000 		.4byte	0x337
+ 1883 0314 CC030000 		.4byte	.LASF50
+ 1884 0318 02       		.byte	0x2
+ 1885 0319 C3       		.byte	0xc3
+ 1886 031a 01       		.byte	0x1
+ 1887 031b 3C010000 		.4byte	.LFB16
+ 1888 031f B0010000 		.4byte	.LFE16
+ 1889 0323 69010000 		.4byte	.LLST9
+ 1890 0327 13       		.uleb128 0x13
+ 1891 0328 B5010000 		.4byte	.LASF51
+ 1892 032c 02       		.byte	0x2
+ 1893 032d C3       		.byte	0xc3
+ 1894 032e 5E000000 		.4byte	0x5e
+ 1895 0332 88010000 		.4byte	.LLST10
+ 1896 0336 00       		.byte	0x0
+ 1897 0337 1A       		.uleb128 0x1a
+ 1898 0338 AF030000 		.4byte	.LASF54
+ 1899 033c 01       		.byte	0x1
+ 1900 033d 71       		.byte	0x71
+ 1901 033e B0010000 		.4byte	.LFB7
+ 1902 0342 C4010000 		.4byte	.LFE7
+ 1903 0346 A6010000 		.4byte	.LLST11
+ 1904 034a 0F       		.uleb128 0xf
+ 1905 034b 9C030000 		.4byte	0x39c
+ 1906 034f 0D000000 		.4byte	.LASF52
+ 1907 0353 01       		.byte	0x1
+ 1908 0354 77       		.byte	0x77
+ 1909 0355 01       		.byte	0x1
+ 1910 0356 C4010000 		.4byte	.LFB8
+ 1911 035a E8010000 		.4byte	.LFE8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 44
+
+
+ 1912 035e C5010000 		.4byte	.LLST12
+ 1913 0362 13       		.uleb128 0x13
+ 1914 0363 AE000000 		.4byte	.LASF53
+ 1915 0367 01       		.byte	0x1
+ 1916 0368 76       		.byte	0x76
+ 1917 0369 5E000000 		.4byte	0x5e
+ 1918 036d E4010000 		.4byte	.LLST13
+ 1919 0371 1B       		.uleb128 0x1b
+ 1920 0372 8A030000 		.4byte	0x38a
+ 1921 0376 F1010000 		.4byte	0x1f1
+ 1922 037a CA010000 		.4byte	.LBB6
+ 1923 037e D2010000 		.4byte	.LBE6
+ 1924 0382 01       		.byte	0x1
+ 1925 0383 7B       		.byte	0x7b
+ 1926 0384 1C       		.uleb128 0x1c
+ 1927 0385 FE010000 		.4byte	0x1fe
+ 1928 0389 00       		.byte	0x0
+ 1929 038a 1D       		.uleb128 0x1d
+ 1930 038b F1010000 		.4byte	0x1f1
+ 1931 038f 00000000 		.4byte	.Ldebug_ranges0+0x0
+ 1932 0393 01       		.byte	0x1
+ 1933 0394 7F       		.byte	0x7f
+ 1934 0395 1C       		.uleb128 0x1c
+ 1935 0396 FE010000 		.4byte	0x1fe
+ 1936 039a 00       		.byte	0x0
+ 1937 039b 00       		.byte	0x0
+ 1938 039c 1E       		.uleb128 0x1e
+ 1939 039d AB020000 		.4byte	.LASF55
+ 1940 03a1 01       		.byte	0x1
+ 1941 03a2 8F       		.byte	0x8f
+ 1942 03a3 01       		.byte	0x1
+ 1943 03a4 01       		.byte	0x1
+ 1944 03a5 1E       		.uleb128 0x1e
+ 1945 03a6 71000000 		.4byte	.LASF56
+ 1946 03aa 01       		.byte	0x1
+ 1947 03ab 15       		.byte	0x15
+ 1948 03ac 01       		.byte	0x1
+ 1949 03ad 01       		.byte	0x1
+ 1950 03ae 1F       		.uleb128 0x1f
+ 1951 03af BE020000 		.4byte	.LASF57
+ 1952 03b3 01       		.byte	0x1
+ 1953 03b4 86       		.byte	0x86
+ 1954 03b5 01       		.byte	0x1
+ 1955 03b6 0F       		.uleb128 0xf
+ 1956 03b7 0C040000 		.4byte	0x40c
+ 1957 03bb 81030000 		.4byte	.LASF58
+ 1958 03bf 02       		.byte	0x2
+ 1959 03c0 7E       		.byte	0x7e
+ 1960 03c1 01       		.byte	0x1
+ 1961 03c2 E8010000 		.4byte	.LFB14
+ 1962 03c6 C0020000 		.4byte	.LFE14
+ 1963 03ca F7010000 		.4byte	.LLST14
+ 1964 03ce 12       		.uleb128 0x12
+ 1965 03cf 61726700 		.ascii	"arg\000"
+ 1966 03d3 02       		.byte	0x2
+ 1967 03d4 7E       		.byte	0x7e
+ 1968 03d5 85000000 		.4byte	0x85
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 45
+
+
+ 1969 03d9 16020000 		.4byte	.LLST15
+ 1970 03dd 20       		.uleb128 0x20
+ 1971 03de 9C030000 		.4byte	0x39c
+ 1972 03e2 EA010000 		.4byte	.LBB18
+ 1973 03e6 C0020000 		.4byte	.LBE18
+ 1974 03ea 02       		.byte	0x2
+ 1975 03eb 7F       		.byte	0x7f
+ 1976 03ec 21       		.uleb128 0x21
+ 1977 03ed A5030000 		.4byte	0x3a5
+ 1978 03f1 EA010000 		.4byte	.LBB20
+ 1979 03f5 14020000 		.4byte	.LBE20
+ 1980 03f9 01       		.byte	0x1
+ 1981 03fa 90       		.byte	0x90
+ 1982 03fb 21       		.uleb128 0x21
+ 1983 03fc AE030000 		.4byte	0x3ae
+ 1984 0400 8A020000 		.4byte	.LBB22
+ 1985 0404 96020000 		.4byte	.LBE22
+ 1986 0408 01       		.byte	0x1
+ 1987 0409 B2       		.byte	0xb2
+ 1988 040a 00       		.byte	0x0
+ 1989 040b 00       		.byte	0x0
+ 1990 040c 0F       		.uleb128 0xf
+ 1991 040d 42040000 		.4byte	0x442
+ 1992 0411 86000000 		.4byte	.LASF59
+ 1993 0415 02       		.byte	0x2
+ 1994 0416 53       		.byte	0x53
+ 1995 0417 01       		.byte	0x1
+ 1996 0418 C0020000 		.4byte	.LFB13
+ 1997 041c 60030000 		.4byte	.LFE13
+ 1998 0420 29020000 		.4byte	.LLST16
+ 1999 0424 12       		.uleb128 0x12
+ 2000 0425 61726700 		.ascii	"arg\000"
+ 2001 0429 02       		.byte	0x2
+ 2002 042a 53       		.byte	0x53
+ 2003 042b 85000000 		.4byte	0x85
+ 2004 042f 54020000 		.4byte	.LLST17
+ 2005 0433 19       		.uleb128 0x19
+ 2006 0434 69020000 		.4byte	.LASF49
+ 2007 0438 02       		.byte	0x2
+ 2008 0439 54       		.byte	0x54
+ 2009 043a 25000000 		.4byte	0x25
+ 2010 043e 02       		.byte	0x2
+ 2011 043f 91       		.byte	0x91
+ 2012 0440 6B       		.sleb128 -21
+ 2013 0441 00       		.byte	0x0
+ 2014 0442 0D       		.uleb128 0xd
+ 2015 0443 66040000 		.4byte	0x466
+ 2016 0447 CF000000 		.4byte	.LASF60
+ 2017 044b 03       		.byte	0x3
+ 2018 044c 1D       		.byte	0x1d
+ 2019 044d 01       		.byte	0x1
+ 2020 044e 01       		.byte	0x1
+ 2021 044f 0E       		.uleb128 0xe
+ 2022 0450 23000000 		.4byte	.LASF61
+ 2023 0454 03       		.byte	0x3
+ 2024 0455 1C       		.byte	0x1c
+ 2025 0456 25000000 		.4byte	0x25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 46
+
+
+ 2026 045a 0E       		.uleb128 0xe
+ 2027 045b 56010000 		.4byte	.LASF62
+ 2028 045f 03       		.byte	0x3
+ 2029 0460 1C       		.byte	0x1c
+ 2030 0461 5E000000 		.4byte	0x5e
+ 2031 0465 00       		.byte	0x0
+ 2032 0466 0F       		.uleb128 0xf
+ 2033 0467 CA040000 		.4byte	0x4ca
+ 2034 046b 71010000 		.4byte	.LASF63
+ 2035 046f 02       		.byte	0x2
+ 2036 0470 82       		.byte	0x82
+ 2037 0471 01       		.byte	0x1
+ 2038 0472 60030000 		.4byte	.LFB15
+ 2039 0476 CC040000 		.4byte	.LFE15
+ 2040 047a 67020000 		.4byte	.LLST18
+ 2041 047e 12       		.uleb128 0x12
+ 2042 047f 61726700 		.ascii	"arg\000"
+ 2043 0483 02       		.byte	0x2
+ 2044 0484 82       		.byte	0x82
+ 2045 0485 85000000 		.4byte	0x85
+ 2046 0489 92020000 		.4byte	.LLST19
+ 2047 048d 22       		.uleb128 0x22
+ 2048 048e E6010000 		.4byte	.LASF45
+ 2049 0492 02       		.byte	0x2
+ 2050 0493 86       		.byte	0x86
+ 2051 0494 5E000000 		.4byte	0x5e
+ 2052 0498 A5020000 		.4byte	.LLST20
+ 2053 049c 23       		.uleb128 0x23
+ 2054 049d 72030000 		.4byte	.LBB27
+ 2055 04a1 CC040000 		.4byte	.LBE27
+ 2056 04a5 24       		.uleb128 0x24
+ 2057 04a6 0E030000 		.4byte	.LASF64
+ 2058 04aa 02       		.byte	0x2
+ 2059 04ab 8A       		.byte	0x8a
+ 2060 04ac 25000000 		.4byte	0x25
+ 2061 04b0 1D       		.uleb128 0x1d
+ 2062 04b1 42040000 		.4byte	0x442
+ 2063 04b5 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 2064 04b9 02       		.byte	0x2
+ 2065 04ba BE       		.byte	0xbe
+ 2066 04bb 1C       		.uleb128 0x1c
+ 2067 04bc 5A040000 		.4byte	0x45a
+ 2068 04c0 25       		.uleb128 0x25
+ 2069 04c1 4F040000 		.4byte	0x44f
+ 2070 04c5 01       		.byte	0x1
+ 2071 04c6 55       		.byte	0x55
+ 2072 04c7 00       		.byte	0x0
+ 2073 04c8 00       		.byte	0x0
+ 2074 04c9 00       		.byte	0x0
+ 2075 04ca 26       		.uleb128 0x26
+ 2076 04cb F6000000 		.4byte	.LASF65
+ 2077 04cf 04       		.byte	0x4
+ 2078 04d0 67       		.byte	0x67
+ 2079 04d1 65000000 		.4byte	0x65
+ 2080 04d5 00       		.byte	0x0
+ 2081 04d6 19       		.uleb128 0x19
+ 2082 04d7 25020000 		.4byte	.LASF66
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 47
+
+
+ 2083 04db 03       		.byte	0x3
+ 2084 04dc 16       		.byte	0x16
+ 2085 04dd 25000000 		.4byte	0x25
+ 2086 04e1 05       		.byte	0x5
+ 2087 04e2 03       		.byte	0x3
+ 2088 04e3 08000000 		.4byte	inicjalizacjaZakonczona
+ 2089 04e7 27       		.uleb128 0x27
+ 2090 04e8 F8040000 		.4byte	0x4f8
+ 2091 04ec 25000000 		.4byte	0x25
+ 2092 04f0 28       		.uleb128 0x28
+ 2093 04f1 7E000000 		.4byte	0x7e
+ 2094 04f5 8F01     		.2byte	0x18f
+ 2095 04f7 00       		.byte	0x0
+ 2096 04f8 19       		.uleb128 0x19
+ 2097 04f9 0B010000 		.4byte	.LASF67
+ 2098 04fd 02       		.byte	0x2
+ 2099 04fe 19       		.byte	0x19
+ 2100 04ff E7040000 		.4byte	0x4e7
+ 2101 0503 05       		.byte	0x5
+ 2102 0504 03       		.byte	0x3
+ 2103 0505 09000000 		.4byte	ProceduraGlownaPamiec
+ 2104 0509 27       		.uleb128 0x27
+ 2105 050a 1A050000 		.4byte	0x51a
+ 2106 050e 25000000 		.4byte	0x25
+ 2107 0512 28       		.uleb128 0x28
+ 2108 0513 7E000000 		.4byte	0x7e
+ 2109 0517 FF07     		.2byte	0x7ff
+ 2110 0519 00       		.byte	0x0
+ 2111 051a 19       		.uleb128 0x19
+ 2112 051b B8000000 		.4byte	.LASF68
+ 2113 051f 02       		.byte	0x2
+ 2114 0520 1D       		.byte	0x1d
+ 2115 0521 09050000 		.4byte	0x509
+ 2116 0525 05       		.byte	0x5
+ 2117 0526 03       		.byte	0x3
+ 2118 0527 99010000 		.4byte	ObslugaEkranuLcd1Stack
+ 2119 052b 19       		.uleb128 0x19
+ 2120 052c BC010000 		.4byte	.LASF69
+ 2121 0530 02       		.byte	0x2
+ 2122 0531 1E       		.byte	0x1e
+ 2123 0532 25000000 		.4byte	0x25
+ 2124 0536 05       		.byte	0x5
+ 2125 0537 03       		.byte	0x3
+ 2126 0538 99090000 		.4byte	pid1
+ 2127 053c 19       		.uleb128 0x19
+ 2128 053d 93030000 		.4byte	.LASF70
+ 2129 0541 02       		.byte	0x2
+ 2130 0542 22       		.byte	0x22
+ 2131 0543 09050000 		.4byte	0x509
+ 2132 0547 05       		.byte	0x5
+ 2133 0548 03       		.byte	0x3
+ 2134 0549 9A090000 		.4byte	ObslugaWyswietlacza128Stack
+ 2135 054d 19       		.uleb128 0x19
+ 2136 054e C1010000 		.4byte	.LASF71
+ 2137 0552 02       		.byte	0x2
+ 2138 0553 23       		.byte	0x23
+ 2139 0554 25000000 		.4byte	0x25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 48
+
+
+ 2140 0558 05       		.byte	0x5
+ 2141 0559 03       		.byte	0x3
+ 2142 055a 9A110000 		.4byte	pid3
+ 2143 055e 27       		.uleb128 0x27
+ 2144 055f 6E050000 		.4byte	0x56e
+ 2145 0563 25000000 		.4byte	0x25
+ 2146 0567 29       		.uleb128 0x29
+ 2147 0568 7E000000 		.4byte	0x7e
+ 2148 056c FF       		.byte	0xff
+ 2149 056d 00       		.byte	0x0
+ 2150 056e 24       		.uleb128 0x24
+ 2151 056f 37000000 		.4byte	.LASF72
+ 2152 0573 02       		.byte	0x2
+ 2153 0574 27       		.byte	0x27
+ 2154 0575 5E050000 		.4byte	0x55e
+ 2155 0579 24       		.uleb128 0x24
+ 2156 057a E3020000 		.4byte	.LASF73
+ 2157 057e 02       		.byte	0x2
+ 2158 057f 28       		.byte	0x28
+ 2159 0580 25000000 		.4byte	0x25
+ 2160 0584 2A       		.uleb128 0x2a
+ 2161 0585 F3020000 		.4byte	.LASF74
+ 2162 0589 02       		.byte	0x2
+ 2163 058a 29       		.byte	0x29
+ 2164 058b E6010000 		.4byte	0x1e6
+ 2165 058f 01       		.byte	0x1
+ 2166 0590 05       		.byte	0x5
+ 2167 0591 03       		.byte	0x3
+ 2168 0592 00000000 		.4byte	wynikInicjalizacjiSd
+ 2169 0596 2A       		.uleb128 0x2a
+ 2170 0597 0F020000 		.4byte	.LASF75
+ 2171 059b 02       		.byte	0x2
+ 2172 059c 2F       		.byte	0x2f
+ 2173 059d 9B010000 		.4byte	0x19b
+ 2174 05a1 01       		.byte	0x1
+ 2175 05a2 05       		.byte	0x5
+ 2176 05a3 03       		.byte	0x3
+ 2177 05a4 00000000 		.4byte	fatfs
+ 2178 05a8 2B       		.uleb128 0x2b
+ 2179 05a9 726300   		.ascii	"rc\000"
+ 2180 05ac 02       		.byte	0x2
+ 2181 05ad 30       		.byte	0x30
+ 2182 05ae AB000000 		.4byte	0xab
+ 2183 05b2 01       		.byte	0x1
+ 2184 05b3 05       		.byte	0x5
+ 2185 05b4 03       		.byte	0x3
+ 2186 05b5 00000000 		.4byte	rc
+ 2187 05b9 2A       		.uleb128 0x2a
+ 2188 05ba 88010000 		.4byte	.LASF76
+ 2189 05be 02       		.byte	0x2
+ 2190 05bf 32       		.byte	0x32
+ 2191 05c0 2F020000 		.4byte	0x22f
+ 2192 05c4 01       		.byte	0x1
+ 2193 05c5 05       		.byte	0x5
+ 2194 05c6 03       		.byte	0x3
+ 2195 05c7 00000000 		.4byte	msClock
+ 2196 05cb 2A       		.uleb128 0x2a
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 49
+
+
+ 2197 05cc 5E020000 		.4byte	.LASF77
+ 2198 05d0 02       		.byte	0x2
+ 2199 05d1 37       		.byte	0x37
+ 2200 05d2 5E000000 		.4byte	0x5e
+ 2201 05d6 01       		.byte	0x1
+ 2202 05d7 05       		.byte	0x5
+ 2203 05d8 03       		.byte	0x3
+ 2204 05d9 00000000 		.4byte	kolorDiody
+ 2205 05dd 00       		.byte	0x0
+ 2206              		.section	.debug_abbrev
+ 2207 0000 01       		.uleb128 0x1
+ 2208 0001 11       		.uleb128 0x11
+ 2209 0002 01       		.byte	0x1
+ 2210 0003 10       		.uleb128 0x10
+ 2211 0004 06       		.uleb128 0x6
+ 2212 0005 12       		.uleb128 0x12
+ 2213 0006 01       		.uleb128 0x1
+ 2214 0007 11       		.uleb128 0x11
+ 2215 0008 01       		.uleb128 0x1
+ 2216 0009 25       		.uleb128 0x25
+ 2217 000a 0E       		.uleb128 0xe
+ 2218 000b 13       		.uleb128 0x13
+ 2219 000c 0B       		.uleb128 0xb
+ 2220 000d 03       		.uleb128 0x3
+ 2221 000e 0E       		.uleb128 0xe
+ 2222 000f 1B       		.uleb128 0x1b
+ 2223 0010 0E       		.uleb128 0xe
+ 2224 0011 00       		.byte	0x0
+ 2225 0012 00       		.byte	0x0
+ 2226 0013 02       		.uleb128 0x2
+ 2227 0014 16       		.uleb128 0x16
+ 2228 0015 00       		.byte	0x0
+ 2229 0016 03       		.uleb128 0x3
+ 2230 0017 08       		.uleb128 0x8
+ 2231 0018 3A       		.uleb128 0x3a
+ 2232 0019 0B       		.uleb128 0xb
+ 2233 001a 3B       		.uleb128 0x3b
+ 2234 001b 0B       		.uleb128 0xb
+ 2235 001c 49       		.uleb128 0x49
+ 2236 001d 13       		.uleb128 0x13
+ 2237 001e 00       		.byte	0x0
+ 2238 001f 00       		.byte	0x0
+ 2239 0020 03       		.uleb128 0x3
+ 2240 0021 24       		.uleb128 0x24
+ 2241 0022 00       		.byte	0x0
+ 2242 0023 03       		.uleb128 0x3
+ 2243 0024 0E       		.uleb128 0xe
+ 2244 0025 0B       		.uleb128 0xb
+ 2245 0026 0B       		.uleb128 0xb
+ 2246 0027 3E       		.uleb128 0x3e
+ 2247 0028 0B       		.uleb128 0xb
+ 2248 0029 00       		.byte	0x0
+ 2249 002a 00       		.byte	0x0
+ 2250 002b 04       		.uleb128 0x4
+ 2251 002c 16       		.uleb128 0x16
+ 2252 002d 00       		.byte	0x0
+ 2253 002e 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 50
+
+
+ 2254 002f 0E       		.uleb128 0xe
+ 2255 0030 3A       		.uleb128 0x3a
+ 2256 0031 0B       		.uleb128 0xb
+ 2257 0032 3B       		.uleb128 0x3b
+ 2258 0033 0B       		.uleb128 0xb
+ 2259 0034 49       		.uleb128 0x49
+ 2260 0035 13       		.uleb128 0x13
+ 2261 0036 00       		.byte	0x0
+ 2262 0037 00       		.byte	0x0
+ 2263 0038 05       		.uleb128 0x5
+ 2264 0039 24       		.uleb128 0x24
+ 2265 003a 00       		.byte	0x0
+ 2266 003b 03       		.uleb128 0x3
+ 2267 003c 08       		.uleb128 0x8
+ 2268 003d 0B       		.uleb128 0xb
+ 2269 003e 0B       		.uleb128 0xb
+ 2270 003f 3E       		.uleb128 0x3e
+ 2271 0040 0B       		.uleb128 0xb
+ 2272 0041 00       		.byte	0x0
+ 2273 0042 00       		.byte	0x0
+ 2274 0043 06       		.uleb128 0x6
+ 2275 0044 0F       		.uleb128 0xf
+ 2276 0045 00       		.byte	0x0
+ 2277 0046 0B       		.uleb128 0xb
+ 2278 0047 0B       		.uleb128 0xb
+ 2279 0048 00       		.byte	0x0
+ 2280 0049 00       		.byte	0x0
+ 2281 004a 07       		.uleb128 0x7
+ 2282 004b 13       		.uleb128 0x13
+ 2283 004c 01       		.byte	0x1
+ 2284 004d 01       		.uleb128 0x1
+ 2285 004e 13       		.uleb128 0x13
+ 2286 004f 03       		.uleb128 0x3
+ 2287 0050 0E       		.uleb128 0xe
+ 2288 0051 0B       		.uleb128 0xb
+ 2289 0052 0B       		.uleb128 0xb
+ 2290 0053 3A       		.uleb128 0x3a
+ 2291 0054 0B       		.uleb128 0xb
+ 2292 0055 3B       		.uleb128 0x3b
+ 2293 0056 0B       		.uleb128 0xb
+ 2294 0057 00       		.byte	0x0
+ 2295 0058 00       		.byte	0x0
+ 2296 0059 08       		.uleb128 0x8
+ 2297 005a 0D       		.uleb128 0xd
+ 2298 005b 00       		.byte	0x0
+ 2299 005c 03       		.uleb128 0x3
+ 2300 005d 0E       		.uleb128 0xe
+ 2301 005e 3A       		.uleb128 0x3a
+ 2302 005f 0B       		.uleb128 0xb
+ 2303 0060 3B       		.uleb128 0x3b
+ 2304 0061 0B       		.uleb128 0xb
+ 2305 0062 49       		.uleb128 0x49
+ 2306 0063 13       		.uleb128 0x13
+ 2307 0064 38       		.uleb128 0x38
+ 2308 0065 0A       		.uleb128 0xa
+ 2309 0066 00       		.byte	0x0
+ 2310 0067 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 51
+
+
+ 2311 0068 09       		.uleb128 0x9
+ 2312 0069 0D       		.uleb128 0xd
+ 2313 006a 00       		.byte	0x0
+ 2314 006b 03       		.uleb128 0x3
+ 2315 006c 08       		.uleb128 0x8
+ 2316 006d 3A       		.uleb128 0x3a
+ 2317 006e 0B       		.uleb128 0xb
+ 2318 006f 3B       		.uleb128 0x3b
+ 2319 0070 0B       		.uleb128 0xb
+ 2320 0071 49       		.uleb128 0x49
+ 2321 0072 13       		.uleb128 0x13
+ 2322 0073 38       		.uleb128 0x38
+ 2323 0074 0A       		.uleb128 0xa
+ 2324 0075 00       		.byte	0x0
+ 2325 0076 00       		.byte	0x0
+ 2326 0077 0A       		.uleb128 0xa
+ 2327 0078 0F       		.uleb128 0xf
+ 2328 0079 00       		.byte	0x0
+ 2329 007a 0B       		.uleb128 0xb
+ 2330 007b 0B       		.uleb128 0xb
+ 2331 007c 49       		.uleb128 0x49
+ 2332 007d 13       		.uleb128 0x13
+ 2333 007e 00       		.byte	0x0
+ 2334 007f 00       		.byte	0x0
+ 2335 0080 0B       		.uleb128 0xb
+ 2336 0081 04       		.uleb128 0x4
+ 2337 0082 01       		.byte	0x1
+ 2338 0083 01       		.uleb128 0x1
+ 2339 0084 13       		.uleb128 0x13
+ 2340 0085 0B       		.uleb128 0xb
+ 2341 0086 0B       		.uleb128 0xb
+ 2342 0087 3A       		.uleb128 0x3a
+ 2343 0088 0B       		.uleb128 0xb
+ 2344 0089 3B       		.uleb128 0x3b
+ 2345 008a 0B       		.uleb128 0xb
+ 2346 008b 00       		.byte	0x0
+ 2347 008c 00       		.byte	0x0
+ 2348 008d 0C       		.uleb128 0xc
+ 2349 008e 28       		.uleb128 0x28
+ 2350 008f 00       		.byte	0x0
+ 2351 0090 03       		.uleb128 0x3
+ 2352 0091 0E       		.uleb128 0xe
+ 2353 0092 1C       		.uleb128 0x1c
+ 2354 0093 0D       		.uleb128 0xd
+ 2355 0094 00       		.byte	0x0
+ 2356 0095 00       		.byte	0x0
+ 2357 0096 0D       		.uleb128 0xd
+ 2358 0097 2E       		.uleb128 0x2e
+ 2359 0098 01       		.byte	0x1
+ 2360 0099 01       		.uleb128 0x1
+ 2361 009a 13       		.uleb128 0x13
+ 2362 009b 03       		.uleb128 0x3
+ 2363 009c 0E       		.uleb128 0xe
+ 2364 009d 3A       		.uleb128 0x3a
+ 2365 009e 0B       		.uleb128 0xb
+ 2366 009f 3B       		.uleb128 0x3b
+ 2367 00a0 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 52
+
+
+ 2368 00a1 27       		.uleb128 0x27
+ 2369 00a2 0C       		.uleb128 0xc
+ 2370 00a3 20       		.uleb128 0x20
+ 2371 00a4 0B       		.uleb128 0xb
+ 2372 00a5 00       		.byte	0x0
+ 2373 00a6 00       		.byte	0x0
+ 2374 00a7 0E       		.uleb128 0xe
+ 2375 00a8 05       		.uleb128 0x5
+ 2376 00a9 00       		.byte	0x0
+ 2377 00aa 03       		.uleb128 0x3
+ 2378 00ab 0E       		.uleb128 0xe
+ 2379 00ac 3A       		.uleb128 0x3a
+ 2380 00ad 0B       		.uleb128 0xb
+ 2381 00ae 3B       		.uleb128 0x3b
+ 2382 00af 0B       		.uleb128 0xb
+ 2383 00b0 49       		.uleb128 0x49
+ 2384 00b1 13       		.uleb128 0x13
+ 2385 00b2 00       		.byte	0x0
+ 2386 00b3 00       		.byte	0x0
+ 2387 00b4 0F       		.uleb128 0xf
+ 2388 00b5 2E       		.uleb128 0x2e
+ 2389 00b6 01       		.byte	0x1
+ 2390 00b7 01       		.uleb128 0x1
+ 2391 00b8 13       		.uleb128 0x13
+ 2392 00b9 03       		.uleb128 0x3
+ 2393 00ba 0E       		.uleb128 0xe
+ 2394 00bb 3A       		.uleb128 0x3a
+ 2395 00bc 0B       		.uleb128 0xb
+ 2396 00bd 3B       		.uleb128 0x3b
+ 2397 00be 0B       		.uleb128 0xb
+ 2398 00bf 27       		.uleb128 0x27
+ 2399 00c0 0C       		.uleb128 0xc
+ 2400 00c1 11       		.uleb128 0x11
+ 2401 00c2 01       		.uleb128 0x1
+ 2402 00c3 12       		.uleb128 0x12
+ 2403 00c4 01       		.uleb128 0x1
+ 2404 00c5 40       		.uleb128 0x40
+ 2405 00c6 06       		.uleb128 0x6
+ 2406 00c7 00       		.byte	0x0
+ 2407 00c8 00       		.byte	0x0
+ 2408 00c9 10       		.uleb128 0x10
+ 2409 00ca 34       		.uleb128 0x34
+ 2410 00cb 00       		.byte	0x0
+ 2411 00cc 03       		.uleb128 0x3
+ 2412 00cd 08       		.uleb128 0x8
+ 2413 00ce 3A       		.uleb128 0x3a
+ 2414 00cf 0B       		.uleb128 0xb
+ 2415 00d0 3B       		.uleb128 0x3b
+ 2416 00d1 0B       		.uleb128 0xb
+ 2417 00d2 49       		.uleb128 0x49
+ 2418 00d3 13       		.uleb128 0x13
+ 2419 00d4 02       		.uleb128 0x2
+ 2420 00d5 0A       		.uleb128 0xa
+ 2421 00d6 00       		.byte	0x0
+ 2422 00d7 00       		.byte	0x0
+ 2423 00d8 11       		.uleb128 0x11
+ 2424 00d9 35       		.uleb128 0x35
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 53
+
+
+ 2425 00da 00       		.byte	0x0
+ 2426 00db 49       		.uleb128 0x49
+ 2427 00dc 13       		.uleb128 0x13
+ 2428 00dd 00       		.byte	0x0
+ 2429 00de 00       		.byte	0x0
+ 2430 00df 12       		.uleb128 0x12
+ 2431 00e0 05       		.uleb128 0x5
+ 2432 00e1 00       		.byte	0x0
+ 2433 00e2 03       		.uleb128 0x3
+ 2434 00e3 08       		.uleb128 0x8
+ 2435 00e4 3A       		.uleb128 0x3a
+ 2436 00e5 0B       		.uleb128 0xb
+ 2437 00e6 3B       		.uleb128 0x3b
+ 2438 00e7 0B       		.uleb128 0xb
+ 2439 00e8 49       		.uleb128 0x49
+ 2440 00e9 13       		.uleb128 0x13
+ 2441 00ea 02       		.uleb128 0x2
+ 2442 00eb 06       		.uleb128 0x6
+ 2443 00ec 00       		.byte	0x0
+ 2444 00ed 00       		.byte	0x0
+ 2445 00ee 13       		.uleb128 0x13
+ 2446 00ef 05       		.uleb128 0x5
+ 2447 00f0 00       		.byte	0x0
+ 2448 00f1 03       		.uleb128 0x3
+ 2449 00f2 0E       		.uleb128 0xe
+ 2450 00f3 3A       		.uleb128 0x3a
+ 2451 00f4 0B       		.uleb128 0xb
+ 2452 00f5 3B       		.uleb128 0x3b
+ 2453 00f6 0B       		.uleb128 0xb
+ 2454 00f7 49       		.uleb128 0x49
+ 2455 00f8 13       		.uleb128 0x13
+ 2456 00f9 02       		.uleb128 0x2
+ 2457 00fa 06       		.uleb128 0x6
+ 2458 00fb 00       		.byte	0x0
+ 2459 00fc 00       		.byte	0x0
+ 2460 00fd 14       		.uleb128 0x14
+ 2461 00fe 34       		.uleb128 0x34
+ 2462 00ff 00       		.byte	0x0
+ 2463 0100 03       		.uleb128 0x3
+ 2464 0101 08       		.uleb128 0x8
+ 2465 0102 3A       		.uleb128 0x3a
+ 2466 0103 0B       		.uleb128 0xb
+ 2467 0104 3B       		.uleb128 0x3b
+ 2468 0105 0B       		.uleb128 0xb
+ 2469 0106 49       		.uleb128 0x49
+ 2470 0107 13       		.uleb128 0x13
+ 2471 0108 02       		.uleb128 0x2
+ 2472 0109 06       		.uleb128 0x6
+ 2473 010a 00       		.byte	0x0
+ 2474 010b 00       		.byte	0x0
+ 2475 010c 15       		.uleb128 0x15
+ 2476 010d 26       		.uleb128 0x26
+ 2477 010e 00       		.byte	0x0
+ 2478 010f 49       		.uleb128 0x49
+ 2479 0110 13       		.uleb128 0x13
+ 2480 0111 00       		.byte	0x0
+ 2481 0112 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 54
+
+
+ 2482 0113 16       		.uleb128 0x16
+ 2483 0114 2E       		.uleb128 0x2e
+ 2484 0115 01       		.byte	0x1
+ 2485 0116 01       		.uleb128 0x1
+ 2486 0117 13       		.uleb128 0x13
+ 2487 0118 3F       		.uleb128 0x3f
+ 2488 0119 0C       		.uleb128 0xc
+ 2489 011a 03       		.uleb128 0x3
+ 2490 011b 0E       		.uleb128 0xe
+ 2491 011c 3A       		.uleb128 0x3a
+ 2492 011d 0B       		.uleb128 0xb
+ 2493 011e 3B       		.uleb128 0x3b
+ 2494 011f 0B       		.uleb128 0xb
+ 2495 0120 27       		.uleb128 0x27
+ 2496 0121 0C       		.uleb128 0xc
+ 2497 0122 11       		.uleb128 0x11
+ 2498 0123 01       		.uleb128 0x1
+ 2499 0124 12       		.uleb128 0x12
+ 2500 0125 01       		.uleb128 0x1
+ 2501 0126 40       		.uleb128 0x40
+ 2502 0127 0A       		.uleb128 0xa
+ 2503 0128 00       		.byte	0x0
+ 2504 0129 00       		.byte	0x0
+ 2505 012a 17       		.uleb128 0x17
+ 2506 012b 05       		.uleb128 0x5
+ 2507 012c 00       		.byte	0x0
+ 2508 012d 03       		.uleb128 0x3
+ 2509 012e 0E       		.uleb128 0xe
+ 2510 012f 3A       		.uleb128 0x3a
+ 2511 0130 0B       		.uleb128 0xb
+ 2512 0131 3B       		.uleb128 0x3b
+ 2513 0132 0B       		.uleb128 0xb
+ 2514 0133 49       		.uleb128 0x49
+ 2515 0134 13       		.uleb128 0x13
+ 2516 0135 02       		.uleb128 0x2
+ 2517 0136 0A       		.uleb128 0xa
+ 2518 0137 00       		.byte	0x0
+ 2519 0138 00       		.byte	0x0
+ 2520 0139 18       		.uleb128 0x18
+ 2521 013a 2E       		.uleb128 0x2e
+ 2522 013b 01       		.byte	0x1
+ 2523 013c 01       		.uleb128 0x1
+ 2524 013d 13       		.uleb128 0x13
+ 2525 013e 3F       		.uleb128 0x3f
+ 2526 013f 0C       		.uleb128 0xc
+ 2527 0140 03       		.uleb128 0x3
+ 2528 0141 0E       		.uleb128 0xe
+ 2529 0142 3A       		.uleb128 0x3a
+ 2530 0143 0B       		.uleb128 0xb
+ 2531 0144 3B       		.uleb128 0x3b
+ 2532 0145 0B       		.uleb128 0xb
+ 2533 0146 27       		.uleb128 0x27
+ 2534 0147 0C       		.uleb128 0xc
+ 2535 0148 49       		.uleb128 0x49
+ 2536 0149 13       		.uleb128 0x13
+ 2537 014a 11       		.uleb128 0x11
+ 2538 014b 01       		.uleb128 0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 55
+
+
+ 2539 014c 12       		.uleb128 0x12
+ 2540 014d 01       		.uleb128 0x1
+ 2541 014e 40       		.uleb128 0x40
+ 2542 014f 06       		.uleb128 0x6
+ 2543 0150 00       		.byte	0x0
+ 2544 0151 00       		.byte	0x0
+ 2545 0152 19       		.uleb128 0x19
+ 2546 0153 34       		.uleb128 0x34
+ 2547 0154 00       		.byte	0x0
+ 2548 0155 03       		.uleb128 0x3
+ 2549 0156 0E       		.uleb128 0xe
+ 2550 0157 3A       		.uleb128 0x3a
+ 2551 0158 0B       		.uleb128 0xb
+ 2552 0159 3B       		.uleb128 0x3b
+ 2553 015a 0B       		.uleb128 0xb
+ 2554 015b 49       		.uleb128 0x49
+ 2555 015c 13       		.uleb128 0x13
+ 2556 015d 02       		.uleb128 0x2
+ 2557 015e 0A       		.uleb128 0xa
+ 2558 015f 00       		.byte	0x0
+ 2559 0160 00       		.byte	0x0
+ 2560 0161 1A       		.uleb128 0x1a
+ 2561 0162 2E       		.uleb128 0x2e
+ 2562 0163 00       		.byte	0x0
+ 2563 0164 03       		.uleb128 0x3
+ 2564 0165 0E       		.uleb128 0xe
+ 2565 0166 3A       		.uleb128 0x3a
+ 2566 0167 0B       		.uleb128 0xb
+ 2567 0168 3B       		.uleb128 0x3b
+ 2568 0169 0B       		.uleb128 0xb
+ 2569 016a 11       		.uleb128 0x11
+ 2570 016b 01       		.uleb128 0x1
+ 2571 016c 12       		.uleb128 0x12
+ 2572 016d 01       		.uleb128 0x1
+ 2573 016e 40       		.uleb128 0x40
+ 2574 016f 06       		.uleb128 0x6
+ 2575 0170 00       		.byte	0x0
+ 2576 0171 00       		.byte	0x0
+ 2577 0172 1B       		.uleb128 0x1b
+ 2578 0173 1D       		.uleb128 0x1d
+ 2579 0174 01       		.byte	0x1
+ 2580 0175 01       		.uleb128 0x1
+ 2581 0176 13       		.uleb128 0x13
+ 2582 0177 31       		.uleb128 0x31
+ 2583 0178 13       		.uleb128 0x13
+ 2584 0179 11       		.uleb128 0x11
+ 2585 017a 01       		.uleb128 0x1
+ 2586 017b 12       		.uleb128 0x12
+ 2587 017c 01       		.uleb128 0x1
+ 2588 017d 58       		.uleb128 0x58
+ 2589 017e 0B       		.uleb128 0xb
+ 2590 017f 59       		.uleb128 0x59
+ 2591 0180 0B       		.uleb128 0xb
+ 2592 0181 00       		.byte	0x0
+ 2593 0182 00       		.byte	0x0
+ 2594 0183 1C       		.uleb128 0x1c
+ 2595 0184 05       		.uleb128 0x5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 56
+
+
+ 2596 0185 00       		.byte	0x0
+ 2597 0186 31       		.uleb128 0x31
+ 2598 0187 13       		.uleb128 0x13
+ 2599 0188 00       		.byte	0x0
+ 2600 0189 00       		.byte	0x0
+ 2601 018a 1D       		.uleb128 0x1d
+ 2602 018b 1D       		.uleb128 0x1d
+ 2603 018c 01       		.byte	0x1
+ 2604 018d 31       		.uleb128 0x31
+ 2605 018e 13       		.uleb128 0x13
+ 2606 018f 55       		.uleb128 0x55
+ 2607 0190 06       		.uleb128 0x6
+ 2608 0191 58       		.uleb128 0x58
+ 2609 0192 0B       		.uleb128 0xb
+ 2610 0193 59       		.uleb128 0x59
+ 2611 0194 0B       		.uleb128 0xb
+ 2612 0195 00       		.byte	0x0
+ 2613 0196 00       		.byte	0x0
+ 2614 0197 1E       		.uleb128 0x1e
+ 2615 0198 2E       		.uleb128 0x2e
+ 2616 0199 00       		.byte	0x0
+ 2617 019a 03       		.uleb128 0x3
+ 2618 019b 0E       		.uleb128 0xe
+ 2619 019c 3A       		.uleb128 0x3a
+ 2620 019d 0B       		.uleb128 0xb
+ 2621 019e 3B       		.uleb128 0x3b
+ 2622 019f 0B       		.uleb128 0xb
+ 2623 01a0 27       		.uleb128 0x27
+ 2624 01a1 0C       		.uleb128 0xc
+ 2625 01a2 20       		.uleb128 0x20
+ 2626 01a3 0B       		.uleb128 0xb
+ 2627 01a4 00       		.byte	0x0
+ 2628 01a5 00       		.byte	0x0
+ 2629 01a6 1F       		.uleb128 0x1f
+ 2630 01a7 2E       		.uleb128 0x2e
+ 2631 01a8 00       		.byte	0x0
+ 2632 01a9 03       		.uleb128 0x3
+ 2633 01aa 0E       		.uleb128 0xe
+ 2634 01ab 3A       		.uleb128 0x3a
+ 2635 01ac 0B       		.uleb128 0xb
+ 2636 01ad 3B       		.uleb128 0x3b
+ 2637 01ae 0B       		.uleb128 0xb
+ 2638 01af 20       		.uleb128 0x20
+ 2639 01b0 0B       		.uleb128 0xb
+ 2640 01b1 00       		.byte	0x0
+ 2641 01b2 00       		.byte	0x0
+ 2642 01b3 20       		.uleb128 0x20
+ 2643 01b4 1D       		.uleb128 0x1d
+ 2644 01b5 01       		.byte	0x1
+ 2645 01b6 31       		.uleb128 0x31
+ 2646 01b7 13       		.uleb128 0x13
+ 2647 01b8 11       		.uleb128 0x11
+ 2648 01b9 01       		.uleb128 0x1
+ 2649 01ba 12       		.uleb128 0x12
+ 2650 01bb 01       		.uleb128 0x1
+ 2651 01bc 58       		.uleb128 0x58
+ 2652 01bd 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 57
+
+
+ 2653 01be 59       		.uleb128 0x59
+ 2654 01bf 0B       		.uleb128 0xb
+ 2655 01c0 00       		.byte	0x0
+ 2656 01c1 00       		.byte	0x0
+ 2657 01c2 21       		.uleb128 0x21
+ 2658 01c3 1D       		.uleb128 0x1d
+ 2659 01c4 00       		.byte	0x0
+ 2660 01c5 31       		.uleb128 0x31
+ 2661 01c6 13       		.uleb128 0x13
+ 2662 01c7 11       		.uleb128 0x11
+ 2663 01c8 01       		.uleb128 0x1
+ 2664 01c9 12       		.uleb128 0x12
+ 2665 01ca 01       		.uleb128 0x1
+ 2666 01cb 58       		.uleb128 0x58
+ 2667 01cc 0B       		.uleb128 0xb
+ 2668 01cd 59       		.uleb128 0x59
+ 2669 01ce 0B       		.uleb128 0xb
+ 2670 01cf 00       		.byte	0x0
+ 2671 01d0 00       		.byte	0x0
+ 2672 01d1 22       		.uleb128 0x22
+ 2673 01d2 34       		.uleb128 0x34
+ 2674 01d3 00       		.byte	0x0
+ 2675 01d4 03       		.uleb128 0x3
+ 2676 01d5 0E       		.uleb128 0xe
+ 2677 01d6 3A       		.uleb128 0x3a
+ 2678 01d7 0B       		.uleb128 0xb
+ 2679 01d8 3B       		.uleb128 0x3b
+ 2680 01d9 0B       		.uleb128 0xb
+ 2681 01da 49       		.uleb128 0x49
+ 2682 01db 13       		.uleb128 0x13
+ 2683 01dc 02       		.uleb128 0x2
+ 2684 01dd 06       		.uleb128 0x6
+ 2685 01de 00       		.byte	0x0
+ 2686 01df 00       		.byte	0x0
+ 2687 01e0 23       		.uleb128 0x23
+ 2688 01e1 0B       		.uleb128 0xb
+ 2689 01e2 01       		.byte	0x1
+ 2690 01e3 11       		.uleb128 0x11
+ 2691 01e4 01       		.uleb128 0x1
+ 2692 01e5 12       		.uleb128 0x12
+ 2693 01e6 01       		.uleb128 0x1
+ 2694 01e7 00       		.byte	0x0
+ 2695 01e8 00       		.byte	0x0
+ 2696 01e9 24       		.uleb128 0x24
+ 2697 01ea 34       		.uleb128 0x34
+ 2698 01eb 00       		.byte	0x0
+ 2699 01ec 03       		.uleb128 0x3
+ 2700 01ed 0E       		.uleb128 0xe
+ 2701 01ee 3A       		.uleb128 0x3a
+ 2702 01ef 0B       		.uleb128 0xb
+ 2703 01f0 3B       		.uleb128 0x3b
+ 2704 01f1 0B       		.uleb128 0xb
+ 2705 01f2 49       		.uleb128 0x49
+ 2706 01f3 13       		.uleb128 0x13
+ 2707 01f4 00       		.byte	0x0
+ 2708 01f5 00       		.byte	0x0
+ 2709 01f6 25       		.uleb128 0x25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 58
+
+
+ 2710 01f7 05       		.uleb128 0x5
+ 2711 01f8 00       		.byte	0x0
+ 2712 01f9 31       		.uleb128 0x31
+ 2713 01fa 13       		.uleb128 0x13
+ 2714 01fb 02       		.uleb128 0x2
+ 2715 01fc 0A       		.uleb128 0xa
+ 2716 01fd 00       		.byte	0x0
+ 2717 01fe 00       		.byte	0x0
+ 2718 01ff 26       		.uleb128 0x26
+ 2719 0200 34       		.uleb128 0x34
+ 2720 0201 00       		.byte	0x0
+ 2721 0202 03       		.uleb128 0x3
+ 2722 0203 0E       		.uleb128 0xe
+ 2723 0204 3A       		.uleb128 0x3a
+ 2724 0205 0B       		.uleb128 0xb
+ 2725 0206 3B       		.uleb128 0x3b
+ 2726 0207 0B       		.uleb128 0xb
+ 2727 0208 49       		.uleb128 0x49
+ 2728 0209 13       		.uleb128 0x13
+ 2729 020a 1C       		.uleb128 0x1c
+ 2730 020b 0B       		.uleb128 0xb
+ 2731 020c 00       		.byte	0x0
+ 2732 020d 00       		.byte	0x0
+ 2733 020e 27       		.uleb128 0x27
+ 2734 020f 01       		.uleb128 0x1
+ 2735 0210 01       		.byte	0x1
+ 2736 0211 01       		.uleb128 0x1
+ 2737 0212 13       		.uleb128 0x13
+ 2738 0213 49       		.uleb128 0x49
+ 2739 0214 13       		.uleb128 0x13
+ 2740 0215 00       		.byte	0x0
+ 2741 0216 00       		.byte	0x0
+ 2742 0217 28       		.uleb128 0x28
+ 2743 0218 21       		.uleb128 0x21
+ 2744 0219 00       		.byte	0x0
+ 2745 021a 49       		.uleb128 0x49
+ 2746 021b 13       		.uleb128 0x13
+ 2747 021c 2F       		.uleb128 0x2f
+ 2748 021d 05       		.uleb128 0x5
+ 2749 021e 00       		.byte	0x0
+ 2750 021f 00       		.byte	0x0
+ 2751 0220 29       		.uleb128 0x29
+ 2752 0221 21       		.uleb128 0x21
+ 2753 0222 00       		.byte	0x0
+ 2754 0223 49       		.uleb128 0x49
+ 2755 0224 13       		.uleb128 0x13
+ 2756 0225 2F       		.uleb128 0x2f
+ 2757 0226 0B       		.uleb128 0xb
+ 2758 0227 00       		.byte	0x0
+ 2759 0228 00       		.byte	0x0
+ 2760 0229 2A       		.uleb128 0x2a
+ 2761 022a 34       		.uleb128 0x34
+ 2762 022b 00       		.byte	0x0
+ 2763 022c 03       		.uleb128 0x3
+ 2764 022d 0E       		.uleb128 0xe
+ 2765 022e 3A       		.uleb128 0x3a
+ 2766 022f 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 59
+
+
+ 2767 0230 3B       		.uleb128 0x3b
+ 2768 0231 0B       		.uleb128 0xb
+ 2769 0232 49       		.uleb128 0x49
+ 2770 0233 13       		.uleb128 0x13
+ 2771 0234 3F       		.uleb128 0x3f
+ 2772 0235 0C       		.uleb128 0xc
+ 2773 0236 02       		.uleb128 0x2
+ 2774 0237 0A       		.uleb128 0xa
+ 2775 0238 00       		.byte	0x0
+ 2776 0239 00       		.byte	0x0
+ 2777 023a 2B       		.uleb128 0x2b
+ 2778 023b 34       		.uleb128 0x34
+ 2779 023c 00       		.byte	0x0
+ 2780 023d 03       		.uleb128 0x3
+ 2781 023e 08       		.uleb128 0x8
+ 2782 023f 3A       		.uleb128 0x3a
+ 2783 0240 0B       		.uleb128 0xb
+ 2784 0241 3B       		.uleb128 0x3b
+ 2785 0242 0B       		.uleb128 0xb
+ 2786 0243 49       		.uleb128 0x49
+ 2787 0244 13       		.uleb128 0x13
+ 2788 0245 3F       		.uleb128 0x3f
+ 2789 0246 0C       		.uleb128 0xc
+ 2790 0247 02       		.uleb128 0x2
+ 2791 0248 0A       		.uleb128 0xa
+ 2792 0249 00       		.byte	0x0
+ 2793 024a 00       		.byte	0x0
+ 2794 024b 00       		.byte	0x0
+ 2795              		.section	.debug_pubnames,"",%progbits
+ 2796 0000 68000000 		.4byte	0x68
+ 2797 0004 0200     		.2byte	0x2
+ 2798 0006 00000000 		.4byte	.Ldebug_info0
+ 2799 000a DE050000 		.4byte	0x5de
+ 2800 000e B0020000 		.4byte	0x2b0
+ 2801 0012 61707054 		.ascii	"appTick\000"
+ 2801      69636B00 
+ 2802 001a D5020000 		.4byte	0x2d5
+ 2803 001e 6D61696E 		.ascii	"main\000"
+ 2803      00
+ 2804 0023 84050000 		.4byte	0x584
+ 2805 0027 77796E69 		.ascii	"wynikInicjalizacjiSd\000"
+ 2805      6B496E69 
+ 2805      636A616C 
+ 2805      697A6163 
+ 2805      6A695364 
+ 2806 003c 96050000 		.4byte	0x596
+ 2807 0040 66617466 		.ascii	"fatfs\000"
+ 2807      7300
+ 2808 0046 A8050000 		.4byte	0x5a8
+ 2809 004a 726300   		.ascii	"rc\000"
+ 2810 004d B9050000 		.4byte	0x5b9
+ 2811 0051 6D73436C 		.ascii	"msClock\000"
+ 2811      6F636B00 
+ 2812 0059 CB050000 		.4byte	0x5cb
+ 2813 005d 6B6F6C6F 		.ascii	"kolorDiody\000"
+ 2813      7244696F 
+ 2813      647900
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 60
+
+
+ 2814 0068 00000000 		.4byte	0x0
+ 2815              		.section	.debug_aranges,"",%progbits
+ 2816 0000 1C000000 		.4byte	0x1c
+ 2817 0004 0200     		.2byte	0x2
+ 2818 0006 00000000 		.4byte	.Ldebug_info0
+ 2819 000a 04       		.byte	0x4
+ 2820 000b 00       		.byte	0x0
+ 2821 000c 0000     		.2byte	0x0
+ 2822 000e 0000     		.2byte	0x0
+ 2823 0010 00000000 		.4byte	.Ltext0
+ 2824 0014 CC040000 		.4byte	.Letext0-.Ltext0
+ 2825 0018 00000000 		.4byte	0x0
+ 2826 001c 00000000 		.4byte	0x0
+ 2827              		.section	.debug_ranges,"",%progbits
+ 2828              	.Ldebug_ranges0:
+ 2829 0000 D6010000 		.4byte	.LBB8-.Ltext0
+ 2830 0004 D8010000 		.4byte	.LBE8-.Ltext0
+ 2831 0008 D8010000 		.4byte	.LBB10-.Ltext0
+ 2832 000c DA010000 		.4byte	.LBE10-.Ltext0
+ 2833 0010 00000000 		.4byte	0x0
+ 2834 0014 00000000 		.4byte	0x0
+ 2835 0018 04040000 		.4byte	.LBB28-.Ltext0
+ 2836 001c 06040000 		.4byte	.LBE28-.Ltext0
+ 2837 0020 0C040000 		.4byte	.LBB32-.Ltext0
+ 2838 0024 CC040000 		.4byte	.LBE32-.Ltext0
+ 2839 0028 08040000 		.4byte	.LBB30-.Ltext0
+ 2840 002c 0A040000 		.4byte	.LBE30-.Ltext0
+ 2841 0030 00000000 		.4byte	0x0
+ 2842 0034 00000000 		.4byte	0x0
+ 2843              		.section	.debug_str,"MS",%progbits,1
+ 2844              	.LASF32:
+ 2845 0000 46525F4E 		.ascii	"FR_NOT_READY\000"
+ 2845      4F545F52 
+ 2845      45414459 
+ 2845      00
+ 2846              	.LASF52:
+ 2847 000d 506F637A 		.ascii	"PoczekajIWyczyscEkran\000"
+ 2847      656B616A 
+ 2847      49577963 
+ 2847      7A797363 
+ 2847      456B7261 
+ 2848              	.LASF61:
+ 2849 0023 6B6F6C6F 		.ascii	"kolor\000"
+ 2849      7200
+ 2850              	.LASF14:
+ 2851 0029 66735F74 		.ascii	"fs_type\000"
+ 2851      79706500 
+ 2852              	.LASF17:
+ 2853 0031 63736563 		.ascii	"csect\000"
+ 2853      7400
+ 2854              	.LASF72:
+ 2855 0037 7A617061 		.ascii	"zapalajDiode\000"
+ 2855      6C616A44 
+ 2855      696F6465 
+ 2855      00
+ 2856              	.LASF4:
+ 2857 0044 7369676E 		.ascii	"signed char\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 61
+
+
+ 2857      65642063 
+ 2857      68617200 
+ 2858              	.LASF18:
+ 2859 0050 6E5F726F 		.ascii	"n_rootdir\000"
+ 2859      6F746469 
+ 2859      7200
+ 2860              	.LASF8:
+ 2861 005a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2861      206C6F6E 
+ 2861      6720756E 
+ 2861      7369676E 
+ 2861      65642069 
+ 2862              	.LASF56:
+ 2863 0071 696E6974 		.ascii	"initLCD\000"
+ 2863      4C434400 
+ 2864              	.LASF43:
+ 2865 0079 64617461 		.ascii	"data\000"
+ 2865      00
+ 2866              	.LASF21:
+ 2867 007e 64697262 		.ascii	"dirbase\000"
+ 2867      61736500 
+ 2868              	.LASF59:
+ 2869 0086 50726F63 		.ascii	"ProceduraGlowna\000"
+ 2869      65647572 
+ 2869      61476C6F 
+ 2869      776E6100 
+ 2870              	.LASF7:
+ 2871 0096 6C6F6E67 		.ascii	"long long int\000"
+ 2871      206C6F6E 
+ 2871      6720696E 
+ 2871      7400
+ 2872              	.LASF40:
+ 2873 00a4 64656C61 		.ascii	"delay37us\000"
+ 2873      79333775 
+ 2873      7300
+ 2874              	.LASF53:
+ 2875 00ae 696C6543 		.ascii	"ileCzekac\000"
+ 2875      7A656B61 
+ 2875      6300
+ 2876              	.LASF68:
+ 2877 00b8 4F62736C 		.ascii	"ObslugaEkranuLcd1Stack\000"
+ 2877      75676145 
+ 2877      6B72616E 
+ 2877      754C6364 
+ 2877      31537461 
+ 2878              	.LASF60:
+ 2879 00cf 5A617061 		.ascii	"ZapalajDiode\000"
+ 2879      6C616A44 
+ 2879      696F6465 
+ 2879      00
+ 2880              	.LASF44:
+ 2881 00dc 57797069 		.ascii	"WypiszCiag\000"
+ 2881      737A4369 
+ 2881      616700
+ 2882              	.LASF24:
+ 2883 00e7 6673697A 		.ascii	"fsize\000"
+ 2883      6500
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 62
+
+
+ 2884              	.LASF22:
+ 2885 00ed 64617461 		.ascii	"database\000"
+ 2885      62617365 
+ 2885      00
+ 2886              	.LASF65:
+ 2887 00f6 53454D41 		.ascii	"SEMAFOR_SPI\000"
+ 2887      464F525F 
+ 2887      53504900 
+ 2888              	.LASF12:
+ 2889 0102 6C6F6E67 		.ascii	"long int\000"
+ 2889      20696E74 
+ 2889      00
+ 2890              	.LASF67:
+ 2891 010b 50726F63 		.ascii	"ProceduraGlownaPamiec\000"
+ 2891      65647572 
+ 2891      61476C6F 
+ 2891      776E6150 
+ 2891      616D6965 
+ 2892              	.LASF6:
+ 2893 0121 75696E74 		.ascii	"uint8\000"
+ 2893      3800
+ 2894              	.LASF37:
+ 2895 0127 46525F4E 		.ascii	"FR_NO_FILESYSTEM\000"
+ 2895      4F5F4649 
+ 2895      4C455359 
+ 2895      5354454D 
+ 2895      00
+ 2896              	.LASF25:
+ 2897 0138 6F72675F 		.ascii	"org_clust\000"
+ 2897      636C7573 
+ 2897      7400
+ 2898              	.LASF20:
+ 2899 0142 66617462 		.ascii	"fatbase\000"
+ 2899      61736500 
+ 2900              	.LASF13:
+ 2901 014a 44574F52 		.ascii	"DWORD\000"
+ 2901      4400
+ 2902              	.LASF15:
+ 2903 0150 6373697A 		.ascii	"csize\000"
+ 2903      6500
+ 2904              	.LASF62:
+ 2905 0156 6966496E 		.ascii	"ifInit\000"
+ 2905      697400
+ 2906              	.LASF39:
+ 2907 015d 506F6473 		.ascii	"PodswietlEkran\000"
+ 2907      77696574 
+ 2907      6C456B72 
+ 2907      616E00
+ 2908              	.LASF10:
+ 2909 016c 42595445 		.ascii	"BYTE\000"
+ 2909      00
+ 2910              	.LASF63:
+ 2911 0171 4F62736C 		.ascii	"ObslugaWyswietlacza128\000"
+ 2911      75676157 
+ 2911      79737769 
+ 2911      65746C61 
+ 2911      637A6131 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 63
+
+
+ 2912              	.LASF76:
+ 2913 0188 6D73436C 		.ascii	"msClock\000"
+ 2913      6F636B00 
+ 2914              	.LASF9:
+ 2915 0190 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2915      20756E73 
+ 2915      69676E65 
+ 2915      6420696E 
+ 2915      7400
+ 2916              	.LASF1:
+ 2917 01a2 73686F72 		.ascii	"short unsigned int\000"
+ 2917      7420756E 
+ 2917      7369676E 
+ 2917      65642069 
+ 2917      6E7400
+ 2918              	.LASF51:
+ 2919 01b5 5F6B746F 		.ascii	"_ktory\000"
+ 2919      727900
+ 2920              	.LASF69:
+ 2921 01bc 70696431 		.ascii	"pid1\000"
+ 2921      00
+ 2922              	.LASF71:
+ 2923 01c1 70696433 		.ascii	"pid3\000"
+ 2923      00
+ 2924              	.LASF79:
+ 2925 01c6 6D61696E 		.ascii	"main.c\000"
+ 2925      2E6300
+ 2926              	.LASF31:
+ 2927 01cd 46525F44 		.ascii	"FR_DISK_ERR\000"
+ 2927      49534B5F 
+ 2927      45525200 
+ 2928              	.LASF47:
+ 2929 01d9 61707054 		.ascii	"appTick\000"
+ 2929      69636B00 
+ 2930              	.LASF2:
+ 2931 01e1 74553332 		.ascii	"tU32\000"
+ 2931      00
+ 2932              	.LASF45:
+ 2933 01e6 74656B73 		.ascii	"tekst\000"
+ 2933      7400
+ 2934              	.LASF28:
+ 2935 01ec 46415446 		.ascii	"FATFS\000"
+ 2935      5300
+ 2936              	.LASF23:
+ 2937 01f2 66707472 		.ascii	"fptr\000"
+ 2937      00
+ 2938              	.LASF35:
+ 2939 01f7 46525F4E 		.ascii	"FR_NOT_OPENED\000"
+ 2939      4F545F4F 
+ 2939      50454E45 
+ 2939      4400
+ 2940              	.LASF19:
+ 2941 0205 6D61785F 		.ascii	"max_clust\000"
+ 2941      636C7573 
+ 2941      7400
+ 2942              	.LASF75:
+ 2943 020f 66617466 		.ascii	"fatfs\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 64
+
+
+ 2943      7300
+ 2944              	.LASF11:
+ 2945 0215 574F5244 		.ascii	"WORD\000"
+ 2945      00
+ 2946              	.LASF33:
+ 2947 021a 46525F4E 		.ascii	"FR_NO_FILE\000"
+ 2947      4F5F4649 
+ 2947      4C4500
+ 2948              	.LASF66:
+ 2949 0225 696E6963 		.ascii	"inicjalizacjaZakonczona\000"
+ 2949      6A616C69 
+ 2949      7A61636A 
+ 2949      615A616B 
+ 2949      6F6E637A 
+ 2950              	.LASF42:
+ 2951 023d 6F6E4F66 		.ascii	"onOff\000"
+ 2951      6600
+ 2952              	.LASF36:
+ 2953 0243 46525F4E 		.ascii	"FR_NOT_ENABLED\000"
+ 2953      4F545F45 
+ 2953      4E41424C 
+ 2953      454400
+ 2954              	.LASF46:
+ 2955 0252 656C6170 		.ascii	"elapsedTime\000"
+ 2955      73656454 
+ 2955      696D6500 
+ 2956              	.LASF77:
+ 2957 025e 6B6F6C6F 		.ascii	"kolorDiody\000"
+ 2957      7244696F 
+ 2957      647900
+ 2958              	.LASF49:
+ 2959 0269 6572726F 		.ascii	"error\000"
+ 2959      7200
+ 2960              	.LASF27:
+ 2961 026f 64736563 		.ascii	"dsect\000"
+ 2961      7400
+ 2962              	.LASF0:
+ 2963 0275 756E7369 		.ascii	"unsigned char\000"
+ 2963      676E6564 
+ 2963      20636861 
+ 2963      7200
+ 2964              	.LASF78:
+ 2965 0283 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 2965      4320342E 
+ 2965      312E3100 
+ 2966              	.LASF3:
+ 2967 028f 756E7369 		.ascii	"unsigned int\000"
+ 2967      676E6564 
+ 2967      20696E74 
+ 2967      00
+ 2968              	.LASF5:
+ 2969 029c 73686F72 		.ascii	"short int\000"
+ 2969      7420696E 
+ 2969      7400
+ 2970              	.LASF16:
+ 2971 02a6 666C6167 		.ascii	"flag\000"
+ 2971      00
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 65
+
+
+ 2972              	.LASF55:
+ 2973 02ab 57797377 		.ascii	"WyswietlTekstNaLcd\000"
+ 2973      6965746C 
+ 2973      54656B73 
+ 2973      744E614C 
+ 2973      636400
+ 2974              	.LASF57:
+ 2975 02be 50727A65 		.ascii	"PrzejdzDoNastepnejLinii\000"
+ 2975      6A647A44 
+ 2975      6F4E6173 
+ 2975      7465706E 
+ 2975      656A4C69 
+ 2976              	.LASF29:
+ 2977 02d6 63686172 		.ascii	"char\000"
+ 2977      00
+ 2978              	.LASF81:
+ 2979 02db 5F464154 		.ascii	"_FATFS_\000"
+ 2979      46535F00 
+ 2980              	.LASF73:
+ 2981 02e3 7069645A 		.ascii	"pidZapalajDiode\000"
+ 2981      6170616C 
+ 2981      616A4469 
+ 2981      6F646500 
+ 2982              	.LASF74:
+ 2983 02f3 77796E69 		.ascii	"wynikInicjalizacjiSd\000"
+ 2983      6B496E69 
+ 2983      636A616C 
+ 2983      697A6163 
+ 2983      6A695364 
+ 2984              	.LASF30:
+ 2985 0308 46525F4F 		.ascii	"FR_OK\000"
+ 2985      4B00
+ 2986              	.LASF64:
+ 2987 030e 72756368 		.ascii	"ruchJoysticka\000"
+ 2987      4A6F7973 
+ 2987      7469636B 
+ 2987      6100
+ 2988              	.LASF80:
+ 2989 031c 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
+ 2989      64726976 
+ 2989      652F672F 
+ 2989      73657276 
+ 2989      6572732F 
+ 2990 034f 5F6C7063 		.ascii	"_lpc2148_edu\000"
+ 2990      32313438 
+ 2990      5F656475 
+ 2990      00
+ 2991              	.LASF26:
+ 2992 035c 63757272 		.ascii	"curr_clust\000"
+ 2992      5F636C75 
+ 2992      737400
+ 2993              	.LASF41:
+ 2994 0367 57797069 		.ascii	"WypiszZnakNaEkran\000"
+ 2994      737A5A6E 
+ 2994      616B4E61 
+ 2994      456B7261 
+ 2994      6E00
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 66
+
+
+ 2995              	.LASF38:
+ 2996 0379 46524553 		.ascii	"FRESULT\000"
+ 2996      554C5400 
+ 2997              	.LASF58:
+ 2998 0381 4F62736C 		.ascii	"ObslugaEkranuLcd1\000"
+ 2998      75676145 
+ 2998      6B72616E 
+ 2998      754C6364 
+ 2998      3100
+ 2999              	.LASF70:
+ 3000 0393 4F62736C 		.ascii	"ObslugaWyswietlacza128Stack\000"
+ 3000      75676157 
+ 3000      79737769 
+ 3000      65746C61 
+ 3000      637A6131 
+ 3001              	.LASF54:
+ 3002 03af 5779637A 		.ascii	"WyczyscEkran\000"
+ 3002      79736345 
+ 3002      6B72616E 
+ 3002      00
+ 3003              	.LASF34:
+ 3004 03bc 46525F4E 		.ascii	"FR_NO_PATH\000"
+ 3004      4F5F5041 
+ 3004      544800
+ 3005              	.LASF48:
+ 3006 03c7 6D61696E 		.ascii	"main\000"
+ 3006      00
+ 3007              	.LASF50:
+ 3008 03cc 57797377 		.ascii	"WyswietlTekst\000"
+ 3008      6965746C 
+ 3008      54656B73 
+ 3008      7400
+ 3009              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 67
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:15     .text:00000000 delay37us
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:47     .text:0000001c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:51     .text:00000020 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:54     .text:00000020 WypiszZnakNaEkran
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:167    .text:000000a4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:173    .text:000000b0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:176    .text:000000b0 WypiszCiag
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:213    .text:000000d0 appTick
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:232    .text:000000dc $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:989    .bss:00000000 msClock
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:240    .text:000000e0 main
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:237    .text:000000e0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:293    .text:0000012c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:622    .text:000002c0 ProceduraGlowna
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:999    .bss:00000009 ProceduraGlownaPamiec
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:314    .text:0000013c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:317    .text:0000013c WyswietlTekst
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:391    .text:000001a0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:398    .text:000001b0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:401    .text:000001b0 WyczyscEkran
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:423    .text:000001c4 PoczekajIWyczyscEkran
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:464    .text:000001e0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:477    .text:000001e8 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:480    .text:000001e8 ObslugaEkranuLcd1
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:602    .text:000002a4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:619    .text:000002c0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:700    .text:00000344 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:1003   .bss:00000999 pid1
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:1001   .bss:00000199 ObslugaEkranuLcd1Stack
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:1007   .bss:0000119a pid3
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:719    .text:00000360 ObslugaWyswietlacza128
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:1005   .bss:0000099a ObslugaWyswietlacza128Stack
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:716    .text:00000360 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:957    .text:00000490 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:982    .data:00000000 wynikInicjalizacjiSd
+                            *COM*:00000030 fatfs
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:995    .bss:00000004 kolorDiody
+                            *COM*:00000004 rc
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:997    .bss:00000008 inicjalizacjaZakonczona
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s:983    .data:00000000 $d
+
+UNDEFINED SYMBOLS
+osInit
+osCreateProcess
+osStartProcess
+osStart
+lcdInit
+lcdColor
+lcdClrscr
+lcdGotoxy
+lcdPuts
+osSleep
+initKeyProc
+osDeleteProcess
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccRFvQpj.s 			page 68
+
+
+__modsi3
+checkKey
+pf_mount
+listDir

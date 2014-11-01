@@ -1,0 +1,33 @@
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+kernel.o: core/kernel.c core/kernel.h core/error.h core/pcb.h \
+  core/../api/general.h core/hal.h core/../core/_oshal/api/a7hal.h \
+  core/../core/_oshal/api/general.h core/prioqueue.h \
+  core/../stub/osstub.h core/../stub/../api/general.h core/timer.h \
+  core/stack_usage.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+prioqueue.o: core/prioqueue.c core/kernel.h core/error.h core/pcb.h \
+  core/../api/general.h core/prioqueue.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+event.o: core/event.c core/kernel.h core/error.h core/pcb.h \
+  core/../api/general.h core/event.h core/prioqueue.h core/hal.h \
+  core/../core/_oshal/api/a7hal.h core/../core/_oshal/api/general.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+count_sem.o: core/count_sem.c core/../api/general.h core/event.h \
+  core/pcb.h core/prioqueue.h core/kernel.h core/error.h core/count_sem.h \
+  core/hal.h core/../core/_oshal/api/a7hal.h \
+  core/../core/_oshal/api/general.h core/../stub/osstub.h \
+  core/../stub/../api/general.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+queue.o: core/queue.c core/queue.h core/event.h core/pcb.h \
+  core/../api/general.h core/prioqueue.h core/kernel.h core/error.h \
+  core/hal.h core/../core/_oshal/api/a7hal.h \
+  core/../core/_oshal/api/general.h core/../stub/osstub.h \
+  core/../stub/../api/general.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+timer.o: core/timer.c core/timer.h core/../api/general.h core/hal.h \
+  core/../core/_oshal/api/a7hal.h core/../core/_oshal/api/general.h \
+  core/count_sem.h core/event.h core/pcb.h core/prioqueue.h core/kernel.h \
+  core/error.h core/../stub/osstub.h core/../stub/../api/general.h
+# 1 "/cygdrive/c/Documents and Settings/Anders Rosvall/Mina dokument/Embedded Artists/Products/LPC2148 Education Board/Test program/v1.2/pre_emptive_os//"
+stack_usage.o: core/stack_usage.c core/stack_usage.h \
+  core/../api/general.h core/kernel.h core/error.h core/pcb.h

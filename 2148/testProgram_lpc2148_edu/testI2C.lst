@@ -1,0 +1,1566 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"testI2C.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 C9000000 		.text
+   9      02004A00 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.section	.rodata.str1.4,"aMS",%progbits,1
+  12              		.align	2
+  13              	.LC0:
+  14 0000 53747269 		.ascii	"String #1\000"
+  14      6E672023 
+  14      3100
+  15 000a 0000     		.align	2
+  16              	.LC2:
+  17 000c 73547249 		.ascii	"sTrInG #2\000"
+  17      6E472023 
+  17      3200
+  18              		.text
+  19              		.align	2
+  20              		.global	testEEPROM
+  21              		.code 16
+  22              		.thumb_func
+  23              		.type	testEEPROM, %function
+  24              	testEEPROM:
+  25              	.LFB2:
+  26              		.file 1 "testI2C.c"
+   1:testI2C.c     **** /******************************************************************************
+   2:testI2C.c     ****  *
+   3:testI2C.c     ****  * Copyright:
+   4:testI2C.c     ****  *    (C) 2000 - 2005 Embedded Artists AB
+   5:testI2C.c     ****  *
+   6:testI2C.c     ****  *****************************************************************************/
+   7:testI2C.c     **** 
+   8:testI2C.c     **** 
+   9:testI2C.c     **** #include "../pre_emptive_os/api/osapi.h"
+  10:testI2C.c     **** #include "../pre_emptive_os/api/general.h"
+  11:testI2C.c     **** #include <printf_P.h>
+  12:testI2C.c     **** #include <lpc2xxx.h>
+  13:testI2C.c     **** #include <consol.h>
+  14:testI2C.c     **** #include <string.h>
+  15:testI2C.c     **** #include "eeprom.h"
+  16:testI2C.c     **** 
+  17:testI2C.c     **** #define MAX_LENGTH 14
+  18:testI2C.c     **** 
+  19:testI2C.c     **** /*****************************************************************************
+  20:testI2C.c     ****  *
+  21:testI2C.c     ****  * Description:
+  22:testI2C.c     ****  *    Test EEPROM
+  23:testI2C.c     ****  *
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 2
+
+
+  24:testI2C.c     ****  ****************************************************************************/
+  25:testI2C.c     **** tU8
+  26:testI2C.c     **** testEEPROM(void)
+  27:testI2C.c     **** {
+  27              		.loc 1 27 0
+  28 0000 70B5     		push	{r4, r5, r6, lr}
+  29              	.LCFI0:
+  30 0002 89B0     		sub	sp, sp, #36
+  31              	.LCFI1:
+  28:testI2C.c     ****   tU8 eepromTestResultOK;
+  29:testI2C.c     ****   tU8 testString1[] = "String #1";
+  32              		.loc 1 29 0
+  33 0004 6C46     		mov	r4, sp
+  34 0006 1A34     		add	r4, r4, #26
+  35 0008 3F49     		ldr	r1, .L24
+  36 000a 201C     		mov	r0, r4
+  37 000c 0A22     		mov	r2, #10
+  38 000e FFF7FEFF 		bl	memcpy
+  30:testI2C.c     ****   tU8 testString2[] = "sTrInG #2";
+  39              		.loc 1 30 0
+  40 0012 3E4B     		ldr	r3, .L24+4
+  41 0014 04AA     		add	r2, sp, #16
+  42 0016 101C     		mov	r0, r2
+  43 0018 191C     		mov	r1, r3
+  44 001a 60C9     		ldmia	r1!, {r5, r6}
+  45 001c 60C0     		stmia	r0!, {r5, r6}
+  46 001e 1B89     		ldrh	r3, [r3, #8]
+  31:testI2C.c     ****   tU8 testBuf[MAX_LENGTH];
+  32:testI2C.c     ****   tS8 errorCode;
+  33:testI2C.c     ****   
+  34:testI2C.c     ****   eepromTestResultOK = TRUE;
+  35:testI2C.c     **** //  printf("\nTest #1 - write string '%s' to address 0x0000", testString1);
+  36:testI2C.c     ****   errorCode = eepromWrite(0x0000, testString1, sizeof(testString1));
+  47              		.loc 1 36 0
+  48 0020 211C     		mov	r1, r4
+  49              		.loc 1 30 0
+  50 0022 1381     		strh	r3, [r2, #8]
+  51              		.loc 1 36 0
+  52 0024 0020     		mov	r0, #0
+  53 0026 0A22     		mov	r2, #10
+  54 0028 FFF7FEFF 		bl	eepromWrite
+  55 002c 0006     		lsl	r0, r0, #24
+  56 002e 040E     		lsr	r4, r0, #24
+  57              	.LVL0:
+  37:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+  38:testI2C.c     **** ;//    printf("\n        - done (status code OK)");
+  39:testI2C.c     ****   else
+  40:testI2C.c     ****   {
+  41:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+  42:testI2C.c     ****     eepromTestResultOK = FALSE;
+  43:testI2C.c     ****   }
+  44:testI2C.c     ****   
+  45:testI2C.c     ****   if (eepromPoll() == I2C_CODE_OK)
+  58              		.loc 1 45 0
+  59 0030 FFF7FEFF 		bl	eepromPoll
+  60 0034 0006     		lsl	r0, r0, #24
+  61 0036 0016     		asr	r0, r0, #24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 3
+
+
+  62 0038 0128     		cmp	r0, #1
+  63 003a 01D0     		beq	.L2
+  64 003c 0024     		mov	r4, #0
+  65              	.LVL1:
+  66 003e 09E0     		b	.L4
+  67              	.LVL2:
+  68              	.L2:
+  69 0040 0123     		mov	r3, #1
+  70 0042 221C     		mov	r2, r4
+  71 0044 5A40     		eor	r2, r2, r3
+  72 0046 5342     		neg	r3, r2
+  73 0048 1343     		orr	r3, r3, r2
+  74 004a DB0F     		lsr	r3, r3, #31
+  75 004c 0122     		mov	r2, #1
+  76 004e 5340     		eor	r3, r3, r2
+  77 0050 1B06     		lsl	r3, r3, #24
+  78 0052 1C0E     		lsr	r4, r3, #24
+  79              	.LVL3:
+  80              	.L4:
+  46:testI2C.c     **** ;//    printf("\n        - program cycle completed");
+  47:testI2C.c     ****   else
+  48:testI2C.c     ****   {
+  49:testI2C.c     **** //    printf("\n        - program cycle failed!");
+  50:testI2C.c     ****     eepromTestResultOK = FALSE;
+  51:testI2C.c     ****   }
+  52:testI2C.c     **** 
+  53:testI2C.c     **** //  printf("\nTest #2 - write string '%s' to address 0x00a0", testString2);
+  54:testI2C.c     ****   errorCode = eepromWrite(0x00a0, testString2, sizeof(testString2));
+  81              		.loc 1 54 0
+  82 0054 A020     		mov	r0, #160
+  83 0056 04A9     		add	r1, sp, #16
+  84 0058 0A22     		mov	r2, #10
+  85 005a FFF7FEFF 		bl	eepromWrite
+  55:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+  86              		.loc 1 55 0
+  87 005e 0006     		lsl	r0, r0, #24
+  88 0060 0016     		asr	r0, r0, #24
+  89 0062 0128     		cmp	r0, #1
+  90 0064 00D0     		beq	.L6
+  91 0066 0024     		mov	r4, #0
+  92              	.L6:
+  56:testI2C.c     **** ;//    printf("\n        - done (status code OK)");
+  57:testI2C.c     ****   else
+  58:testI2C.c     ****   {
+  59:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+  60:testI2C.c     ****     eepromTestResultOK = FALSE;
+  61:testI2C.c     ****   }
+  62:testI2C.c     ****    
+  63:testI2C.c     ****   if (eepromPoll() == I2C_CODE_OK)
+  93              		.loc 1 63 0
+  94 0068 FFF7FEFF 		bl	eepromPoll
+  95 006c 0006     		lsl	r0, r0, #24
+  96 006e 0016     		asr	r0, r0, #24
+  97 0070 0128     		cmp	r0, #1
+  98 0072 00D0     		beq	.L8
+  99 0074 0024     		mov	r4, #0
+ 100              	.L8:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 4
+
+
+  64:testI2C.c     **** ;//    printf("\n        - program cycle completed");
+  65:testI2C.c     ****   else
+  66:testI2C.c     ****   {
+  67:testI2C.c     **** //    printf("\n        - program cycle failed!");
+  68:testI2C.c     ****     eepromTestResultOK = FALSE;
+  69:testI2C.c     ****   }
+  70:testI2C.c     **** 
+  71:testI2C.c     ****   /*
+  72:testI2C.c     ****    * Read from eeprom
+  73:testI2C.c     ****    */
+  74:testI2C.c     **** //  printf("\nTest #3 - read string from address 0x0000");
+  75:testI2C.c     ****   errorCode = eepromPageRead(0x0000, testBuf, MAX_LENGTH);
+ 101              		.loc 1 75 0
+ 102 0076 6D46     		mov	r5, sp
+ 103 0078 0235     		add	r5, r5, #2
+ 104 007a 0020     		mov	r0, #0
+ 105 007c 291C     		mov	r1, r5
+ 106 007e 0E22     		mov	r2, #14
+ 107 0080 FFF7FEFF 		bl	eepromPageRead
+  76:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+ 108              		.loc 1 76 0
+ 109 0084 0006     		lsl	r0, r0, #24
+ 110 0086 0016     		asr	r0, r0, #24
+ 111 0088 0128     		cmp	r0, #1
+ 112 008a 04D1     		bne	.L10
+  77:testI2C.c     ****   {
+  78:testI2C.c     ****     if (strlen(testBuf) == sizeof(testString1)-1)
+ 113              		.loc 1 78 0
+ 114 008c 281C     		mov	r0, r5
+ 115 008e FFF7FEFF 		bl	strlen
+ 116 0092 0928     		cmp	r0, #9
+ 117 0094 00D0     		beq	.L12
+ 118              	.L10:
+ 119 0096 0024     		mov	r4, #0
+ 120              	.L12:
+  79:testI2C.c     **** ;//      printf("\n        - string is '%s'", testBuf);
+  80:testI2C.c     ****     else
+  81:testI2C.c     ****     {
+  82:testI2C.c     **** //      printf("\n        - wrong length (read string is %d characters long)!", strlen(testBuf));
+  83:testI2C.c     ****       eepromTestResultOK = FALSE;
+  84:testI2C.c     ****     }
+  85:testI2C.c     ****   }
+  86:testI2C.c     ****   else
+  87:testI2C.c     ****   {
+  88:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+  89:testI2C.c     ****     eepromTestResultOK = FALSE;
+  90:testI2C.c     ****   }
+  91:testI2C.c     **** 
+  92:testI2C.c     **** //  printf("\nTest #4 - read string from address 0x00a0");
+  93:testI2C.c     ****   errorCode = eepromPageRead(0x00a0, testBuf, MAX_LENGTH);
+ 121              		.loc 1 93 0
+ 122 0098 6D46     		mov	r5, sp
+ 123 009a 0235     		add	r5, r5, #2
+ 124 009c A020     		mov	r0, #160
+ 125 009e 291C     		mov	r1, r5
+ 126 00a0 0E22     		mov	r2, #14
+ 127 00a2 FFF7FEFF 		bl	eepromPageRead
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 5
+
+
+  94:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+ 128              		.loc 1 94 0
+ 129 00a6 0006     		lsl	r0, r0, #24
+ 130 00a8 0016     		asr	r0, r0, #24
+ 131 00aa 0128     		cmp	r0, #1
+ 132 00ac 04D1     		bne	.L13
+  95:testI2C.c     ****   {
+  96:testI2C.c     ****     if (strlen(testBuf) == sizeof(testString2)-1)
+ 133              		.loc 1 96 0
+ 134 00ae 281C     		mov	r0, r5
+ 135 00b0 FFF7FEFF 		bl	strlen
+ 136 00b4 0928     		cmp	r0, #9
+ 137 00b6 00D0     		beq	.L15
+ 138              	.L13:
+ 139 00b8 0024     		mov	r4, #0
+ 140              	.L15:
+  97:testI2C.c     **** ;//      printf("\n        - string is '%s'", testBuf);
+  98:testI2C.c     ****     else
+  99:testI2C.c     ****     {
+ 100:testI2C.c     **** //      printf("\n        - wrong length (read string is %d characters long)!", strlen(testBuf));
+ 101:testI2C.c     ****       eepromTestResultOK = FALSE;
+ 102:testI2C.c     ****     }
+ 103:testI2C.c     ****   }
+ 104:testI2C.c     ****   else
+ 105:testI2C.c     ****   {
+ 106:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+ 107:testI2C.c     ****     eepromTestResultOK = FALSE;
+ 108:testI2C.c     ****   }
+ 109:testI2C.c     **** 
+ 110:testI2C.c     ****   /*
+ 111:testI2C.c     ****    * Write/Read from eeprom
+ 112:testI2C.c     ****    */
+ 113:testI2C.c     **** //  printf("\nTest #5 - write string '%s' to address 0x0004", testString2);
+ 114:testI2C.c     ****   errorCode = eepromWrite(0x0004, testString2, sizeof(testString2));
+ 141              		.loc 1 114 0
+ 142 00ba 0420     		mov	r0, #4
+ 143 00bc 04A9     		add	r1, sp, #16
+ 144 00be 0A22     		mov	r2, #10
+ 145 00c0 FFF7FEFF 		bl	eepromWrite
+ 115:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+ 146              		.loc 1 115 0
+ 147 00c4 0006     		lsl	r0, r0, #24
+ 148 00c6 0016     		asr	r0, r0, #24
+ 149 00c8 0128     		cmp	r0, #1
+ 150 00ca 00D0     		beq	.L16
+ 151 00cc 0024     		mov	r4, #0
+ 152              	.L16:
+ 116:testI2C.c     **** ;//    printf("\n        - done (status code OK)");
+ 117:testI2C.c     ****   else
+ 118:testI2C.c     ****   {
+ 119:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+ 120:testI2C.c     ****     eepromTestResultOK = FALSE;
+ 121:testI2C.c     ****   }
+ 122:testI2C.c     ****   
+ 123:testI2C.c     ****   if (eepromPoll() == I2C_CODE_OK)
+ 153              		.loc 1 123 0
+ 154 00ce FFF7FEFF 		bl	eepromPoll
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 6
+
+
+ 155 00d2 0006     		lsl	r0, r0, #24
+ 156 00d4 0016     		asr	r0, r0, #24
+ 157 00d6 0128     		cmp	r0, #1
+ 158 00d8 00D0     		beq	.L18
+ 159 00da 0024     		mov	r4, #0
+ 160              	.L18:
+ 124:testI2C.c     **** ;//    printf("\n        - program cycle completed");
+ 125:testI2C.c     ****   else
+ 126:testI2C.c     ****   {
+ 127:testI2C.c     **** //    printf("\n        - program cycle failed!");
+ 128:testI2C.c     ****     eepromTestResultOK = FALSE;
+ 129:testI2C.c     ****   }
+ 130:testI2C.c     **** 
+ 131:testI2C.c     **** //  printf("\nTest #6 - read string from address 0x0000");
+ 132:testI2C.c     ****   errorCode = eepromPageRead(0x0000, testBuf, MAX_LENGTH);
+ 161              		.loc 1 132 0
+ 162 00dc 6D46     		mov	r5, sp
+ 163 00de 0235     		add	r5, r5, #2
+ 164 00e0 0020     		mov	r0, #0
+ 165 00e2 291C     		mov	r1, r5
+ 166 00e4 0E22     		mov	r2, #14
+ 167 00e6 FFF7FEFF 		bl	eepromPageRead
+ 133:testI2C.c     ****   if (errorCode == I2C_CODE_OK)
+ 168              		.loc 1 133 0
+ 169 00ea 0006     		lsl	r0, r0, #24
+ 170 00ec 0016     		asr	r0, r0, #24
+ 171 00ee 0128     		cmp	r0, #1
+ 172 00f0 04D1     		bne	.L20
+ 134:testI2C.c     ****   {
+ 135:testI2C.c     ****     if (strlen(testBuf) == sizeof(testString2)-1+4)
+ 173              		.loc 1 135 0
+ 174 00f2 281C     		mov	r0, r5
+ 175 00f4 FFF7FEFF 		bl	strlen
+ 176 00f8 0D28     		cmp	r0, #13
+ 177 00fa 00D0     		beq	.L22
+ 178              	.L20:
+ 179 00fc 0024     		mov	r4, #0
+ 180              	.L22:
+ 136:testI2C.c     **** ;//      printf("\n        - string is '%s'", testBuf);
+ 137:testI2C.c     ****     else
+ 138:testI2C.c     ****     {
+ 139:testI2C.c     **** //      printf("\n        - wrong length (read string is %d characters long)!", strlen(testBuf));
+ 140:testI2C.c     ****       eepromTestResultOK = FALSE;
+ 141:testI2C.c     ****     }
+ 142:testI2C.c     ****   }
+ 143:testI2C.c     ****   else
+ 144:testI2C.c     ****   {
+ 145:testI2C.c     **** //    printf("\n        - failed (error code = %d)!", errorCode);
+ 146:testI2C.c     ****     eepromTestResultOK = FALSE;
+ 147:testI2C.c     ****   }
+ 148:testI2C.c     ****   
+ 149:testI2C.c     ****   return eepromTestResultOK;
+ 150:testI2C.c     **** }
+ 181              		.loc 1 150 0
+ 182 00fe 201C     		mov	r0, r4
+ 183 0100 09B0     		add	sp, sp, #36
+ 184              		@ sp needed for prologue
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 7
+
+
+ 185              	.LVL4:
+ 186 0102 70BC     		pop	{r4, r5, r6}
+ 187 0104 02BC     		pop	{r1}
+ 188 0106 0847     		bx	r1
+ 189              	.L25:
+ 190              		.align	2
+ 191              	.L24:
+ 192 0108 00000000 		.word	.LC0
+ 193 010c 0C000000 		.word	.LC2
+ 194              	.LFE2:
+ 195              		.size	testEEPROM, .-testEEPROM
+ 196              		.section	.rodata.str1.4
+ 197 0016 0000     		.align	2
+ 198              	.LC4:
+ 199 0018 0A0A2A2A 		.ascii	"\012\012*******************************************"
+ 199      2A2A2A2A 
+ 199      2A2A2A2A 
+ 199      2A2A2A2A 
+ 199      2A2A2A2A 
+ 200 0045 2A2A2A2A 		.ascii	"************\012\000"
+ 200      2A2A2A2A 
+ 200      2A2A2A2A 
+ 200      0A00
+ 201 0053 00       		.align	2
+ 202              	.LC6:
+ 203 0054 2A202020 		.ascii	"*                                                  "
+ 203      20202020 
+ 203      20202020 
+ 203      20202020 
+ 203      20202020 
+ 204 0087 2020202A 		.ascii	"   *\012\000"
+ 204      0A00
+ 205 008d 000000   		.align	2
+ 206              	.LC8:
+ 207 0090 2A205468 		.ascii	"* The I2C EEPROM and RTC crystal are tested...     "
+ 207      65204932 
+ 207      43204545 
+ 207      50524F4D 
+ 207      20616E64 
+ 208 00c3 2020202A 		.ascii	"   *\012\000"
+ 208      0A00
+ 209 00c9 000000   		.align	2
+ 210              	.LC10:
+ 211 00cc 2A2A2A2A 		.ascii	"***************************************************"
+ 211      2A2A2A2A 
+ 211      2A2A2A2A 
+ 211      2A2A2A2A 
+ 211      2A2A2A2A 
+ 212 00ff 2A2A2A2A 		.ascii	"****\012\000"
+ 212      0A00
+ 213 0105 000000   		.align	2
+ 214              	.LC12:
+ 215 0108 0A0A5254 		.ascii	"\012\012RTC (Real-Time Clock) test\000"
+ 215      43202852 
+ 215      65616C2D 
+ 215      54696D65 
+ 215      20436C6F 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 8
+
+
+ 216 0125 000000   		.align	2
+ 217              	.LC14:
+ 218 0128 2E00     		.ascii	".\000"
+ 219 012a 0000     		.align	2
+ 220              	.LC16:
+ 221 012c 20746573 		.ascii	" test OK!\012\000"
+ 221      74204F4B 
+ 221      210A00
+ 222 0137 00       		.align	2
+ 223              	.LC18:
+ 224 0138 20636865 		.ascii	" check result during ADC/DAC test [%d:%d:%d]\012\000"
+ 224      636B2072 
+ 224      6573756C 
+ 224      74206475 
+ 224      72696E67 
+ 225 0166 0000     		.align	2
+ 226              	.LC20:
+ 227 0168 0A0A5375 		.ascii	"\012\012Summary of EEPROM tests: Passed all tests!\000"
+ 227      6D6D6172 
+ 227      79206F66 
+ 227      20454550 
+ 227      524F4D20 
+ 228 0195 000000   		.align	2
+ 229              	.LC22:
+ 230 0198 0A0A5375 		.ascii	"\012\012Summary of EEPROM tests: Failed at least on"
+ 230      6D6D6172 
+ 230      79206F66 
+ 230      20454550 
+ 230      524F4D20 
+ 231 01c5 65207465 		.ascii	"e test!\000"
+ 231      73742100 
+ 232 01cd 000000   		.align	2
+ 233              	.LC24:
+ 234 01d0 2A205468 		.ascii	"* The LM75 temperature sensor is tested...         "
+ 234      65204C4D 
+ 234      37352074 
+ 234      656D7065 
+ 234      72617475 
+ 235 0203 2020202A 		.ascii	"   *\012\000"
+ 235      0A00
+ 236 0209 000000   		.align	2
+ 237              	.LC26:
+ 238 020c 0D4C4D37 		.ascii	"\015LM75 temp = %d.%d\000"
+ 238      35207465 
+ 238      6D70203D 
+ 238      2025642E 
+ 238      256400
+ 239 021f 00       		.align	2
+ 240              	.LC28:
+ 241 0220 0A464149 		.ascii	"\012FAILED to read from LM75!!!!!!!!!!!!!!!!!\012\000"
+ 241      4C454420 
+ 241      746F2072 
+ 241      65616420 
+ 241      66726F6D 
+ 242              		.text
+ 243              		.align	2
+ 244              		.global	testI2C
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 9
+
+
+ 245              		.code 16
+ 246              		.thumb_func
+ 247              		.type	testI2C, %function
+ 248              	testI2C:
+ 249              	.LFB4:
+ 151:testI2C.c     **** 
+ 152:testI2C.c     **** /*****************************************************************************
+ 153:testI2C.c     ****  *
+ 154:testI2C.c     ****  * Description:
+ 155:testI2C.c     ****  *    Test RTC crystal
+ 156:testI2C.c     ****  *
+ 157:testI2C.c     ****  ****************************************************************************/
+ 158:testI2C.c     **** static void
+ 159:testI2C.c     **** testRtc(void)
+ 160:testI2C.c     **** {
+ 161:testI2C.c     ****   CCR  = 0x00000012;
+ 162:testI2C.c     ****   CCR  = 0x00000010;
+ 163:testI2C.c     ****   ILR  = 0x00000000;
+ 164:testI2C.c     ****   CIIR = 0x00000000;
+ 165:testI2C.c     ****   AMR  = 0x00000000;
+ 166:testI2C.c     ****   //PREINT  = 449;
+ 167:testI2C.c     ****   //PREFRAC = 0;
+ 168:testI2C.c     ****   osSleep(50);
+ 169:testI2C.c     ****   SEC  = 0;
+ 170:testI2C.c     ****   MINx  = 0;
+ 171:testI2C.c     ****   HOUR = 0;
+ 172:testI2C.c     ****   osSleep(50);
+ 173:testI2C.c     ****   CCR  = 0x00000011;
+ 174:testI2C.c     ****   
+ 175:testI2C.c     ****   osSleep(75);
+ 176:testI2C.c     ****   printf(".");
+ 177:testI2C.c     ****   osSleep(50);
+ 178:testI2C.c     ****   printf(".");
+ 179:testI2C.c     ****   osSleep(50);
+ 180:testI2C.c     ****   printf(".");
+ 181:testI2C.c     ****   osSleep(50);
+ 182:testI2C.c     ****   printf(".");
+ 183:testI2C.c     ****   osSleep(50);
+ 184:testI2C.c     ****   printf(".");
+ 185:testI2C.c     ****   osSleep(50);
+ 186:testI2C.c     ****   printf(".");
+ 187:testI2C.c     ****   osSleep(50);
+ 188:testI2C.c     ****   printf(".");
+ 189:testI2C.c     ****   
+ 190:testI2C.c     ****   if ((SEC == 3) && (MINx == 0) && (HOUR == 0))
+ 191:testI2C.c     ****     printf(" test OK!\n");
+ 192:testI2C.c     ****   else
+ 193:testI2C.c     ****     printf(" check result during ADC/DAC test [%d:%d:%d]\n", HOUR, MINx, SEC);
+ 194:testI2C.c     **** }
+ 195:testI2C.c     **** 
+ 196:testI2C.c     **** /*****************************************************************************
+ 197:testI2C.c     ****  *
+ 198:testI2C.c     ****  * Description:
+ 199:testI2C.c     ****  *    A process entry function. 
+ 200:testI2C.c     ****  *
+ 201:testI2C.c     ****  ****************************************************************************/
+ 202:testI2C.c     **** void
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 10
+
+
+ 203:testI2C.c     **** testI2C(void)
+ 204:testI2C.c     **** {
+ 250              		.loc 1 204 0
+ 251 0110 F0B5     		push	{r4, r5, r6, r7, lr}
+ 252              	.LCFI2:
+ 253 0112 81B0     		sub	sp, sp, #4
+ 254              	.LCFI3:
+ 205:testI2C.c     ****  	tU8 data[3];
+ 206:testI2C.c     **** 
+ 207:testI2C.c     ****   printf("\n\n*******************************************************\n");
+ 255              		.loc 1 207 0
+ 256 0114 5548     		ldr	r0, .L40
+ 257 0116 FFF7FEFF 		bl	simplePrintf
+ 208:testI2C.c     ****   printf("*                                                     *\n");
+ 258              		.loc 1 208 0
+ 259 011a 554C     		ldr	r4, .L40+4
+ 260 011c 201C     		mov	r0, r4
+ 261 011e FFF7FEFF 		bl	simplePrintf
+ 209:testI2C.c     ****   printf("* The I2C EEPROM and RTC crystal are tested...        *\n");
+ 262              		.loc 1 209 0
+ 263 0122 5448     		ldr	r0, .L40+8
+ 264 0124 FFF7FEFF 		bl	simplePrintf
+ 210:testI2C.c     ****   printf("*                                                     *\n");
+ 265              		.loc 1 210 0
+ 266 0128 201C     		mov	r0, r4
+ 267 012a FFF7FEFF 		bl	simplePrintf
+ 211:testI2C.c     ****   printf("*******************************************************\n");
+ 268              		.loc 1 211 0
+ 269 012e 5248     		ldr	r0, .L40+12
+ 270 0130 FFF7FEFF 		bl	simplePrintf
+ 271              	.LBB5:
+ 272              	.LBB6:
+ 273              		.loc 1 161 0
+ 274 0134 514D     		ldr	r5, .L40+16
+ 275              	.LBE6:
+ 276              	.LBE5:
+ 212:testI2C.c     **** 
+ 213:testI2C.c     ****   /* test RTC crystal */
+ 214:testI2C.c     ****   printf("\n\nRTC (Real-Time Clock) test");
+ 277              		.loc 1 214 0
+ 278 0136 5248     		ldr	r0, .L40+20
+ 279 0138 FFF7FEFF 		bl	simplePrintf
+ 280              	.LBB7:
+ 281              	.LBB8:
+ 282              		.loc 1 161 0
+ 283 013c 1223     		mov	r3, #18
+ 284 013e 2B60     		str	r3, [r5]
+ 285              		.loc 1 162 0
+ 286 0140 1023     		mov	r3, #16
+ 287 0142 2B60     		str	r3, [r5]
+ 288              		.loc 1 163 0
+ 289 0144 4F4B     		ldr	r3, .L40+24
+ 290 0146 0024     		mov	r4, #0
+ 291 0148 1C60     		str	r4, [r3]
+ 292              		.loc 1 164 0
+ 293 014a 0C33     		add	r3, r3, #12
+ 294 014c 1C60     		str	r4, [r3]
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 11
+
+
+ 295              		.loc 1 165 0
+ 296 014e 0433     		add	r3, r3, #4
+ 297 0150 1C60     		str	r4, [r3]
+ 298              		.loc 1 168 0
+ 299 0152 3220     		mov	r0, #50
+ 300 0154 FFF7FEFF 		bl	osSleep
+ 301              		.loc 1 169 0
+ 302 0158 4B4E     		ldr	r6, .L40+28
+ 303              		.loc 1 171 0
+ 304 015a 4C4A     		ldr	r2, .L40+32
+ 305              		.loc 1 170 0
+ 306 015c 4C4F     		ldr	r7, .L40+36
+ 307              		.loc 1 169 0
+ 308 015e 3460     		str	r4, [r6]
+ 309              		.loc 1 172 0
+ 310 0160 3220     		mov	r0, #50
+ 311              		.loc 1 170 0
+ 312 0162 3C60     		str	r4, [r7]
+ 313              		.loc 1 171 0
+ 314 0164 1460     		str	r4, [r2]
+ 315              		.loc 1 172 0
+ 316 0166 FFF7FEFF 		bl	osSleep
+ 317              		.loc 1 173 0
+ 318 016a 1123     		mov	r3, #17
+ 319 016c 2B60     		str	r3, [r5]
+ 320              		.loc 1 175 0
+ 321 016e 4B20     		mov	r0, #75
+ 322 0170 FFF7FEFF 		bl	osSleep
+ 323              		.loc 1 176 0
+ 324 0174 474C     		ldr	r4, .L40+40
+ 325 0176 201C     		mov	r0, r4
+ 326 0178 FFF7FEFF 		bl	simplePrintf
+ 327              		.loc 1 177 0
+ 328 017c 3220     		mov	r0, #50
+ 329 017e FFF7FEFF 		bl	osSleep
+ 330              		.loc 1 178 0
+ 331 0182 201C     		mov	r0, r4
+ 332 0184 FFF7FEFF 		bl	simplePrintf
+ 333              		.loc 1 179 0
+ 334 0188 3220     		mov	r0, #50
+ 335 018a FFF7FEFF 		bl	osSleep
+ 336              		.loc 1 180 0
+ 337 018e 201C     		mov	r0, r4
+ 338 0190 FFF7FEFF 		bl	simplePrintf
+ 339              		.loc 1 181 0
+ 340 0194 3220     		mov	r0, #50
+ 341 0196 FFF7FEFF 		bl	osSleep
+ 342              		.loc 1 182 0
+ 343 019a 201C     		mov	r0, r4
+ 344 019c FFF7FEFF 		bl	simplePrintf
+ 345              		.loc 1 183 0
+ 346 01a0 3220     		mov	r0, #50
+ 347 01a2 FFF7FEFF 		bl	osSleep
+ 348              		.loc 1 184 0
+ 349 01a6 201C     		mov	r0, r4
+ 350 01a8 FFF7FEFF 		bl	simplePrintf
+ 351              		.loc 1 185 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 12
+
+
+ 352 01ac 3220     		mov	r0, #50
+ 353 01ae FFF7FEFF 		bl	osSleep
+ 354              		.loc 1 186 0
+ 355 01b2 201C     		mov	r0, r4
+ 356 01b4 FFF7FEFF 		bl	simplePrintf
+ 357              		.loc 1 187 0
+ 358 01b8 3220     		mov	r0, #50
+ 359 01ba FFF7FEFF 		bl	osSleep
+ 360              		.loc 1 188 0
+ 361 01be 201C     		mov	r0, r4
+ 362 01c0 FFF7FEFF 		bl	simplePrintf
+ 363              		.loc 1 190 0
+ 364 01c4 3368     		ldr	r3, [r6]
+ 365 01c6 032B     		cmp	r3, #3
+ 366 01c8 0AD1     		bne	.L27
+ 367 01ca 3B68     		ldr	r3, [r7]
+ 368 01cc 002B     		cmp	r3, #0
+ 369 01ce 07D1     		bne	.L27
+ 370 01d0 2E4A     		ldr	r2, .L40+32
+ 371 01d2 1368     		ldr	r3, [r2]
+ 372 01d4 002B     		cmp	r3, #0
+ 373 01d6 03D1     		bne	.L27
+ 374              		.loc 1 191 0
+ 375 01d8 2F48     		ldr	r0, .L40+44
+ 376 01da FFF7FEFF 		bl	simplePrintf
+ 377 01de 08E0     		b	.L31
+ 378              	.L27:
+ 379              		.loc 1 193 0
+ 380 01e0 2A4B     		ldr	r3, .L40+32
+ 381 01e2 1968     		ldr	r1, [r3]
+ 382 01e4 043B     		sub	r3, r3, #4
+ 383 01e6 1A68     		ldr	r2, [r3]
+ 384 01e8 043B     		sub	r3, r3, #4
+ 385 01ea 1B68     		ldr	r3, [r3]
+ 386 01ec 2B48     		ldr	r0, .L40+48
+ 387 01ee FFF7FEFF 		bl	simplePrintf
+ 388              	.L31:
+ 389              	.LBE8:
+ 390              	.LBE7:
+ 215:testI2C.c     **** 	testRtc();
+ 216:testI2C.c     **** 
+ 217:testI2C.c     ****   /* initialize and test I2C */
+ 218:testI2C.c     ****   i2cInit();
+ 391              		.loc 1 218 0
+ 392 01f2 FFF7FEFF 		bl	i2cInit
+ 219:testI2C.c     ****   if (testEEPROM() == TRUE)
+ 393              		.loc 1 219 0
+ 394 01f6 FFF7FEFF 		bl	testEEPROM
+ 395 01fa 0128     		cmp	r0, #1
+ 396 01fc 01D1     		bne	.L32
+ 220:testI2C.c     ****     printf("\n\nSummary of EEPROM tests: Passed all tests!");
+ 397              		.loc 1 220 0
+ 398 01fe 2848     		ldr	r0, .L40+52
+ 399 0200 00E0     		b	.L39
+ 400              	.L32:
+ 221:testI2C.c     ****   else
+ 222:testI2C.c     ****     printf("\n\nSummary of EEPROM tests: Failed at least one test!");
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 13
+
+
+ 401              		.loc 1 222 0
+ 402 0202 2848     		ldr	r0, .L40+56
+ 403              	.L39:
+ 404 0204 FFF7FEFF 		bl	simplePrintf
+ 223:testI2C.c     **** 
+ 224:testI2C.c     **** 
+ 225:testI2C.c     ****   printf("\n\n*******************************************************\n");
+ 405              		.loc 1 225 0
+ 406 0208 1848     		ldr	r0, .L40
+ 407 020a FFF7FEFF 		bl	simplePrintf
+ 226:testI2C.c     ****   printf("*                                                     *\n");
+ 408              		.loc 1 226 0
+ 409 020e 184C     		ldr	r4, .L40+4
+ 410 0210 201C     		mov	r0, r4
+ 411 0212 FFF7FEFF 		bl	simplePrintf
+ 227:testI2C.c     ****   printf("* The LM75 temperature sensor is tested...            *\n");
+ 412              		.loc 1 227 0
+ 413 0216 2448     		ldr	r0, .L40+60
+ 414 0218 FFF7FEFF 		bl	simplePrintf
+ 228:testI2C.c     ****   printf("*                                                     *\n");
+ 415              		.loc 1 228 0
+ 416 021c 201C     		mov	r0, r4
+ 229:testI2C.c     ****   printf("*******************************************************\n");
+ 230:testI2C.c     ****   
+ 231:testI2C.c     ****   //test LM75
+ 232:testI2C.c     ****   if (1 == lm75Read(0x90, &data[0], 3))
+ 417              		.loc 1 232 0
+ 418 021e 6C46     		mov	r4, sp
+ 419              		.loc 1 228 0
+ 420 0220 FFF7FEFF 		bl	simplePrintf
+ 421              		.loc 1 232 0
+ 422 0224 0134     		add	r4, r4, #1
+ 423              		.loc 1 229 0
+ 424 0226 1448     		ldr	r0, .L40+12
+ 425 0228 FFF7FEFF 		bl	simplePrintf
+ 426              		.loc 1 232 0
+ 427 022c 0322     		mov	r2, #3
+ 428 022e 9020     		mov	r0, #144
+ 429 0230 211C     		mov	r1, r4
+ 430 0232 FFF7FEFF 		bl	lm75Read
+ 431 0236 0006     		lsl	r0, r0, #24
+ 432 0238 0216     		asr	r2, r0, #24
+ 433 023a 012A     		cmp	r2, #1
+ 434 023c 0ED1     		bne	.L35
+ 435              	.LBB9:
+ 233:testI2C.c     ****   {
+ 234:testI2C.c     ****     tU16 temp;
+ 235:testI2C.c     ****     temp = (((tU16)data[0]<<8) + (tU16)data[1]) >> 7;
+ 436              		.loc 1 235 0
+ 437 023e 2178     		ldrb	r1, [r4]
+ 438 0240 6378     		ldrb	r3, [r4, #1]
+ 439 0242 0902     		lsl	r1, r1, #8
+ 440 0244 C918     		add	r1, r1, r3
+ 441 0246 C911     		asr	r1, r1, #7
+ 442 0248 0904     		lsl	r1, r1, #16
+ 443 024a 0B0C     		lsr	r3, r1, #16
+ 444              	.LVL5:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 14
+
+
+ 236:testI2C.c     ****     printf("\rLM75 temp = %d.%d", temp / 2, (temp&1) * 5);
+ 445              		.loc 1 236 0
+ 446 024c 1340     		and	r3, r3, r2
+ 447              	.LVL6:
+ 448 024e 9A00     		lsl	r2, r3, #2
+ 449 0250 1648     		ldr	r0, .L40+64
+ 450 0252 490C     		lsr	r1, r1, #17
+ 451 0254 D218     		add	r2, r2, r3
+ 452 0256 FFF7FEFF 		bl	simplePrintf
+ 453 025a 02E0     		b	.L38
+ 454              	.L35:
+ 455              	.LBE9:
+ 237:testI2C.c     ****   }
+ 238:testI2C.c     ****   else
+ 239:testI2C.c     ****     printf("\nFAILED to read from LM75!!!!!!!!!!!!!!!!!\n");
+ 456              		.loc 1 239 0
+ 457 025c 1448     		ldr	r0, .L40+68
+ 458 025e FFF7FEFF 		bl	simplePrintf
+ 459              	.L38:
+ 240:testI2C.c     **** }
+ 460              		.loc 1 240 0
+ 461 0262 01B0     		add	sp, sp, #4
+ 462              		@ sp needed for prologue
+ 463 0264 F0BC     		pop	{r4, r5, r6, r7}
+ 464 0266 01BC     		pop	{r0}
+ 465 0268 0047     		bx	r0
+ 466              	.L41:
+ 467 026a 0000     		.align	2
+ 468              	.L40:
+ 469 026c 18000000 		.word	.LC4
+ 470 0270 54000000 		.word	.LC6
+ 471 0274 90000000 		.word	.LC8
+ 472 0278 CC000000 		.word	.LC10
+ 473 027c 084002E0 		.word	-536723448
+ 474 0280 08010000 		.word	.LC12
+ 475 0284 004002E0 		.word	-536723456
+ 476 0288 204002E0 		.word	-536723424
+ 477 028c 284002E0 		.word	-536723416
+ 478 0290 244002E0 		.word	-536723420
+ 479 0294 28010000 		.word	.LC14
+ 480 0298 2C010000 		.word	.LC16
+ 481 029c 38010000 		.word	.LC18
+ 482 02a0 68010000 		.word	.LC20
+ 483 02a4 98010000 		.word	.LC22
+ 484 02a8 D0010000 		.word	.LC24
+ 485 02ac 0C020000 		.word	.LC26
+ 486 02b0 20020000 		.word	.LC28
+ 487              	.LFE4:
+ 488              		.size	testI2C, .-testI2C
+ 489              		.section	.debug_frame,"",%progbits
+ 490              	.Lframe0:
+ 491 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 492              	.LSCIE0:
+ 493 0004 FFFFFFFF 		.4byte	0xffffffff
+ 494 0008 01       		.byte	0x1
+ 495 0009 00       		.ascii	"\000"
+ 496 000a 01       		.uleb128 0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 15
+
+
+ 497 000b 7C       		.sleb128 -4
+ 498 000c 0E       		.byte	0xe
+ 499 000d 0C       		.byte	0xc
+ 500 000e 0D       		.uleb128 0xd
+ 501 000f 00       		.uleb128 0x0
+ 502              		.align	2
+ 503              	.LECIE0:
+ 504              	.LSFDE0:
+ 505 0010 1C000000 		.4byte	.LEFDE0-.LASFDE0
+ 506              	.LASFDE0:
+ 507 0014 00000000 		.4byte	.Lframe0
+ 508 0018 00000000 		.4byte	.LFB2
+ 509 001c 10010000 		.4byte	.LFE2-.LFB2
+ 510 0020 42       		.byte	0x4
+ 511              		.4byte	.LCFI0-.LFB2
+ 512 0021 0E       		.byte	0xe
+ 513 0022 10       		.uleb128 0x10
+ 514 0023 84       		.byte	0x84
+ 515 0024 04       		.uleb128 0x4
+ 516 0025 85       		.byte	0x85
+ 517 0026 03       		.uleb128 0x3
+ 518 0027 86       		.byte	0x86
+ 519 0028 02       		.uleb128 0x2
+ 520 0029 8E       		.byte	0x8e
+ 521 002a 01       		.uleb128 0x1
+ 522 002b 42       		.byte	0x4
+ 523              		.4byte	.LCFI1-.LCFI0
+ 524 002c 0E       		.byte	0xe
+ 525 002d 34       		.uleb128 0x34
+ 526 002e 0000     		.align	2
+ 527              	.LEFDE0:
+ 528              	.LSFDE2:
+ 529 0030 1C000000 		.4byte	.LEFDE2-.LASFDE2
+ 530              	.LASFDE2:
+ 531 0034 00000000 		.4byte	.Lframe0
+ 532 0038 10010000 		.4byte	.LFB4
+ 533 003c A4010000 		.4byte	.LFE4-.LFB4
+ 534 0040 42       		.byte	0x4
+ 535              		.4byte	.LCFI2-.LFB4
+ 536 0041 0E       		.byte	0xe
+ 537 0042 14       		.uleb128 0x14
+ 538 0043 84       		.byte	0x84
+ 539 0044 05       		.uleb128 0x5
+ 540 0045 85       		.byte	0x85
+ 541 0046 04       		.uleb128 0x4
+ 542 0047 86       		.byte	0x86
+ 543 0048 03       		.uleb128 0x3
+ 544 0049 87       		.byte	0x87
+ 545 004a 02       		.uleb128 0x2
+ 546 004b 8E       		.byte	0x8e
+ 547 004c 01       		.uleb128 0x1
+ 548 004d 42       		.byte	0x4
+ 549              		.4byte	.LCFI3-.LCFI2
+ 550 004e 0E       		.byte	0xe
+ 551 004f 18       		.uleb128 0x18
+ 552              		.align	2
+ 553              	.LEFDE2:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 16
+
+
+ 554              		.file 2 "../pre_emptive_os/api/../api/general.h"
+ 555              		.text
+ 556              	.Letext0:
+ 557              		.section	.debug_loc,"",%progbits
+ 558              	.Ldebug_loc0:
+ 559              	.LLST0:
+ 560 0000 00000000 		.4byte	.LFB2-.Ltext0
+ 561 0004 02000000 		.4byte	.LCFI0-.Ltext0
+ 562 0008 0100     		.2byte	0x1
+ 563 000a 5D       		.byte	0x5d
+ 564 000b 02000000 		.4byte	.LCFI0-.Ltext0
+ 565 000f 04000000 		.4byte	.LCFI1-.Ltext0
+ 566 0013 0200     		.2byte	0x2
+ 567 0015 7D       		.byte	0x7d
+ 568 0016 10       		.sleb128 16
+ 569 0017 04000000 		.4byte	.LCFI1-.Ltext0
+ 570 001b 10010000 		.4byte	.LFE2-.Ltext0
+ 571 001f 0200     		.2byte	0x2
+ 572 0021 7D       		.byte	0x7d
+ 573 0022 34       		.sleb128 52
+ 574 0023 00000000 		.4byte	0x0
+ 575 0027 00000000 		.4byte	0x0
+ 576              	.LLST1:
+ 577 002b 3E000000 		.4byte	.LVL1-.Ltext0
+ 578 002f 40000000 		.4byte	.LVL2-.Ltext0
+ 579 0033 0100     		.2byte	0x1
+ 580 0035 54       		.byte	0x54
+ 581 0036 54000000 		.4byte	.LVL3-.Ltext0
+ 582 003a 02010000 		.4byte	.LVL4-.Ltext0
+ 583 003e 0100     		.2byte	0x1
+ 584 0040 54       		.byte	0x54
+ 585 0041 00000000 		.4byte	0x0
+ 586 0045 00000000 		.4byte	0x0
+ 587              	.LLST2:
+ 588 0049 30000000 		.4byte	.LVL0-.Ltext0
+ 589 004d 3E000000 		.4byte	.LVL1-.Ltext0
+ 590 0051 0100     		.2byte	0x1
+ 591 0053 54       		.byte	0x54
+ 592 0054 40000000 		.4byte	.LVL2-.Ltext0
+ 593 0058 54000000 		.4byte	.LVL3-.Ltext0
+ 594 005c 0100     		.2byte	0x1
+ 595 005e 54       		.byte	0x54
+ 596 005f 00000000 		.4byte	0x0
+ 597 0063 00000000 		.4byte	0x0
+ 598              	.LLST3:
+ 599 0067 10010000 		.4byte	.LFB4-.Ltext0
+ 600 006b 12010000 		.4byte	.LCFI2-.Ltext0
+ 601 006f 0100     		.2byte	0x1
+ 602 0071 5D       		.byte	0x5d
+ 603 0072 12010000 		.4byte	.LCFI2-.Ltext0
+ 604 0076 14010000 		.4byte	.LCFI3-.Ltext0
+ 605 007a 0200     		.2byte	0x2
+ 606 007c 7D       		.byte	0x7d
+ 607 007d 14       		.sleb128 20
+ 608 007e 14010000 		.4byte	.LCFI3-.Ltext0
+ 609 0082 B4020000 		.4byte	.LFE4-.Ltext0
+ 610 0086 0200     		.2byte	0x2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 17
+
+
+ 611 0088 7D       		.byte	0x7d
+ 612 0089 18       		.sleb128 24
+ 613 008a 00000000 		.4byte	0x0
+ 614 008e 00000000 		.4byte	0x0
+ 615              	.LLST4:
+ 616 0092 4C020000 		.4byte	.LVL5-.Ltext0
+ 617 0096 4E020000 		.4byte	.LVL6-.Ltext0
+ 618 009a 0100     		.2byte	0x1
+ 619 009c 53       		.byte	0x53
+ 620 009d 00000000 		.4byte	0x0
+ 621 00a1 00000000 		.4byte	0x0
+ 622              		.section	.debug_info
+ 623 0000 8E010000 		.4byte	0x18e
+ 624 0004 0200     		.2byte	0x2
+ 625 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 626 000a 04       		.byte	0x4
+ 627 000b 01       		.uleb128 0x1
+ 628 000c 00000000 		.4byte	.Ldebug_line0
+ 629 0010 B4020000 		.4byte	.Letext0
+ 630 0014 00000000 		.4byte	.Ltext0
+ 631 0018 C6000000 		.4byte	.LASF20
+ 632 001c 01       		.byte	0x1
+ 633 001d DC000000 		.4byte	.LASF21
+ 634 0021 EB000000 		.4byte	.LASF22
+ 635 0025 02       		.uleb128 0x2
+ 636 0026 74553800 		.ascii	"tU8\000"
+ 637 002a 02       		.byte	0x2
+ 638 002b 47       		.byte	0x47
+ 639 002c 30000000 		.4byte	0x30
+ 640 0030 03       		.uleb128 0x3
+ 641 0031 B0000000 		.4byte	.LASF1
+ 642 0035 01       		.byte	0x1
+ 643 0036 08       		.byte	0x8
+ 644 0037 04       		.uleb128 0x4
+ 645 0038 3B000000 		.4byte	.LASF0
+ 646 003c 02       		.byte	0x2
+ 647 003d 48       		.byte	0x48
+ 648 003e 42000000 		.4byte	0x42
+ 649 0042 03       		.uleb128 0x3
+ 650 0043 7A000000 		.4byte	.LASF2
+ 651 0047 02       		.byte	0x2
+ 652 0048 07       		.byte	0x7
+ 653 0049 03       		.uleb128 0x3
+ 654 004a 4E000000 		.4byte	.LASF3
+ 655 004e 04       		.byte	0x4
+ 656 004f 07       		.byte	0x7
+ 657 0050 02       		.uleb128 0x2
+ 658 0051 74533800 		.ascii	"tS8\000"
+ 659 0055 02       		.byte	0x2
+ 660 0056 4A       		.byte	0x4a
+ 661 0057 5B000000 		.4byte	0x5b
+ 662 005b 03       		.uleb128 0x3
+ 663 005c 0A000000 		.4byte	.LASF4
+ 664 0060 01       		.byte	0x1
+ 665 0061 06       		.byte	0x6
+ 666 0062 03       		.uleb128 0x3
+ 667 0063 D2000000 		.4byte	.LASF5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 18
+
+
+ 668 0067 02       		.byte	0x2
+ 669 0068 05       		.byte	0x5
+ 670 0069 05       		.uleb128 0x5
+ 671 006a 696E7400 		.ascii	"int\000"
+ 672 006e 04       		.byte	0x4
+ 673 006f 05       		.byte	0x5
+ 674 0070 03       		.uleb128 0x3
+ 675 0071 63000000 		.4byte	.LASF6
+ 676 0075 04       		.byte	0x4
+ 677 0076 07       		.byte	0x7
+ 678 0077 03       		.uleb128 0x3
+ 679 0078 45000000 		.4byte	.LASF7
+ 680 007c 04       		.byte	0x4
+ 681 007d 05       		.byte	0x5
+ 682 007e 03       		.uleb128 0x3
+ 683 007f 2D000000 		.4byte	.LASF8
+ 684 0083 08       		.byte	0x8
+ 685 0084 05       		.byte	0x5
+ 686 0085 03       		.uleb128 0x3
+ 687 0086 63000000 		.4byte	.LASF6
+ 688 008a 04       		.byte	0x4
+ 689 008b 07       		.byte	0x7
+ 690 008c 03       		.uleb128 0x3
+ 691 008d E6000000 		.4byte	.LASF9
+ 692 0091 01       		.byte	0x1
+ 693 0092 08       		.byte	0x8
+ 694 0093 03       		.uleb128 0x3
+ 695 0094 16000000 		.4byte	.LASF10
+ 696 0098 08       		.byte	0x8
+ 697 0099 07       		.byte	0x7
+ 698 009a 06       		.uleb128 0x6
+ 699 009b 00010000 		.4byte	0x100
+ 700 009f 01       		.byte	0x1
+ 701 00a0 A5000000 		.4byte	.LASF16
+ 702 00a4 01       		.byte	0x1
+ 703 00a5 1B       		.byte	0x1b
+ 704 00a6 01       		.byte	0x1
+ 705 00a7 25000000 		.4byte	0x25
+ 706 00ab 00000000 		.4byte	.LFB2
+ 707 00af 10010000 		.4byte	.LFE2
+ 708 00b3 00000000 		.4byte	.LLST0
+ 709 00b7 07       		.uleb128 0x7
+ 710 00b8 44010000 		.4byte	.LASF11
+ 711 00bc 01       		.byte	0x1
+ 712 00bd 1C       		.byte	0x1c
+ 713 00be 25000000 		.4byte	0x25
+ 714 00c2 2B000000 		.4byte	.LLST1
+ 715 00c6 08       		.uleb128 0x8
+ 716 00c7 8D000000 		.4byte	.LASF12
+ 717 00cb 01       		.byte	0x1
+ 718 00cc 1D       		.byte	0x1d
+ 719 00cd 00010000 		.4byte	0x100
+ 720 00d1 02       		.byte	0x2
+ 721 00d2 91       		.byte	0x91
+ 722 00d3 66       		.sleb128 -26
+ 723 00d4 08       		.uleb128 0x8
+ 724 00d5 99000000 		.4byte	.LASF13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 19
+
+
+ 725 00d9 01       		.byte	0x1
+ 726 00da 1E       		.byte	0x1e
+ 727 00db 10010000 		.4byte	0x110
+ 728 00df 02       		.byte	0x2
+ 729 00e0 91       		.byte	0x91
+ 730 00e1 5C       		.sleb128 -36
+ 731 00e2 08       		.uleb128 0x8
+ 732 00e3 5B000000 		.4byte	.LASF14
+ 733 00e7 01       		.byte	0x1
+ 734 00e8 1F       		.byte	0x1f
+ 735 00e9 20010000 		.4byte	0x120
+ 736 00ed 02       		.byte	0x2
+ 737 00ee 91       		.byte	0x91
+ 738 00ef 4E       		.sleb128 -50
+ 739 00f0 07       		.uleb128 0x7
+ 740 00f1 00000000 		.4byte	.LASF15
+ 741 00f5 01       		.byte	0x1
+ 742 00f6 20       		.byte	0x20
+ 743 00f7 50000000 		.4byte	0x50
+ 744 00fb 49000000 		.4byte	.LLST2
+ 745 00ff 00       		.byte	0x0
+ 746 0100 09       		.uleb128 0x9
+ 747 0101 10010000 		.4byte	0x110
+ 748 0105 25000000 		.4byte	0x25
+ 749 0109 0A       		.uleb128 0xa
+ 750 010a 70000000 		.4byte	0x70
+ 751 010e 09       		.byte	0x9
+ 752 010f 00       		.byte	0x0
+ 753 0110 09       		.uleb128 0x9
+ 754 0111 20010000 		.4byte	0x120
+ 755 0115 25000000 		.4byte	0x25
+ 756 0119 0A       		.uleb128 0xa
+ 757 011a 70000000 		.4byte	0x70
+ 758 011e 09       		.byte	0x9
+ 759 011f 00       		.byte	0x0
+ 760 0120 09       		.uleb128 0x9
+ 761 0121 30010000 		.4byte	0x130
+ 762 0125 25000000 		.4byte	0x25
+ 763 0129 0A       		.uleb128 0xa
+ 764 012a 70000000 		.4byte	0x70
+ 765 012e 0D       		.byte	0xd
+ 766 012f 00       		.byte	0x0
+ 767 0130 0B       		.uleb128 0xb
+ 768 0131 3C010000 		.4byte	.LASF23
+ 769 0135 01       		.byte	0x1
+ 770 0136 A0       		.byte	0xa0
+ 771 0137 01       		.byte	0x1
+ 772 0138 01       		.byte	0x1
+ 773 0139 0C       		.uleb128 0xc
+ 774 013a 85010000 		.4byte	0x185
+ 775 013e 01       		.byte	0x1
+ 776 013f BE000000 		.4byte	.LASF17
+ 777 0143 01       		.byte	0x1
+ 778 0144 CC       		.byte	0xcc
+ 779 0145 01       		.byte	0x1
+ 780 0146 10010000 		.4byte	.LFB4
+ 781 014a B4020000 		.4byte	.LFE4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 20
+
+
+ 782 014e 67000000 		.4byte	.LLST3
+ 783 0152 08       		.uleb128 0x8
+ 784 0153 75000000 		.4byte	.LASF18
+ 785 0157 01       		.byte	0x1
+ 786 0158 CD       		.byte	0xcd
+ 787 0159 85010000 		.4byte	0x185
+ 788 015d 02       		.byte	0x2
+ 789 015e 91       		.byte	0x91
+ 790 015f 69       		.sleb128 -23
+ 791 0160 0D       		.uleb128 0xd
+ 792 0161 30010000 		.4byte	0x130
+ 793 0165 00000000 		.4byte	.Ldebug_ranges0+0x0
+ 794 0169 01       		.byte	0x1
+ 795 016a D7       		.byte	0xd7
+ 796 016b 0E       		.uleb128 0xe
+ 797 016c 3E020000 		.4byte	.LBB9
+ 798 0170 5C020000 		.4byte	.LBE9
+ 799 0174 07       		.uleb128 0x7
+ 800 0175 40000000 		.4byte	.LASF19
+ 801 0179 01       		.byte	0x1
+ 802 017a EA       		.byte	0xea
+ 803 017b 37000000 		.4byte	0x37
+ 804 017f 92000000 		.4byte	.LLST4
+ 805 0183 00       		.byte	0x0
+ 806 0184 00       		.byte	0x0
+ 807 0185 0F       		.uleb128 0xf
+ 808 0186 25000000 		.4byte	0x25
+ 809 018a 0A       		.uleb128 0xa
+ 810 018b 70000000 		.4byte	0x70
+ 811 018f 02       		.byte	0x2
+ 812 0190 00       		.byte	0x0
+ 813 0191 00       		.byte	0x0
+ 814              		.section	.debug_abbrev
+ 815 0000 01       		.uleb128 0x1
+ 816 0001 11       		.uleb128 0x11
+ 817 0002 01       		.byte	0x1
+ 818 0003 10       		.uleb128 0x10
+ 819 0004 06       		.uleb128 0x6
+ 820 0005 12       		.uleb128 0x12
+ 821 0006 01       		.uleb128 0x1
+ 822 0007 11       		.uleb128 0x11
+ 823 0008 01       		.uleb128 0x1
+ 824 0009 25       		.uleb128 0x25
+ 825 000a 0E       		.uleb128 0xe
+ 826 000b 13       		.uleb128 0x13
+ 827 000c 0B       		.uleb128 0xb
+ 828 000d 03       		.uleb128 0x3
+ 829 000e 0E       		.uleb128 0xe
+ 830 000f 1B       		.uleb128 0x1b
+ 831 0010 0E       		.uleb128 0xe
+ 832 0011 00       		.byte	0x0
+ 833 0012 00       		.byte	0x0
+ 834 0013 02       		.uleb128 0x2
+ 835 0014 16       		.uleb128 0x16
+ 836 0015 00       		.byte	0x0
+ 837 0016 03       		.uleb128 0x3
+ 838 0017 08       		.uleb128 0x8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 21
+
+
+ 839 0018 3A       		.uleb128 0x3a
+ 840 0019 0B       		.uleb128 0xb
+ 841 001a 3B       		.uleb128 0x3b
+ 842 001b 0B       		.uleb128 0xb
+ 843 001c 49       		.uleb128 0x49
+ 844 001d 13       		.uleb128 0x13
+ 845 001e 00       		.byte	0x0
+ 846 001f 00       		.byte	0x0
+ 847 0020 03       		.uleb128 0x3
+ 848 0021 24       		.uleb128 0x24
+ 849 0022 00       		.byte	0x0
+ 850 0023 03       		.uleb128 0x3
+ 851 0024 0E       		.uleb128 0xe
+ 852 0025 0B       		.uleb128 0xb
+ 853 0026 0B       		.uleb128 0xb
+ 854 0027 3E       		.uleb128 0x3e
+ 855 0028 0B       		.uleb128 0xb
+ 856 0029 00       		.byte	0x0
+ 857 002a 00       		.byte	0x0
+ 858 002b 04       		.uleb128 0x4
+ 859 002c 16       		.uleb128 0x16
+ 860 002d 00       		.byte	0x0
+ 861 002e 03       		.uleb128 0x3
+ 862 002f 0E       		.uleb128 0xe
+ 863 0030 3A       		.uleb128 0x3a
+ 864 0031 0B       		.uleb128 0xb
+ 865 0032 3B       		.uleb128 0x3b
+ 866 0033 0B       		.uleb128 0xb
+ 867 0034 49       		.uleb128 0x49
+ 868 0035 13       		.uleb128 0x13
+ 869 0036 00       		.byte	0x0
+ 870 0037 00       		.byte	0x0
+ 871 0038 05       		.uleb128 0x5
+ 872 0039 24       		.uleb128 0x24
+ 873 003a 00       		.byte	0x0
+ 874 003b 03       		.uleb128 0x3
+ 875 003c 08       		.uleb128 0x8
+ 876 003d 0B       		.uleb128 0xb
+ 877 003e 0B       		.uleb128 0xb
+ 878 003f 3E       		.uleb128 0x3e
+ 879 0040 0B       		.uleb128 0xb
+ 880 0041 00       		.byte	0x0
+ 881 0042 00       		.byte	0x0
+ 882 0043 06       		.uleb128 0x6
+ 883 0044 2E       		.uleb128 0x2e
+ 884 0045 01       		.byte	0x1
+ 885 0046 01       		.uleb128 0x1
+ 886 0047 13       		.uleb128 0x13
+ 887 0048 3F       		.uleb128 0x3f
+ 888 0049 0C       		.uleb128 0xc
+ 889 004a 03       		.uleb128 0x3
+ 890 004b 0E       		.uleb128 0xe
+ 891 004c 3A       		.uleb128 0x3a
+ 892 004d 0B       		.uleb128 0xb
+ 893 004e 3B       		.uleb128 0x3b
+ 894 004f 0B       		.uleb128 0xb
+ 895 0050 27       		.uleb128 0x27
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 22
+
+
+ 896 0051 0C       		.uleb128 0xc
+ 897 0052 49       		.uleb128 0x49
+ 898 0053 13       		.uleb128 0x13
+ 899 0054 11       		.uleb128 0x11
+ 900 0055 01       		.uleb128 0x1
+ 901 0056 12       		.uleb128 0x12
+ 902 0057 01       		.uleb128 0x1
+ 903 0058 40       		.uleb128 0x40
+ 904 0059 06       		.uleb128 0x6
+ 905 005a 00       		.byte	0x0
+ 906 005b 00       		.byte	0x0
+ 907 005c 07       		.uleb128 0x7
+ 908 005d 34       		.uleb128 0x34
+ 909 005e 00       		.byte	0x0
+ 910 005f 03       		.uleb128 0x3
+ 911 0060 0E       		.uleb128 0xe
+ 912 0061 3A       		.uleb128 0x3a
+ 913 0062 0B       		.uleb128 0xb
+ 914 0063 3B       		.uleb128 0x3b
+ 915 0064 0B       		.uleb128 0xb
+ 916 0065 49       		.uleb128 0x49
+ 917 0066 13       		.uleb128 0x13
+ 918 0067 02       		.uleb128 0x2
+ 919 0068 06       		.uleb128 0x6
+ 920 0069 00       		.byte	0x0
+ 921 006a 00       		.byte	0x0
+ 922 006b 08       		.uleb128 0x8
+ 923 006c 34       		.uleb128 0x34
+ 924 006d 00       		.byte	0x0
+ 925 006e 03       		.uleb128 0x3
+ 926 006f 0E       		.uleb128 0xe
+ 927 0070 3A       		.uleb128 0x3a
+ 928 0071 0B       		.uleb128 0xb
+ 929 0072 3B       		.uleb128 0x3b
+ 930 0073 0B       		.uleb128 0xb
+ 931 0074 49       		.uleb128 0x49
+ 932 0075 13       		.uleb128 0x13
+ 933 0076 02       		.uleb128 0x2
+ 934 0077 0A       		.uleb128 0xa
+ 935 0078 00       		.byte	0x0
+ 936 0079 00       		.byte	0x0
+ 937 007a 09       		.uleb128 0x9
+ 938 007b 01       		.uleb128 0x1
+ 939 007c 01       		.byte	0x1
+ 940 007d 01       		.uleb128 0x1
+ 941 007e 13       		.uleb128 0x13
+ 942 007f 49       		.uleb128 0x49
+ 943 0080 13       		.uleb128 0x13
+ 944 0081 00       		.byte	0x0
+ 945 0082 00       		.byte	0x0
+ 946 0083 0A       		.uleb128 0xa
+ 947 0084 21       		.uleb128 0x21
+ 948 0085 00       		.byte	0x0
+ 949 0086 49       		.uleb128 0x49
+ 950 0087 13       		.uleb128 0x13
+ 951 0088 2F       		.uleb128 0x2f
+ 952 0089 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 23
+
+
+ 953 008a 00       		.byte	0x0
+ 954 008b 00       		.byte	0x0
+ 955 008c 0B       		.uleb128 0xb
+ 956 008d 2E       		.uleb128 0x2e
+ 957 008e 00       		.byte	0x0
+ 958 008f 03       		.uleb128 0x3
+ 959 0090 0E       		.uleb128 0xe
+ 960 0091 3A       		.uleb128 0x3a
+ 961 0092 0B       		.uleb128 0xb
+ 962 0093 3B       		.uleb128 0x3b
+ 963 0094 0B       		.uleb128 0xb
+ 964 0095 27       		.uleb128 0x27
+ 965 0096 0C       		.uleb128 0xc
+ 966 0097 20       		.uleb128 0x20
+ 967 0098 0B       		.uleb128 0xb
+ 968 0099 00       		.byte	0x0
+ 969 009a 00       		.byte	0x0
+ 970 009b 0C       		.uleb128 0xc
+ 971 009c 2E       		.uleb128 0x2e
+ 972 009d 01       		.byte	0x1
+ 973 009e 01       		.uleb128 0x1
+ 974 009f 13       		.uleb128 0x13
+ 975 00a0 3F       		.uleb128 0x3f
+ 976 00a1 0C       		.uleb128 0xc
+ 977 00a2 03       		.uleb128 0x3
+ 978 00a3 0E       		.uleb128 0xe
+ 979 00a4 3A       		.uleb128 0x3a
+ 980 00a5 0B       		.uleb128 0xb
+ 981 00a6 3B       		.uleb128 0x3b
+ 982 00a7 0B       		.uleb128 0xb
+ 983 00a8 27       		.uleb128 0x27
+ 984 00a9 0C       		.uleb128 0xc
+ 985 00aa 11       		.uleb128 0x11
+ 986 00ab 01       		.uleb128 0x1
+ 987 00ac 12       		.uleb128 0x12
+ 988 00ad 01       		.uleb128 0x1
+ 989 00ae 40       		.uleb128 0x40
+ 990 00af 06       		.uleb128 0x6
+ 991 00b0 00       		.byte	0x0
+ 992 00b1 00       		.byte	0x0
+ 993 00b2 0D       		.uleb128 0xd
+ 994 00b3 1D       		.uleb128 0x1d
+ 995 00b4 00       		.byte	0x0
+ 996 00b5 31       		.uleb128 0x31
+ 997 00b6 13       		.uleb128 0x13
+ 998 00b7 55       		.uleb128 0x55
+ 999 00b8 06       		.uleb128 0x6
+ 1000 00b9 58       		.uleb128 0x58
+ 1001 00ba 0B       		.uleb128 0xb
+ 1002 00bb 59       		.uleb128 0x59
+ 1003 00bc 0B       		.uleb128 0xb
+ 1004 00bd 00       		.byte	0x0
+ 1005 00be 00       		.byte	0x0
+ 1006 00bf 0E       		.uleb128 0xe
+ 1007 00c0 0B       		.uleb128 0xb
+ 1008 00c1 01       		.byte	0x1
+ 1009 00c2 11       		.uleb128 0x11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 24
+
+
+ 1010 00c3 01       		.uleb128 0x1
+ 1011 00c4 12       		.uleb128 0x12
+ 1012 00c5 01       		.uleb128 0x1
+ 1013 00c6 00       		.byte	0x0
+ 1014 00c7 00       		.byte	0x0
+ 1015 00c8 0F       		.uleb128 0xf
+ 1016 00c9 01       		.uleb128 0x1
+ 1017 00ca 01       		.byte	0x1
+ 1018 00cb 49       		.uleb128 0x49
+ 1019 00cc 13       		.uleb128 0x13
+ 1020 00cd 00       		.byte	0x0
+ 1021 00ce 00       		.byte	0x0
+ 1022 00cf 00       		.byte	0x0
+ 1023              		.section	.debug_pubnames,"",%progbits
+ 1024 0000 29000000 		.4byte	0x29
+ 1025 0004 0200     		.2byte	0x2
+ 1026 0006 00000000 		.4byte	.Ldebug_info0
+ 1027 000a 92010000 		.4byte	0x192
+ 1028 000e 9A000000 		.4byte	0x9a
+ 1029 0012 74657374 		.ascii	"testEEPROM\000"
+ 1029      45455052 
+ 1029      4F4D00
+ 1030 001d 39010000 		.4byte	0x139
+ 1031 0021 74657374 		.ascii	"testI2C\000"
+ 1031      49324300 
+ 1032 0029 00000000 		.4byte	0x0
+ 1033              		.section	.debug_aranges,"",%progbits
+ 1034 0000 1C000000 		.4byte	0x1c
+ 1035 0004 0200     		.2byte	0x2
+ 1036 0006 00000000 		.4byte	.Ldebug_info0
+ 1037 000a 04       		.byte	0x4
+ 1038 000b 00       		.byte	0x0
+ 1039 000c 0000     		.2byte	0x0
+ 1040 000e 0000     		.2byte	0x0
+ 1041 0010 00000000 		.4byte	.Ltext0
+ 1042 0014 B4020000 		.4byte	.Letext0-.Ltext0
+ 1043 0018 00000000 		.4byte	0x0
+ 1044 001c 00000000 		.4byte	0x0
+ 1045              		.section	.debug_ranges,"",%progbits
+ 1046              	.Ldebug_ranges0:
+ 1047 0000 34010000 		.4byte	.LBB5-.Ltext0
+ 1048 0004 36010000 		.4byte	.LBE5-.Ltext0
+ 1049 0008 3C010000 		.4byte	.LBB7-.Ltext0
+ 1050 000c F2010000 		.4byte	.LBE7-.Ltext0
+ 1051 0010 00000000 		.4byte	0x0
+ 1052 0014 00000000 		.4byte	0x0
+ 1053              		.section	.debug_str,"MS",%progbits,1
+ 1054              	.LASF15:
+ 1055 0000 6572726F 		.ascii	"errorCode\000"
+ 1055      72436F64 
+ 1055      6500
+ 1056              	.LASF4:
+ 1057 000a 7369676E 		.ascii	"signed char\000"
+ 1057      65642063 
+ 1057      68617200 
+ 1058              	.LASF10:
+ 1059 0016 6C6F6E67 		.ascii	"long long unsigned int\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 25
+
+
+ 1059      206C6F6E 
+ 1059      6720756E 
+ 1059      7369676E 
+ 1059      65642069 
+ 1060              	.LASF8:
+ 1061 002d 6C6F6E67 		.ascii	"long long int\000"
+ 1061      206C6F6E 
+ 1061      6720696E 
+ 1061      7400
+ 1062              	.LASF0:
+ 1063 003b 74553136 		.ascii	"tU16\000"
+ 1063      00
+ 1064              	.LASF19:
+ 1065 0040 74656D70 		.ascii	"temp\000"
+ 1065      00
+ 1066              	.LASF7:
+ 1067 0045 6C6F6E67 		.ascii	"long int\000"
+ 1067      20696E74 
+ 1067      00
+ 1068              	.LASF3:
+ 1069 004e 756E7369 		.ascii	"unsigned int\000"
+ 1069      676E6564 
+ 1069      20696E74 
+ 1069      00
+ 1070              	.LASF14:
+ 1071 005b 74657374 		.ascii	"testBuf\000"
+ 1071      42756600 
+ 1072              	.LASF6:
+ 1073 0063 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1073      20756E73 
+ 1073      69676E65 
+ 1073      6420696E 
+ 1073      7400
+ 1074              	.LASF18:
+ 1075 0075 64617461 		.ascii	"data\000"
+ 1075      00
+ 1076              	.LASF2:
+ 1077 007a 73686F72 		.ascii	"short unsigned int\000"
+ 1077      7420756E 
+ 1077      7369676E 
+ 1077      65642069 
+ 1077      6E7400
+ 1078              	.LASF12:
+ 1079 008d 74657374 		.ascii	"testString1\000"
+ 1079      53747269 
+ 1079      6E673100 
+ 1080              	.LASF13:
+ 1081 0099 74657374 		.ascii	"testString2\000"
+ 1081      53747269 
+ 1081      6E673200 
+ 1082              	.LASF16:
+ 1083 00a5 74657374 		.ascii	"testEEPROM\000"
+ 1083      45455052 
+ 1083      4F4D00
+ 1084              	.LASF1:
+ 1085 00b0 756E7369 		.ascii	"unsigned char\000"
+ 1085      676E6564 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 26
+
+
+ 1085      20636861 
+ 1085      7200
+ 1086              	.LASF17:
+ 1087 00be 74657374 		.ascii	"testI2C\000"
+ 1087      49324300 
+ 1088              	.LASF20:
+ 1089 00c6 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 1089      4320342E 
+ 1089      312E3100 
+ 1090              	.LASF5:
+ 1091 00d2 73686F72 		.ascii	"short int\000"
+ 1091      7420696E 
+ 1091      7400
+ 1092              	.LASF21:
+ 1093 00dc 74657374 		.ascii	"testI2C.c\000"
+ 1093      4932432E 
+ 1093      6300
+ 1094              	.LASF9:
+ 1095 00e6 63686172 		.ascii	"char\000"
+ 1095      00
+ 1096              	.LASF22:
+ 1097 00eb 2F637967 		.ascii	"/cygdrive/c/Embedded/workspace/2148/v3.0_without_fi"
+ 1097      64726976 
+ 1097      652F632F 
+ 1097      456D6265 
+ 1097      64646564 
+ 1098 011e 6C657379 		.ascii	"lesys/testProgram_lpc2148_edu\000"
+ 1098      732F7465 
+ 1098      73745072 
+ 1098      6F677261 
+ 1098      6D5F6C70 
+ 1099              	.LASF23:
+ 1100 013c 74657374 		.ascii	"testRtc\000"
+ 1100      52746300 
+ 1101              	.LASF11:
+ 1102 0144 65657072 		.ascii	"eepromTestResultOK\000"
+ 1102      6F6D5465 
+ 1102      73745265 
+ 1102      73756C74 
+ 1102      4F4B00
+ 1103              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 testI2C.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:24     .text:00000000 testEEPROM
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:192    .text:00000108 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:248    .text:00000110 testI2C
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:245    .text:00000110 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdS9nui.s:469    .text:0000026c $d
+
+UNDEFINED SYMBOLS
+memcpy
+eepromWrite
+eepromPoll
+eepromPageRead
+strlen
+simplePrintf
+osSleep
+i2cInit
+lm75Read

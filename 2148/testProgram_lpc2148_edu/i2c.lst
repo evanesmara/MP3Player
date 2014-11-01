@@ -1,0 +1,3393 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"i2c.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 15010000 		.text
+   9      02003F00 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.align	2
+  12              		.global	i2cCheckStatus
+  13              		.code 16
+  14              		.thumb_func
+  15              		.type	i2cCheckStatus, %function
+  16              	i2cCheckStatus:
+  17              	.LFB2:
+  18              		.file 1 "i2c.c"
+   1:i2c.c         **** 
+   2:i2c.c         **** 
+   3:i2c.c         **** 
+   4:i2c.c         **** 
+   5:i2c.c         **** /******************************************************************************
+   6:i2c.c         ****  * Includes
+   7:i2c.c         ****  *****************************************************************************/
+   8:i2c.c         **** 
+   9:i2c.c         **** #include "../pre_emptive_os/api/general.h"
+  10:i2c.c         **** #include "i2c.h"
+  11:i2c.c         **** #include <lpc2xxx.h>
+  12:i2c.c         **** 
+  13:i2c.c         **** /******************************************************************************
+  14:i2c.c         ****  * Defines and typedefs
+  15:i2c.c         ****  *****************************************************************************/
+  16:i2c.c         **** 
+  17:i2c.c         **** #define I2C_CONSET (*((volatile unsigned char *) 0xE001C000))
+  18:i2c.c         **** #define I2C_STAT   (*((volatile unsigned char *) 0xE001C004))
+  19:i2c.c         **** #define I2C_DATA   (*((volatile unsigned char *) 0xE001C008))
+  20:i2c.c         **** #define I2C_ADDR   (*((volatile unsigned char *) 0xE001C00C))
+  21:i2c.c         **** #define I2C_SCLH   (*((volatile unsigned short*) 0xE001C010))
+  22:i2c.c         **** #define I2C_SCLL   (*((volatile unsigned short*) 0xE001C014))
+  23:i2c.c         **** #define I2C_CONCLR (*((volatile unsigned char *) 0xE001C018))
+  24:i2c.c         **** 
+  25:i2c.c         **** 
+  26:i2c.c         **** #define I2C_REG_CONSET      0x00000040 /* Control Set Register         */
+  27:i2c.c         **** #define I2C_REG_CONSET_MASK 0x0000007C /* Used bits                    */
+  28:i2c.c         **** #define I2C_REG_DATA        0x00000000 /* Data register                */
+  29:i2c.c         **** #define I2C_REG_DATA_MASK   0x000000FF /* Used bits                    */
+  30:i2c.c         **** #define I2C_REG_ADDR        0x00000000 /* Slave address register       */
+  31:i2c.c         **** #define I2C_REG_ADDR_MASK   0x000000FF /* Used bits                    */
+  32:i2c.c         **** #define I2C_REG_SCLH        0x00000040 /* SCL Duty Cycle high register */
+  33:i2c.c         **** #define I2C_REG_SCLH_MASK   0x0000FFFF /* Used bits                    */
+  34:i2c.c         **** #define I2C_REG_SCLL        0x00000040 /* SCL Duty Cycle low register  */
+  35:i2c.c         **** #define I2C_REG_SCLL_MASK   0x0000FFFF /* Used bits                    */
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 2
+
+
+  36:i2c.c         **** 
+  37:i2c.c         **** /******************************************************************************
+  38:i2c.c         ****  *
+  39:i2c.c         ****  * Description:
+  40:i2c.c         ****  *    Checks the I2C status.
+  41:i2c.c         ****  *
+  42:i2c.c         ****  *
+  43:i2c.c         ****  *  Returns:
+  44:i2c.c         ****  *      00h Bus error
+  45:i2c.c         ****  *      08h START condition transmitted
+  46:i2c.c         ****  *      10h Repeated START condition transmitted
+  47:i2c.c         ****  *      18h SLA + W transmitted, ACK received
+  48:i2c.c         ****  *      20h SLA + W transmitted, ACK not received
+  49:i2c.c         ****  *      28h Data byte transmitted, ACK received
+  50:i2c.c         ****  *      30h Data byte transmitted, ACK not received
+  51:i2c.c         ****  *      38h Arbitration lost
+  52:i2c.c         ****  *      40h SLA + R transmitted, ACK received
+  53:i2c.c         ****  *      48h SLA + R transmitted, ACK not received
+  54:i2c.c         ****  *      50h Data byte received in master mode, ACK transmitted
+  55:i2c.c         ****  *      58h Data byte received in master mode, ACK not transmitted
+  56:i2c.c         ****  *      60h SLA + W received, ACK transmitted
+  57:i2c.c         ****  *      68h Arbitration lost, SLA + W received, ACK transmitted
+  58:i2c.c         ****  *      70h General call address received, ACK transmitted
+  59:i2c.c         ****  *      78h Arbitration lost, general call addr received, ACK transmitted
+  60:i2c.c         ****  *      80h Data byte received with own SLA, ACK transmitted
+  61:i2c.c         ****  *      88h Data byte received with own SLA, ACK not transmitted
+  62:i2c.c         ****  *      90h Data byte received after general call, ACK transmitted
+  63:i2c.c         ****  *      98h Data byte received after general call, ACK not transmitted
+  64:i2c.c         ****  *      A0h STOP or repeated START condition received in slave mode
+  65:i2c.c         ****  *      A8h SLA + R received, ACK transmitted
+  66:i2c.c         ****  *      B0h Arbitration lost, SLA + R received, ACK transmitted
+  67:i2c.c         ****  *      B8h Data byte transmitted in slave mode, ACK received
+  68:i2c.c         ****  *      C0h Data byte transmitted in slave mode, ACK not received
+  69:i2c.c         ****  *      C8h Last byte transmitted in slave mode, ACK received
+  70:i2c.c         ****  *      F8h No relevant status information, SI=0
+  71:i2c.c         ****  *      FFh Channel error
+  72:i2c.c         ****  *
+  73:i2c.c         ****  *****************************************************************************/
+  74:i2c.c         **** tU8
+  75:i2c.c         **** i2cCheckStatus(void)
+  76:i2c.c         **** {
+  19              		.loc 1 76 0
+  20              		@ lr needed for prologue
+  21              	.L2:
+  77:i2c.c         ****   tU8 status = 0;
+  78:i2c.c         **** 
+  79:i2c.c         ****   /* wait for I2C Status changed */
+  80:i2c.c         ****   while( (I2C_CONSET & 0x08)  == 0)   /* while SI == 0 */
+  22              		.loc 1 80 0
+  23 0000 034B     		ldr	r3, .L7
+  24 0002 1B78     		ldrb	r3, [r3]
+  25 0004 1A07     		lsl	r2, r3, #28
+  26 0006 FBD5     		bpl	.L2
+  81:i2c.c         ****   {
+  82:i2c.c         ****     ;
+  83:i2c.c         ****   }
+  84:i2c.c         **** 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 3
+
+
+  85:i2c.c         ****   /* Read I2C State */
+  86:i2c.c         ****   status = I2C_STAT;
+  27              		.loc 1 86 0
+  28 0008 024B     		ldr	r3, .L7+4
+  29 000a 1878     		ldrb	r0, [r3]
+  87:i2c.c         **** 
+  88:i2c.c         ****   /* NOTE! SI flag is not cleared here */
+  89:i2c.c         **** 
+  90:i2c.c         ****   return status;
+  91:i2c.c         **** }
+  30              		.loc 1 91 0
+  31              		@ sp needed for prologue
+  32 000c 7047     		bx	lr
+  33              	.L8:
+  34 000e 0000     		.align	2
+  35              	.L7:
+  36 0010 00C001E0 		.word	-536756224
+  37 0014 04C001E0 		.word	-536756220
+  38              	.LFE2:
+  39              		.size	i2cCheckStatus, .-i2cCheckStatus
+  40              		.align	2
+  41              		.global	i2cInit
+  42              		.code 16
+  43              		.thumb_func
+  44              		.type	i2cInit, %function
+  45              	i2cInit:
+  46              	.LFB3:
+  92:i2c.c         **** 
+  93:i2c.c         **** /******************************************************************************
+  94:i2c.c         ****  *
+  95:i2c.c         ****  * Description:
+  96:i2c.c         ****  *    Reset the I2C module.
+  97:i2c.c         ****  *
+  98:i2c.c         ****  *****************************************************************************/
+  99:i2c.c         **** void
+ 100:i2c.c         **** i2cInit(void)
+ 101:i2c.c         **** {
+  47              		.loc 1 101 0
+ 102:i2c.c         ****   PINSEL0  |= 0x50;
+  48              		.loc 1 102 0
+  49 0018 0E49     		ldr	r1, .L11
+  50 001a 0B68     		ldr	r3, [r1]
+  51 001c 5022     		mov	r2, #80
+  52 001e 1343     		orr	r3, r3, r2
+  53 0020 0B60     		str	r3, [r1]
+ 103:i2c.c         **** 
+ 104:i2c.c         ****   /* clear flags */
+ 105:i2c.c         ****   I2C_CONCLR = 0x6c;    
+  54              		.loc 1 105 0
+  55 0022 0D4B     		ldr	r3, .L11+4
+  56 0024 6C22     		mov	r2, #108
+  57 0026 1A70     		strb	r2, [r3]
+ 106:i2c.c         **** 
+ 107:i2c.c         ****   /* reset registers */
+ 108:i2c.c         ****   I2C_SCLL   = ( I2C_SCLL   & ~I2C_REG_SCLL_MASK )   | I2C_REG_SCLL;
+  58              		.loc 1 108 0
+  59 0028 043B     		sub	r3, r3, #4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 4
+
+
+  60 002a 1A88     		ldrh	r2, [r3]
+  61 002c 4022     		mov	r2, #64
+  62 002e 1A80     		strh	r2, [r3]
+ 109:i2c.c         ****   I2C_SCLH   = ( I2C_SCLH   & ~I2C_REG_SCLH_MASK )   | I2C_REG_SCLH;
+  63              		.loc 1 109 0
+  64 0030 043B     		sub	r3, r3, #4
+  65 0032 1988     		ldrh	r1, [r3]
+  66 0034 1A80     		strh	r2, [r3]
+ 110:i2c.c         ****   I2C_ADDR   = ( I2C_ADDR   & ~I2C_REG_ADDR_MASK )   | I2C_REG_ADDR;
+  67              		.loc 1 110 0
+  68 0036 094A     		ldr	r2, .L11+8
+  69 0038 1378     		ldrb	r3, [r2]
+  70 003a 0023     		mov	r3, #0
+  71 003c 1370     		strb	r3, [r2]
+ 111:i2c.c         ****   I2C_CONSET = ( I2C_CONSET & ~I2C_REG_CONSET_MASK ) | I2C_REG_CONSET;
+  72              		.loc 1 111 0
+  73 003e 0849     		ldr	r1, .L11+12
+  74 0040 0B78     		ldrb	r3, [r1]
+  75 0042 7C22     		mov	r2, #124
+  76 0044 9343     		bic	r3, r3, r2
+  77 0046 4022     		mov	r2, #64
+  78 0048 1343     		orr	r3, r3, r2
+  79 004a 1B06     		lsl	r3, r3, #24
+  80 004c 1B0E     		lsr	r3, r3, #24
+  81              		.loc 1 101 0
+  82              		@ lr needed for prologue
+  83              		.loc 1 111 0
+  84 004e 0B70     		strb	r3, [r1]
+ 112:i2c.c         **** }
+  85              		.loc 1 112 0
+  86              		@ sp needed for prologue
+  87 0050 7047     		bx	lr
+  88              	.L12:
+  89 0052 0000     		.align	2
+  90              	.L11:
+  91 0054 00C002E0 		.word	-536690688
+  92 0058 18C001E0 		.word	-536756200
+  93 005c 0CC001E0 		.word	-536756212
+  94 0060 00C001E0 		.word	-536756224
+  95              	.LFE3:
+  96              		.size	i2cInit, .-i2cInit
+  97              		.align	2
+  98              		.global	i2cStart
+  99              		.code 16
+ 100              		.thumb_func
+ 101              		.type	i2cStart, %function
+ 102              	i2cStart:
+ 103              	.LFB4:
+ 113:i2c.c         **** 
+ 114:i2c.c         **** /******************************************************************************
+ 115:i2c.c         ****  *
+ 116:i2c.c         ****  * Description:
+ 117:i2c.c         ****  *    Generates a start condition on I2C when bus is free.
+ 118:i2c.c         ****  *    Master mode will also automatically be entered.
+ 119:i2c.c         ****  *
+ 120:i2c.c         ****  *    Note: After a stop condition, you may need a bus free time before you 
+ 121:i2c.c         ****  *          can generate a new start condition.
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 5
+
+
+ 122:i2c.c         ****  *
+ 123:i2c.c         ****  * Returns:
+ 124:i2c.c         ****  *    I2C_CODE_OK or I2C status code
+ 125:i2c.c         ****  *
+ 126:i2c.c         ****  *****************************************************************************/
+ 127:i2c.c         **** tS8
+ 128:i2c.c         **** i2cStart(void)
+ 129:i2c.c         **** {
+ 104              		.loc 1 129 0
+ 130:i2c.c         ****   tU8   status  = 0;
+ 131:i2c.c         ****   tS8   retCode = 0;
+ 132:i2c.c         **** 
+ 133:i2c.c         ****   /* issue a start condition */
+ 134:i2c.c         ****   I2C_CONSET |= 0x20; /* STA = 1, set start flag */
+ 105              		.loc 1 134 0
+ 106 0064 0F4B     		ldr	r3, .L29
+ 107 0066 1A78     		ldrb	r2, [r3]
+ 108 0068 2021     		mov	r1, #32
+ 109 006a 0A43     		orr	r2, r2, r1
+ 110 006c 1206     		lsl	r2, r2, #24
+ 111              		.loc 1 129 0
+ 112              		@ lr needed for prologue
+ 113              		.loc 1 134 0
+ 114 006e 120E     		lsr	r2, r2, #24
+ 115              	.L28:
+ 116 0070 1A70     		strb	r2, [r3]
+ 117              	.L27:
+ 118              	.LBB6:
+ 119              	.LBB7:
+ 120              		.loc 1 80 0
+ 121 0072 0C4B     		ldr	r3, .L29
+ 122 0074 1B78     		ldrb	r3, [r3]
+ 123 0076 0822     		mov	r2, #8
+ 124 0078 1342     		tst	r3, r2
+ 125 007a FAD0     		beq	.L27
+ 126              		.loc 1 86 0
+ 127 007c 0A4B     		ldr	r3, .L29+4
+ 128 007e 1B78     		ldrb	r3, [r3]
+ 129              	.LVL0:
+ 130              	.LBE7:
+ 131              	.LBE6:
+ 135:i2c.c         **** 
+ 136:i2c.c         ****   /* wait until START transmitted */
+ 137:i2c.c         ****   while(1)
+ 138:i2c.c         ****   {
+ 139:i2c.c         ****     status = i2cCheckStatus();
+ 140:i2c.c         **** 
+ 141:i2c.c         ****     /* start transmitted */
+ 142:i2c.c         ****     if((status == 0x08) || (status == 0x10))
+ 132              		.loc 1 142 0
+ 133 0080 082B     		cmp	r3, #8
+ 134 0082 07D0     		beq	.L16
+ 135 0084 102B     		cmp	r3, #16
+ 136 0086 05D0     		beq	.L16
+ 143:i2c.c         ****     {
+ 144:i2c.c         ****       retCode = I2C_CODE_OK;
+ 145:i2c.c         ****       break;
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 6
+
+
+ 146:i2c.c         ****     }
+ 147:i2c.c         **** 
+ 148:i2c.c         ****     /* error */
+ 149:i2c.c         ****     else if(status != 0xf8)
+ 137              		.loc 1 149 0
+ 138 0088 F82B     		cmp	r3, #248
+ 139 008a 01D0     		beq	.L19
+ 150:i2c.c         ****     {
+ 151:i2c.c         ****       retCode = (tS8) status;
+ 140              		.loc 1 151 0
+ 141 008c 181C     		mov	r0, r3
+ 142              	.LVL1:
+ 143 008e 02E0     		b	.L21
+ 144              	.LVL2:
+ 145              	.L19:
+ 152:i2c.c         ****       break;
+ 153:i2c.c         ****     }
+ 154:i2c.c         **** 
+ 155:i2c.c         ****     else
+ 156:i2c.c         ****     {
+ 157:i2c.c         ****       /* clear SI flag */
+ 158:i2c.c         ****       I2C_CONCLR = 0x08;
+ 146              		.loc 1 158 0
+ 147 0090 064B     		ldr	r3, .L29+8
+ 148              	.LVL3:
+ 149 0092 EDE7     		b	.L28
+ 150              	.LVL4:
+ 151              	.L16:
+ 159:i2c.c         ****     }    
+ 160:i2c.c         ****   }
+ 152              		.loc 1 160 0
+ 153 0094 0120     		mov	r0, #1
+ 154              	.LVL5:
+ 155              	.L21:
+ 161:i2c.c         **** 
+ 162:i2c.c         ****   /* clear start flag */
+ 163:i2c.c         ****   I2C_CONCLR = 0x20;
+ 156              		.loc 1 163 0
+ 157 0096 054B     		ldr	r3, .L29+8
+ 158              	.LVL6:
+ 159 0098 0006     		lsl	r0, r0, #24
+ 160              	.LVL7:
+ 161 009a 2022     		mov	r2, #32
+ 162 009c 0016     		asr	r0, r0, #24
+ 163 009e 1A70     		strb	r2, [r3]
+ 164:i2c.c         **** 
+ 165:i2c.c         ****   return retCode;
+ 166:i2c.c         **** }
+ 164              		.loc 1 166 0
+ 165              		@ sp needed for prologue
+ 166 00a0 7047     		bx	lr
+ 167              	.L30:
+ 168 00a2 0000     		.align	2
+ 169              	.L29:
+ 170 00a4 00C001E0 		.word	-536756224
+ 171 00a8 04C001E0 		.word	-536756220
+ 172 00ac 18C001E0 		.word	-536756200
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 7
+
+
+ 173              	.LFE4:
+ 174              		.size	i2cStart, .-i2cStart
+ 175              		.align	2
+ 176              		.global	i2cStop
+ 177              		.code 16
+ 178              		.thumb_func
+ 179              		.type	i2cStop, %function
+ 180              	i2cStop:
+ 181              	.LFB6:
+ 167:i2c.c         **** 
+ 168:i2c.c         **** /******************************************************************************
+ 169:i2c.c         ****  *
+ 170:i2c.c         ****  * Description:
+ 171:i2c.c         ****  *    Generates a start condition on I2C when bus is free.
+ 172:i2c.c         ****  *    Master mode will also automatically be entered.
+ 173:i2c.c         ****  *
+ 174:i2c.c         ****  *    Note: After a stop condition, you may need a bus free time before you 
+ 175:i2c.c         ****  *          can generate a new start condition.
+ 176:i2c.c         ****  *
+ 177:i2c.c         ****  * Returns:
+ 178:i2c.c         ****  *    I2C_CODE_OK or I2C status code
+ 179:i2c.c         ****  *
+ 180:i2c.c         ****  *****************************************************************************/
+ 181:i2c.c         **** tS8
+ 182:i2c.c         **** i2cRepeatStart(void)
+ 183:i2c.c         **** {
+ 184:i2c.c         ****   tU8   status  = 0;
+ 185:i2c.c         ****   tS8   retCode = 0;
+ 186:i2c.c         **** 
+ 187:i2c.c         ****   /* issue a start condition */
+ 188:i2c.c         ****   I2C_CONSET |= 0x20; /* STA = 1, set start flag */
+ 189:i2c.c         ****   I2C_CONCLR = 0x08;  /* clear SI flag           */
+ 190:i2c.c         **** 
+ 191:i2c.c         ****   /* wait until START transmitted */
+ 192:i2c.c         ****   while(1)
+ 193:i2c.c         ****   {
+ 194:i2c.c         ****     status = i2cCheckStatus();
+ 195:i2c.c         **** 
+ 196:i2c.c         ****     /* start transmitted */
+ 197:i2c.c         ****     if((status == 0x08) || (status == 0x10))
+ 198:i2c.c         ****     {
+ 199:i2c.c         ****       retCode = I2C_CODE_OK;
+ 200:i2c.c         ****       break;
+ 201:i2c.c         ****     }
+ 202:i2c.c         **** 
+ 203:i2c.c         ****     /* error */
+ 204:i2c.c         ****     else if(status != 0xf8)
+ 205:i2c.c         ****     {
+ 206:i2c.c         ****       retCode = (tS8) status;
+ 207:i2c.c         ****       break;
+ 208:i2c.c         ****     }
+ 209:i2c.c         **** 
+ 210:i2c.c         ****     else
+ 211:i2c.c         ****     {
+ 212:i2c.c         ****       /* clear SI flag */
+ 213:i2c.c         ****       I2C_CONCLR = 0x08;
+ 214:i2c.c         ****     }    
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 8
+
+
+ 215:i2c.c         ****   }
+ 216:i2c.c         **** 
+ 217:i2c.c         ****   /* clear start flag */
+ 218:i2c.c         ****   I2C_CONCLR = 0x20;
+ 219:i2c.c         **** 
+ 220:i2c.c         ****   return retCode;
+ 221:i2c.c         **** }
+ 222:i2c.c         **** 
+ 223:i2c.c         **** /******************************************************************************
+ 224:i2c.c         ****  *
+ 225:i2c.c         ****  * Description:
+ 226:i2c.c         ****  *    Generates a stop condition in master mode or recovers from an error
+ 227:i2c.c         ****  *    condition in slave mode.
+ 228:i2c.c         ****  *
+ 229:i2c.c         ****  *    Note: After this function is run, you may need a bus free time before
+ 230:i2c.c         ****  *          you can generate a new start condition.
+ 231:i2c.c         ****  *
+ 232:i2c.c         ****  * Returns:
+ 233:i2c.c         ****  *    I2C_CODE_OK
+ 234:i2c.c         ****  *
+ 235:i2c.c         ****  *****************************************************************************/
+ 236:i2c.c         **** tS8
+ 237:i2c.c         **** i2cStop(void)
+ 238:i2c.c         **** {
+ 182              		.loc 1 238 0
+ 239:i2c.c         ****   I2C_CONSET |= 0x10; /* STO = 1, set stop flag */ 
+ 183              		.loc 1 239 0
+ 184 00b0 0749     		ldr	r1, .L37
+ 185 00b2 0B78     		ldrb	r3, [r1]
+ 186 00b4 1022     		mov	r2, #16
+ 187 00b6 1343     		orr	r3, r3, r2
+ 188 00b8 1B06     		lsl	r3, r3, #24
+ 189 00ba 1B0E     		lsr	r3, r3, #24
+ 190 00bc 0B70     		strb	r3, [r1]
+ 240:i2c.c         ****   I2C_CONCLR = 0x08;  /* clear SI flag          */ 
+ 191              		.loc 1 240 0
+ 192 00be 054B     		ldr	r3, .L37+4
+ 193 00c0 0822     		mov	r2, #8
+ 194 00c2 1A70     		strb	r2, [r3]
+ 195              		.loc 1 238 0
+ 196              		@ lr needed for prologue
+ 197              	.L32:
+ 241:i2c.c         **** 
+ 242:i2c.c         ****   /* wait for STOP detected (while STO = 1) */
+ 243:i2c.c         ****   while((I2C_CONSET & 0x10) == 0x10 )
+ 198              		.loc 1 243 0
+ 199 00c4 024B     		ldr	r3, .L37
+ 200 00c6 1B78     		ldrb	r3, [r3]
+ 201 00c8 DA06     		lsl	r2, r3, #27
+ 202 00ca FBD4     		bmi	.L32
+ 244:i2c.c         ****   {
+ 245:i2c.c         ****     /* do nothing */
+ 246:i2c.c         ****     ;
+ 247:i2c.c         ****   }
+ 248:i2c.c         **** 
+ 249:i2c.c         ****   return I2C_CODE_OK;
+ 250:i2c.c         **** }
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 9
+
+
+ 203              		.loc 1 250 0
+ 204 00cc 0120     		mov	r0, #1
+ 205              		@ sp needed for prologue
+ 206 00ce 7047     		bx	lr
+ 207              	.L38:
+ 208              		.align	2
+ 209              	.L37:
+ 210 00d0 00C001E0 		.word	-536756224
+ 211 00d4 18C001E0 		.word	-536756200
+ 212              	.LFE6:
+ 213              		.size	i2cStop, .-i2cStop
+ 214              		.align	2
+ 215              		.global	i2cPutChar
+ 216              		.code 16
+ 217              		.thumb_func
+ 218              		.type	i2cPutChar, %function
+ 219              	i2cPutChar:
+ 220              	.LFB7:
+ 251:i2c.c         **** 
+ 252:i2c.c         **** /******************************************************************************
+ 253:i2c.c         ****  *
+ 254:i2c.c         ****  * Description:
+ 255:i2c.c         ****  *    Sends a character on the I2C network
+ 256:i2c.c         ****  *
+ 257:i2c.c         ****  * Params:
+ 258:i2c.c         ****  *    [in] data - the character to send
+ 259:i2c.c         ****  *
+ 260:i2c.c         ****  * Returns:
+ 261:i2c.c         ****  *    I2C_CODE_OK   - successful
+ 262:i2c.c         ****  *    I2C_CODE_BUSY - data register is not ready -> byte was not sent
+ 263:i2c.c         ****  *
+ 264:i2c.c         ****  *****************************************************************************/
+ 265:i2c.c         **** tS8
+ 266:i2c.c         **** i2cPutChar(tU8 data)
+ 267:i2c.c         **** {
+ 221              		.loc 1 267 0
+ 222              	.LVL8:
+ 268:i2c.c         ****   tS8 retCode = 0;
+ 269:i2c.c         **** 
+ 270:i2c.c         ****   /* check if I2C Data register can be accessed */
+ 271:i2c.c         ****   if((I2C_CONSET & 0x08) != 0)  /* if SI = 1 */
+ 223              		.loc 1 271 0
+ 224 00d8 084B     		ldr	r3, .L44
+ 225 00da 1B78     		ldrb	r3, [r3]
+ 226              		.loc 1 267 0
+ 227 00dc 0006     		lsl	r0, r0, #24
+ 228              	.LVL9:
+ 229              		.loc 1 271 0
+ 230 00de 0822     		mov	r2, #8
+ 231              		.loc 1 267 0
+ 232              		@ lr needed for prologue
+ 233              		.loc 1 267 0
+ 234 00e0 000E     		lsr	r0, r0, #24
+ 235              	.LVL10:
+ 236              		.loc 1 271 0
+ 237 00e2 1342     		tst	r3, r2
+ 238 00e4 01D1     		bne	.L40
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 10
+
+
+ 239 00e6 FC20     		mov	r0, #252
+ 240              	.LVL11:
+ 241 00e8 04E0     		b	.L42
+ 242              	.LVL12:
+ 243              	.L40:
+ 272:i2c.c         ****   {
+ 273:i2c.c         ****     /* send data */
+ 274:i2c.c         ****     I2C_DATA   = data;
+ 244              		.loc 1 274 0
+ 245 00ea 054B     		ldr	r3, .L44+4
+ 246 00ec 1870     		strb	r0, [r3]
+ 275:i2c.c         ****     I2C_CONCLR = 0x08; /* clear SI flag */ 
+ 247              		.loc 1 275 0
+ 248 00ee 1033     		add	r3, r3, #16
+ 249 00f0 1A70     		strb	r2, [r3]
+ 250 00f2 0120     		mov	r0, #1
+ 251              	.LVL13:
+ 252              	.L42:
+ 253 00f4 0006     		lsl	r0, r0, #24
+ 254              	.LVL14:
+ 255 00f6 0016     		asr	r0, r0, #24
+ 276:i2c.c         ****     retCode    = I2C_CODE_OK;
+ 277:i2c.c         ****   }
+ 278:i2c.c         ****   else
+ 279:i2c.c         ****   {
+ 280:i2c.c         ****     /* data register not ready */
+ 281:i2c.c         ****     retCode = I2C_CODE_BUSY;
+ 282:i2c.c         ****   }
+ 283:i2c.c         **** 
+ 284:i2c.c         ****   return retCode;
+ 285:i2c.c         **** }
+ 256              		.loc 1 285 0
+ 257              		@ sp needed for prologue
+ 258 00f8 7047     		bx	lr
+ 259              	.L45:
+ 260 00fa 0000     		.align	2
+ 261              	.L44:
+ 262 00fc 00C001E0 		.word	-536756224
+ 263 0100 08C001E0 		.word	-536756216
+ 264              	.LFE7:
+ 265              		.size	i2cPutChar, .-i2cPutChar
+ 266              		.align	2
+ 267              		.global	i2cGetChar
+ 268              		.code 16
+ 269              		.thumb_func
+ 270              		.type	i2cGetChar, %function
+ 271              	i2cGetChar:
+ 272              	.LFB8:
+ 286:i2c.c         **** 
+ 287:i2c.c         **** /******************************************************************************
+ 288:i2c.c         ****  *
+ 289:i2c.c         ****  * Description:
+ 290:i2c.c         ****  *    Read a character. I2C master mode is used.
+ 291:i2c.c         ****  *    This function is also used to prepare if the master shall generate
+ 292:i2c.c         ****  *    acknowledge or not acknowledge.
+ 293:i2c.c         ****  *
+ 294:i2c.c         ****  * Params:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 11
+
+
+ 295:i2c.c         ****  *    [in]  mode  - I2C_MODE_ACK0 Set ACK=0. Slave sends next byte
+ 296:i2c.c         ****  *                  I2C_MODE_ACK1 Set ACK=1. Slave sends last byte
+ 297:i2c.c         ****  *                  I2C_MODE_READ Read data from data register
+ 298:i2c.c         ****  *    [out] pData - a pointer to where the data shall be saved.
+ 299:i2c.c         ****  *
+ 300:i2c.c         ****  * Returns:
+ 301:i2c.c         ****  *    I2C_CODE_OK    - successful
+ 302:i2c.c         ****  *    I2C_CODE_EMPTY - no data is available
+ 303:i2c.c         ****  *
+ 304:i2c.c         ****  *****************************************************************************/
+ 305:i2c.c         **** tS8
+ 306:i2c.c         **** i2cGetChar(tU8  mode,
+ 307:i2c.c         ****            tU8* pData)
+ 308:i2c.c         **** {
+ 273              		.loc 1 308 0
+ 274              	.LVL15:
+ 275 0104 0006     		lsl	r0, r0, #24
+ 276              	.LVL16:
+ 277 0106 000E     		lsr	r0, r0, #24
+ 278              	.LVL17:
+ 279              		@ lr needed for prologue
+ 309:i2c.c         ****   tS8 retCode = I2C_CODE_OK;
+ 310:i2c.c         **** 
+ 311:i2c.c         ****   if(mode == I2C_MODE_ACK0)
+ 280              		.loc 1 311 0
+ 281 0108 0028     		cmp	r0, #0
+ 282 010a 0AD1     		bne	.L47
+ 312:i2c.c         ****   {
+ 313:i2c.c         ****     /* the operation mode is changed from master transmit to master receive */
+ 314:i2c.c         **** 
+ 315:i2c.c         ****     /* set ACK=0 (informs slave to send next byte) */
+ 316:i2c.c         **** 
+ 317:i2c.c         ****     I2C_CONSET |= 0x04; /* AA=1          */
+ 283              		.loc 1 317 0
+ 284 010c 1049     		ldr	r1, .L58
+ 285              	.LVL18:
+ 286 010e 0B78     		ldrb	r3, [r1]
+ 287 0110 0422     		mov	r2, #4
+ 288 0112 1343     		orr	r3, r3, r2
+ 289 0114 1B06     		lsl	r3, r3, #24
+ 290 0116 1B0E     		lsr	r3, r3, #24
+ 291 0118 0B70     		strb	r3, [r1]
+ 318:i2c.c         ****     I2C_CONCLR = 0x08;  /* clear SI flag */   
+ 292              		.loc 1 318 0
+ 293 011a 0E4B     		ldr	r3, .L58+4
+ 294 011c 0822     		mov	r2, #8
+ 295 011e 1A70     		strb	r2, [r3]
+ 296 0120 12E0     		b	.L57
+ 297              	.LVL19:
+ 298              	.L47:
+ 319:i2c.c         ****   }
+ 320:i2c.c         ****   else if(mode == I2C_MODE_ACK1)
+ 299              		.loc 1 320 0
+ 300 0122 0128     		cmp	r0, #1
+ 301 0124 05D1     		bne	.L50
+ 321:i2c.c         ****   {
+ 322:i2c.c         ****     /* set ACK=1 (informs slave to send last byte) */
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 12
+
+
+ 323:i2c.c         ****     I2C_CONCLR = 0x04;     
+ 302              		.loc 1 323 0
+ 303 0126 0B4B     		ldr	r3, .L58+4
+ 304 0128 0422     		mov	r2, #4
+ 305 012a 1A70     		strb	r2, [r3]
+ 324:i2c.c         ****     I2C_CONCLR = 0x08; /* clear SI flag */ 
+ 306              		.loc 1 324 0
+ 307 012c 0822     		mov	r2, #8
+ 308 012e 1A70     		strb	r2, [r3]
+ 309 0130 0BE0     		b	.L49
+ 310              	.L50:
+ 325:i2c.c         ****   }
+ 326:i2c.c         ****   else if(mode == I2C_MODE_READ)
+ 311              		.loc 1 326 0
+ 312 0132 0228     		cmp	r0, #2
+ 313 0134 08D1     		bne	.L57
+ 327:i2c.c         ****   {
+ 328:i2c.c         ****     /* check if I2C Data register can be accessed */
+ 329:i2c.c         ****     if((I2C_CONSET & 0x08) != 0)  /* SI = 1 */
+ 314              		.loc 1 329 0
+ 315 0136 064B     		ldr	r3, .L58
+ 316 0138 1B78     		ldrb	r3, [r3]
+ 317 013a 1A07     		lsl	r2, r3, #28
+ 318 013c 01D4     		bmi	.L54
+ 319 013e FD20     		mov	r0, #253
+ 320              	.LVL20:
+ 321 0140 03E0     		b	.L49
+ 322              	.LVL21:
+ 323              	.L54:
+ 330:i2c.c         ****     {
+ 331:i2c.c         ****       /* read data  */
+ 332:i2c.c         ****       *pData = (tU8) I2C_DATA;
+ 324              		.loc 1 332 0
+ 325 0142 054B     		ldr	r3, .L58+8
+ 326 0144 1B78     		ldrb	r3, [r3]
+ 327 0146 0B70     		strb	r3, [r1]
+ 328              	.L57:
+ 329 0148 0120     		mov	r0, #1
+ 330              	.LVL22:
+ 331              	.L49:
+ 332              	.LVL23:
+ 333 014a 0006     		lsl	r0, r0, #24
+ 334              	.LVL24:
+ 335 014c 0016     		asr	r0, r0, #24
+ 333:i2c.c         ****     }
+ 334:i2c.c         ****     else
+ 335:i2c.c         ****     {
+ 336:i2c.c         ****       /* No data available */
+ 337:i2c.c         ****       retCode = I2C_CODE_EMPTY;
+ 338:i2c.c         ****     }
+ 339:i2c.c         ****   }
+ 340:i2c.c         **** 
+ 341:i2c.c         ****   return retCode;
+ 342:i2c.c         **** }
+ 336              		.loc 1 342 0
+ 337              		@ sp needed for prologue
+ 338 014e 7047     		bx	lr
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 13
+
+
+ 339              	.L59:
+ 340              		.align	2
+ 341              	.L58:
+ 342 0150 00C001E0 		.word	-536756224
+ 343 0154 18C001E0 		.word	-536756200
+ 344 0158 08C001E0 		.word	-536756216
+ 345              	.LFE8:
+ 346              		.size	i2cGetChar, .-i2cGetChar
+ 347              		.align	2
+ 348              		.global	i2cWaitTransmit
+ 349              		.code 16
+ 350              		.thumb_func
+ 351              		.type	i2cWaitTransmit, %function
+ 352              	i2cWaitTransmit:
+ 353              	.LFB10:
+ 343:i2c.c         **** 
+ 344:i2c.c         **** /******************************************************************************
+ 345:i2c.c         ****  *
+ 346:i2c.c         ****  * Description:
+ 347:i2c.c         ****  *    Sends data on the I2C network
+ 348:i2c.c         ****  *
+ 349:i2c.c         ****  *    Note: After this function is run, you may need a bus free time before a 
+ 350:i2c.c         ****  *          new data transfer can be initiated.
+ 351:i2c.c         ****  *
+ 352:i2c.c         ****  * Params:
+ 353:i2c.c         ****  *    [in] addr  - address
+ 354:i2c.c         ****  *    [in] pData - data to transmit
+ 355:i2c.c         ****  *    [in] len   - number of bytes to transmit
+ 356:i2c.c         ****  *
+ 357:i2c.c         ****  * Returns:
+ 358:i2c.c         ****  *    I2C_CODE_OK    - successful
+ 359:i2c.c         ****  *    I2C_CODE_ERROR - an error occured
+ 360:i2c.c         ****  *
+ 361:i2c.c         ****  *****************************************************************************/
+ 362:i2c.c         **** tS8
+ 363:i2c.c         **** i2cWrite(tU8  addr,
+ 364:i2c.c         ****          tU8* pData,
+ 365:i2c.c         ****          tU16 len)
+ 366:i2c.c         **** {
+ 367:i2c.c         ****   tS8 retCode = 0;
+ 368:i2c.c         ****   tU8 status  = 0;
+ 369:i2c.c         ****   tU8 i       = 0;
+ 370:i2c.c         **** 
+ 371:i2c.c         ****   /* generate Start condition */
+ 372:i2c.c         ****   retCode = i2cStart();
+ 373:i2c.c         **** 
+ 374:i2c.c         ****   /* Transmit address */
+ 375:i2c.c         ****   if(retCode == I2C_CODE_OK)
+ 376:i2c.c         ****   {
+ 377:i2c.c         ****     /* write SLA+W */
+ 378:i2c.c         ****     retCode = i2cPutChar(addr);
+ 379:i2c.c         ****     while(retCode == I2C_CODE_BUSY)
+ 380:i2c.c         ****     {
+ 381:i2c.c         ****       retCode = i2cPutChar(addr);
+ 382:i2c.c         ****     }
+ 383:i2c.c         ****   }
+ 384:i2c.c         **** 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 14
+
+
+ 385:i2c.c         ****   if(retCode == I2C_CODE_OK)
+ 386:i2c.c         ****   {
+ 387:i2c.c         ****     /* wait until address transmitted and transmit data */
+ 388:i2c.c         ****     for(i = 0; i < len; i++)
+ 389:i2c.c         ****     {
+ 390:i2c.c         ****       /* wait until data transmitted */
+ 391:i2c.c         **** 
+ 392:i2c.c         ****       while(1)
+ 393:i2c.c         ****       {
+ 394:i2c.c         ****         /* get new status */
+ 395:i2c.c         ****         status = i2cCheckStatus();
+ 396:i2c.c         **** 
+ 397:i2c.c         ****         /* 
+ 398:i2c.c         ****          * SLA+W transmitted, ACK received or
+ 399:i2c.c         ****          * data byte transmitted, ACK received
+ 400:i2c.c         ****          */
+ 401:i2c.c         ****         if( (status == 0x18) || (status == 0x28) )
+ 402:i2c.c         ****         {
+ 403:i2c.c         ****           /* Data transmitted and ACK received */
+ 404:i2c.c         **** 
+ 405:i2c.c         ****           /* write data */
+ 406:i2c.c         ****           retCode = i2cPutChar(*pData);
+ 407:i2c.c         ****           while(retCode == I2C_CODE_BUSY)
+ 408:i2c.c         ****           {
+ 409:i2c.c         ****             retCode = i2cPutChar(*pData);
+ 410:i2c.c         ****           }
+ 411:i2c.c         ****           pData++;
+ 412:i2c.c         **** 
+ 413:i2c.c         ****           break;
+ 414:i2c.c         ****         }
+ 415:i2c.c         **** 
+ 416:i2c.c         ****         /* no relevant status information */
+ 417:i2c.c         ****         else if( status != 0xf8 )
+ 418:i2c.c         ****         {
+ 419:i2c.c         ****           /* error */
+ 420:i2c.c         ****           i = len;
+ 421:i2c.c         ****           retCode = I2C_CODE_ERROR;
+ 422:i2c.c         ****           break;
+ 423:i2c.c         ****         }
+ 424:i2c.c         ****       }
+ 425:i2c.c         ****     }
+ 426:i2c.c         ****   }
+ 427:i2c.c         **** 
+ 428:i2c.c         ****   /* wait until data transmitted */
+ 429:i2c.c         ****   while(1)
+ 430:i2c.c         ****   {
+ 431:i2c.c         ****     /* get new status */
+ 432:i2c.c         ****     status = i2cCheckStatus();
+ 433:i2c.c         **** 
+ 434:i2c.c         ****     /* 
+ 435:i2c.c         ****      * SLA+W transmitted, ACK received or
+ 436:i2c.c         ****      * data byte transmitted, ACK received
+ 437:i2c.c         ****      */
+ 438:i2c.c         ****     if( (status == 0x18) || (status == 0x28) )
+ 439:i2c.c         ****     {
+ 440:i2c.c         ****       /* data transmitted and ACK received */
+ 441:i2c.c         ****       break;
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 15
+
+
+ 442:i2c.c         ****     }
+ 443:i2c.c         **** 
+ 444:i2c.c         ****     /* no relevant status information */
+ 445:i2c.c         ****     else if(status != 0xf8 )
+ 446:i2c.c         ****     {
+ 447:i2c.c         ****       /* error */
+ 448:i2c.c         ****       i = len;
+ 449:i2c.c         ****       retCode = I2C_CODE_ERROR;
+ 450:i2c.c         ****       break;
+ 451:i2c.c         ****     }
+ 452:i2c.c         ****   }
+ 453:i2c.c         **** 
+ 454:i2c.c         ****   /* generate Stop condition */
+ 455:i2c.c         ****   i2cStop();
+ 456:i2c.c         **** 
+ 457:i2c.c         ****   return retCode;
+ 458:i2c.c         **** }
+ 459:i2c.c         **** 
+ 460:i2c.c         **** tS8
+ 461:i2c.c         **** i2cWaitTransmit(void)
+ 462:i2c.c         **** {
+ 354              		.loc 1 462 0
+ 355              		@ lr needed for prologue
+ 356              	.LVL25:
+ 357              	.L74:
+ 358              	.LBB8:
+ 359              	.LBB9:
+ 360              		.loc 1 80 0
+ 361 015c 084B     		ldr	r3, .L75
+ 362              	.LVL26:
+ 363 015e 1B78     		ldrb	r3, [r3]
+ 364 0160 1A07     		lsl	r2, r3, #28
+ 365 0162 FBD5     		bpl	.L74
+ 366              		.loc 1 86 0
+ 367 0164 074B     		ldr	r3, .L75+4
+ 368 0166 1B78     		ldrb	r3, [r3]
+ 369              	.LVL27:
+ 370              	.LBE9:
+ 371              	.LBE8:
+ 463:i2c.c         ****   tU8 status = 0;
+ 464:i2c.c         **** 
+ 465:i2c.c         ****   /* wait until data transmitted */
+ 466:i2c.c         ****   while(1)
+ 467:i2c.c         ****   {
+ 468:i2c.c         ****     /* get new status */
+ 469:i2c.c         ****     status = i2cCheckStatus();
+ 470:i2c.c         **** 
+ 471:i2c.c         ****     /* 
+ 472:i2c.c         ****      * SLA+W transmitted, ACK received or
+ 473:i2c.c         ****      * data byte transmitted, ACK received
+ 474:i2c.c         ****      */
+ 475:i2c.c         ****     if( (status == 0x18) || (status == 0x28) )
+ 372              		.loc 1 475 0
+ 373 0168 182B     		cmp	r3, #24
+ 374 016a 06D0     		beq	.L63
+ 375 016c 282B     		cmp	r3, #40
+ 376 016e 04D0     		beq	.L63
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 16
+
+
+ 476:i2c.c         ****     {
+ 477:i2c.c         ****       /* data transmitted and ACK received */
+ 478:i2c.c         ****       return I2C_CODE_OK;
+ 479:i2c.c         ****     }
+ 480:i2c.c         **** 
+ 481:i2c.c         ****     /* no relevant status information */
+ 482:i2c.c         ****     else if(status != 0xf8 )
+ 377              		.loc 1 482 0
+ 378 0170 F82B     		cmp	r3, #248
+ 379 0172 F3D0     		beq	.L74
+ 380 0174 0120     		mov	r0, #1
+ 381 0176 4042     		neg	r0, r0
+ 382 0178 00E0     		b	.L67
+ 383              	.L63:
+ 384 017a 0120     		mov	r0, #1
+ 385              	.L67:
+ 483:i2c.c         ****     {
+ 484:i2c.c         ****       /* error */
+ 485:i2c.c         **** 
+ 486:i2c.c         ****       return I2C_CODE_ERROR;
+ 487:i2c.c         ****     }
+ 488:i2c.c         ****   }
+ 489:i2c.c         **** }
+ 386              		.loc 1 489 0
+ 387              		@ sp needed for prologue
+ 388 017c 7047     		bx	lr
+ 389              	.L76:
+ 390 017e 0000     		.align	2
+ 391              	.L75:
+ 392 0180 00C001E0 		.word	-536756224
+ 393 0184 04C001E0 		.word	-536756220
+ 394              	.LFE10:
+ 395              		.size	i2cWaitTransmit, .-i2cWaitTransmit
+ 396              		.align	2
+ 397              		.global	i2cWriteWithWait
+ 398              		.code 16
+ 399              		.thumb_func
+ 400              		.type	i2cWriteWithWait, %function
+ 401              	i2cWriteWithWait:
+ 402              	.LFB11:
+ 490:i2c.c         **** 
+ 491:i2c.c         **** tS8
+ 492:i2c.c         **** i2cWriteWithWait(tU8 data)
+ 493:i2c.c         **** {
+ 403              		.loc 1 493 0
+ 404 0188 10B5     		push	{r4, lr}
+ 405              	.LCFI0:
+ 406              	.LVL28:
+ 407 018a 0006     		lsl	r0, r0, #24
+ 408              	.LVL29:
+ 409 018c 040E     		lsr	r4, r0, #24
+ 410              	.L79:
+ 494:i2c.c         ****   tS8 retCode = 0;
+ 495:i2c.c         ****   
+ 496:i2c.c         ****   retCode = i2cPutChar(data);
+ 497:i2c.c         ****   while(retCode == I2C_CODE_BUSY)
+ 498:i2c.c         ****   {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 17
+
+
+ 499:i2c.c         ****     retCode = i2cPutChar(data);
+ 411              		.loc 1 499 0
+ 412 018e 201C     		mov	r0, r4
+ 413 0190 FFF7FEFF 		bl	i2cPutChar
+ 414 0194 0006     		lsl	r0, r0, #24
+ 415 0196 000E     		lsr	r0, r0, #24
+ 416              	.LVL30:
+ 417              		.loc 1 497 0
+ 418 0198 0306     		lsl	r3, r0, #24
+ 419 019a FC28     		cmp	r0, #252
+ 420 019c F7D0     		beq	.L79
+ 500:i2c.c         ****   }
+ 501:i2c.c         **** 
+ 502:i2c.c         ****   if(retCode == I2C_CODE_OK)
+ 421              		.loc 1 502 0
+ 422 019e 1B16     		asr	r3, r3, #24
+ 423 01a0 012B     		cmp	r3, #1
+ 424 01a2 03D1     		bne	.L81
+ 503:i2c.c         ****     retCode = i2cWaitTransmit();
+ 425              		.loc 1 503 0
+ 426 01a4 FFF7FEFF 		bl	i2cWaitTransmit
+ 427              	.LVL31:
+ 428 01a8 0006     		lsl	r0, r0, #24
+ 429 01aa 000E     		lsr	r0, r0, #24
+ 430              	.LVL32:
+ 431              	.L81:
+ 432 01ac 0006     		lsl	r0, r0, #24
+ 433              	.LVL33:
+ 434 01ae 0016     		asr	r0, r0, #24
+ 504:i2c.c         **** 
+ 505:i2c.c         ****   return retCode;
+ 506:i2c.c         **** }
+ 435              		.loc 1 506 0
+ 436              		@ sp needed for prologue
+ 437 01b0 10BC     		pop	{r4}
+ 438 01b2 02BC     		pop	{r1}
+ 439 01b4 0847     		bx	r1
+ 440              	.LFE11:
+ 441              		.size	i2cWriteWithWait, .-i2cWriteWithWait
+ 442 01b6 0000     		.align	2
+ 443              		.global	i2cMyWrite
+ 444              		.code 16
+ 445              		.thumb_func
+ 446              		.type	i2cMyWrite, %function
+ 447              	i2cMyWrite:
+ 448              	.LFB12:
+ 507:i2c.c         **** 
+ 508:i2c.c         **** tS8
+ 509:i2c.c         **** i2cMyWrite(tU8  addr,
+ 510:i2c.c         ****            tU8* pData,
+ 511:i2c.c         ****            tU16 len)
+ 512:i2c.c         **** {
+ 449              		.loc 1 512 0
+ 450 01b8 F0B5     		push	{r4, r5, r6, r7, lr}
+ 451              	.LCFI1:
+ 452              	.LVL34:
+ 453              		.loc 1 512 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 18
+
+
+ 454 01ba 0006     		lsl	r0, r0, #24
+ 455              	.LVL35:
+ 456 01bc 1204     		lsl	r2, r2, #16
+ 457              	.LVL36:
+ 458 01be 0F1C     		mov	r7, r1
+ 459 01c0 040E     		lsr	r4, r0, #24
+ 460              	.LVL37:
+ 461 01c2 160C     		lsr	r6, r2, #16
+ 462              	.LVL38:
+ 513:i2c.c         ****   tS8 retCode = 0;
+ 514:i2c.c         ****   tU8 i       = 0;
+ 515:i2c.c         **** 
+ 516:i2c.c         ****   do
+ 517:i2c.c         ****   {
+ 518:i2c.c         ****     /* generate Start condition */
+ 519:i2c.c         ****     retCode = i2cStart();
+ 463              		.loc 1 519 0
+ 464 01c4 FFF7FEFF 		bl	i2cStart
+ 465              	.LVL39:
+ 466 01c8 0006     		lsl	r0, r0, #24
+ 520:i2c.c         ****     if(retCode != I2C_CODE_OK)
+ 467              		.loc 1 520 0
+ 468 01ca 050E     		lsr	r5, r0, #24
+ 469              	.LVL40:
+ 470 01cc 0016     		asr	r0, r0, #24
+ 471 01ce 0128     		cmp	r0, #1
+ 472 01d0 17D1     		bne	.L85
+ 521:i2c.c         ****       break;
+ 522:i2c.c         **** 
+ 523:i2c.c         ****     /* write address */
+ 524:i2c.c         ****     retCode = i2cWriteWithWait(addr);
+ 473              		.loc 1 524 0
+ 474 01d2 201C     		mov	r0, r4
+ 475 01d4 FFF7FEFF 		bl	i2cWriteWithWait
+ 476 01d8 0006     		lsl	r0, r0, #24
+ 525:i2c.c         ****     if(retCode != I2C_CODE_OK)
+ 477              		.loc 1 525 0
+ 478 01da 050E     		lsr	r5, r0, #24
+ 479 01dc 0016     		asr	r0, r0, #24
+ 480 01de 0128     		cmp	r0, #1
+ 481 01e0 0FD1     		bne	.L85
+ 526:i2c.c         ****       break;
+ 482              		.loc 1 526 0
+ 483 01e2 0024     		mov	r4, #0
+ 484              	.LVL41:
+ 485 01e4 09E0     		b	.L88
+ 486              	.L89:
+ 527:i2c.c         **** 
+ 528:i2c.c         ****     for(i = 0; i <len; i++)
+ 529:i2c.c         ****     {
+ 530:i2c.c         ****       retCode = i2cWriteWithWait(*pData);
+ 487              		.loc 1 530 0
+ 488 01e6 E05D     		ldrb	r0, [r4, r7]
+ 489 01e8 FFF7FEFF 		bl	i2cWriteWithWait
+ 531:i2c.c         ****       if(retCode != I2C_CODE_OK)
+ 490              		.loc 1 531 0
+ 491 01ec 0006     		lsl	r0, r0, #24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 19
+
+
+ 492 01ee 0316     		asr	r3, r0, #24
+ 493              		.loc 1 530 0
+ 494 01f0 0134     		add	r4, r4, #1
+ 495              		.loc 1 531 0
+ 496 01f2 012B     		cmp	r3, #1
+ 497 01f4 01D0     		beq	.L88
+ 498 01f6 050E     		lsr	r5, r0, #24
+ 499 01f8 03E0     		b	.L85
+ 500              	.L88:
+ 501              		.loc 1 528 0
+ 502 01fa 2306     		lsl	r3, r4, #24
+ 503 01fc 1B0E     		lsr	r3, r3, #24
+ 504 01fe B342     		cmp	r3, r6
+ 505 0200 F1D3     		bcc	.L89
+ 506              	.LVL42:
+ 507              	.L85:
+ 532:i2c.c         ****         break;
+ 533:i2c.c         **** 
+ 534:i2c.c         ****       pData++;
+ 535:i2c.c         ****     }
+ 536:i2c.c         **** 
+ 537:i2c.c         ****   } while(0);
+ 538:i2c.c         **** 
+ 539:i2c.c         ****   /* generate Stop condition */
+ 540:i2c.c         ****   i2cStop();
+ 508              		.loc 1 540 0
+ 509 0202 FFF7FEFF 		bl	i2cStop
+ 510 0206 2806     		lsl	r0, r5, #24
+ 511 0208 0016     		asr	r0, r0, #24
+ 541:i2c.c         **** 
+ 542:i2c.c         **** 
+ 543:i2c.c         ****   return retCode;
+ 544:i2c.c         **** }
+ 512              		.loc 1 544 0
+ 513              		@ sp needed for prologue
+ 514              	.LVL43:
+ 515              	.LVL44:
+ 516              	.LVL45:
+ 517              	.LVL46:
+ 518 020a F0BC     		pop	{r4, r5, r6, r7}
+ 519 020c 02BC     		pop	{r1}
+ 520 020e 0847     		bx	r1
+ 521              	.LFE12:
+ 522              		.size	i2cMyWrite, .-i2cMyWrite
+ 523              		.align	2
+ 524              		.global	i2cRepeatStart
+ 525              		.code 16
+ 526              		.thumb_func
+ 527              		.type	i2cRepeatStart, %function
+ 528              	i2cRepeatStart:
+ 529              	.LFB5:
+ 530              		.loc 1 183 0
+ 531              		.loc 1 188 0
+ 532 0210 0F49     		ldr	r1, .L110
+ 533 0212 0B78     		ldrb	r3, [r1]
+ 534 0214 2022     		mov	r2, #32
+ 535 0216 1343     		orr	r3, r3, r2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 20
+
+
+ 536 0218 1B06     		lsl	r3, r3, #24
+ 537 021a 1B0E     		lsr	r3, r3, #24
+ 538 021c 0B70     		strb	r3, [r1]
+ 539              		.loc 1 183 0
+ 540              		@ lr needed for prologue
+ 541              		.loc 1 189 0
+ 542 021e 0822     		mov	r2, #8
+ 543              	.LVL47:
+ 544              	.L109:
+ 545 0220 0C4B     		ldr	r3, .L110+4
+ 546              	.LVL48:
+ 547 0222 1A70     		strb	r2, [r3]
+ 548              	.L108:
+ 549              	.LBB12:
+ 550              	.LBB13:
+ 551              		.loc 1 80 0
+ 552 0224 0A4B     		ldr	r3, .L110
+ 553 0226 1B78     		ldrb	r3, [r3]
+ 554 0228 0822     		mov	r2, #8
+ 555 022a 1342     		tst	r3, r2
+ 556 022c FAD0     		beq	.L108
+ 557              		.loc 1 86 0
+ 558 022e 0A4B     		ldr	r3, .L110+8
+ 559 0230 1B78     		ldrb	r3, [r3]
+ 560              	.LVL49:
+ 561              	.LBE13:
+ 562              	.LBE12:
+ 563              		.loc 1 197 0
+ 564 0232 082B     		cmp	r3, #8
+ 565 0234 05D0     		beq	.L97
+ 566 0236 102B     		cmp	r3, #16
+ 567 0238 03D0     		beq	.L97
+ 568              		.loc 1 204 0
+ 569 023a F82B     		cmp	r3, #248
+ 570 023c F0D0     		beq	.L109
+ 571              		.loc 1 206 0
+ 572 023e 181C     		mov	r0, r3
+ 573              	.LVL50:
+ 574 0240 00E0     		b	.L102
+ 575              	.LVL51:
+ 576              	.L97:
+ 577              		.loc 1 215 0
+ 578 0242 0120     		mov	r0, #1
+ 579              	.LVL52:
+ 580              	.L102:
+ 581              		.loc 1 218 0
+ 582 0244 034B     		ldr	r3, .L110+4
+ 583              	.LVL53:
+ 584 0246 0006     		lsl	r0, r0, #24
+ 585              	.LVL54:
+ 586 0248 2022     		mov	r2, #32
+ 587 024a 0016     		asr	r0, r0, #24
+ 588 024c 1A70     		strb	r2, [r3]
+ 589              		.loc 1 221 0
+ 590              		@ sp needed for prologue
+ 591 024e 7047     		bx	lr
+ 592              	.L111:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 21
+
+
+ 593              		.align	2
+ 594              	.L110:
+ 595 0250 00C001E0 		.word	-536756224
+ 596 0254 18C001E0 		.word	-536756200
+ 597 0258 04C001E0 		.word	-536756220
+ 598              	.LFE5:
+ 599              		.size	i2cRepeatStart, .-i2cRepeatStart
+ 600              		.align	2
+ 601              		.global	i2cRead
+ 602              		.code 16
+ 603              		.thumb_func
+ 604              		.type	i2cRead, %function
+ 605              	i2cRead:
+ 606              	.LFB13:
+ 545:i2c.c         **** 
+ 546:i2c.c         **** 
+ 547:i2c.c         **** /******************************************************************************
+ 548:i2c.c         ****  *
+ 549:i2c.c         ****  * Description:
+ 550:i2c.c         ****  *    Read a specified number of bytes from the I2C network.
+ 551:i2c.c         ****  *
+ 552:i2c.c         ****  *    Note: After this function is run, you may need a bus free time before a 
+ 553:i2c.c         ****  *          new data transfer can be initiated.
+ 554:i2c.c         ****  *
+ 555:i2c.c         ****  * Params:
+ 556:i2c.c         ****  *    [in] addr - address
+ 557:i2c.c         ****  *    [in] pBuf - receive buffer
+ 558:i2c.c         ****  *    [in] len  - number of bytes to receive
+ 559:i2c.c         ****  *
+ 560:i2c.c         ****  * Returns:
+ 561:i2c.c         ****  *    I2C_CODE_OK or I2C status code
+ 562:i2c.c         ****  *
+ 563:i2c.c         ****  *****************************************************************************/
+ 564:i2c.c         **** tS8
+ 565:i2c.c         **** i2cRead(tU8  addr,
+ 566:i2c.c         ****         tU8* pBuf,
+ 567:i2c.c         ****         tU16 len)
+ 568:i2c.c         **** {
+ 607              		.loc 1 568 0
+ 608 025c F0B5     		push	{r4, r5, r6, r7, lr}
+ 609              	.LCFI2:
+ 610              	.LVL55:
+ 611              		.loc 1 568 0
+ 612 025e 0006     		lsl	r0, r0, #24
+ 613              	.LVL56:
+ 614 0260 1204     		lsl	r2, r2, #16
+ 615              	.LVL57:
+ 616 0262 0D1C     		mov	r5, r1
+ 617 0264 060E     		lsr	r6, r0, #24
+ 618              	.LVL58:
+ 619 0266 170C     		lsr	r7, r2, #16
+ 620              	.LVL59:
+ 569:i2c.c         ****   tS8 retCode = 0;
+ 570:i2c.c         ****   tU8 status  = 0;
+ 571:i2c.c         ****   tU8 i       = 0;
+ 572:i2c.c         **** 
+ 573:i2c.c         ****   /* Generate Start condition */
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 22
+
+
+ 574:i2c.c         ****   retCode = i2cStart();
+ 621              		.loc 1 574 0
+ 622 0268 FFF7FEFF 		bl	i2cStart
+ 623              	.LVL60:
+ 624 026c 0006     		lsl	r0, r0, #24
+ 575:i2c.c         **** 
+ 576:i2c.c         ****   /* Transmit address */
+ 577:i2c.c         ****   if(retCode == I2C_CODE_OK )
+ 625              		.loc 1 577 0
+ 626 026e 040E     		lsr	r4, r0, #24
+ 627              	.LVL61:
+ 628 0270 0016     		asr	r0, r0, #24
+ 629 0272 0128     		cmp	r0, #1
+ 630 0274 36D1     		bne	.L113
+ 631              	.L116:
+ 578:i2c.c         ****   {
+ 579:i2c.c         ****     /* write SLA+R */
+ 580:i2c.c         ****     retCode = i2cPutChar(addr);
+ 581:i2c.c         ****     while(retCode == I2C_CODE_BUSY)
+ 582:i2c.c         ****     {
+ 583:i2c.c         ****       retCode = i2cPutChar(addr);
+ 632              		.loc 1 583 0
+ 633 0276 301C     		mov	r0, r6
+ 634 0278 FFF7FEFF 		bl	i2cPutChar
+ 635 027c 0006     		lsl	r0, r0, #24
+ 636 027e 040E     		lsr	r4, r0, #24
+ 637              		.loc 1 581 0
+ 638 0280 2306     		lsl	r3, r4, #24
+ 639 0282 FC2C     		cmp	r4, #252
+ 640 0284 F7D0     		beq	.L116
+ 584:i2c.c         ****     }
+ 585:i2c.c         ****   }
+ 586:i2c.c         **** 
+ 587:i2c.c         ****   if(retCode == I2C_CODE_OK )
+ 641              		.loc 1 587 0
+ 642 0286 1A1C     		mov	r2, r3
+ 643 0288 1B16     		asr	r3, r3, #24
+ 644 028a 012B     		cmp	r3, #1
+ 645 028c 2AD1     		bne	.L113
+ 646 028e 140E     		lsr	r4, r2, #24
+ 647 0290 0126     		mov	r6, #1
+ 648              	.LVL62:
+ 649 0292 25E0     		b	.L119
+ 650              	.LVL63:
+ 651              	.L142:
+ 652              	.LBB16:
+ 653              	.LBB17:
+ 654              		.loc 1 80 0
+ 655 0294 174B     		ldr	r3, .L143
+ 656              	.LVL64:
+ 657 0296 1B78     		ldrb	r3, [r3]
+ 658 0298 1A07     		lsl	r2, r3, #28
+ 659 029a FBD5     		bpl	.L142
+ 660              		.loc 1 86 0
+ 661 029c 164B     		ldr	r3, .L143+4
+ 662 029e 1B78     		ldrb	r3, [r3]
+ 663              	.LVL65:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 23
+
+
+ 664              	.LBE17:
+ 665              	.LBE16:
+ 588:i2c.c         ****   {
+ 589:i2c.c         ****     /* wait until address transmitted and receive data */
+ 590:i2c.c         ****     for(i = 1; i <= len; i++ )
+ 591:i2c.c         ****     {
+ 592:i2c.c         ****       /* wait until data transmitted */
+ 593:i2c.c         ****       while(1)
+ 594:i2c.c         ****       {
+ 595:i2c.c         ****         /* get new status */
+ 596:i2c.c         ****         status = i2cCheckStatus();
+ 597:i2c.c         **** 
+ 598:i2c.c         ****         /*
+ 599:i2c.c         ****          * SLA+R transmitted, ACK received or
+ 600:i2c.c         ****          * SLA+R transmitted, ACK not received
+ 601:i2c.c         ****          * data byte received in master mode, ACK transmitted
+ 602:i2c.c         ****          */
+ 603:i2c.c         ****         if((status == 0x40 ) || (status == 0x48 ) || (status == 0x50 ))
+ 666              		.loc 1 603 0
+ 667 02a0 402B     		cmp	r3, #64
+ 668 02a2 03D0     		beq	.L122
+ 669 02a4 482B     		cmp	r3, #72
+ 670 02a6 01D0     		beq	.L122
+ 671 02a8 502B     		cmp	r3, #80
+ 672 02aa 11D1     		bne	.L125
+ 673              	.L122:
+ 604:i2c.c         ****         {
+ 605:i2c.c         ****           /* data received */
+ 606:i2c.c         **** 
+ 607:i2c.c         ****           if(i == len)
+ 674              		.loc 1 607 0
+ 675 02ac BE42     		cmp	r6, r7
+ 676 02ae 01D1     		bne	.L126
+ 608:i2c.c         ****           {
+ 609:i2c.c         ****             /* Set generate NACK */
+ 610:i2c.c         ****             retCode = i2cGetChar(I2C_MODE_ACK1, pBuf);
+ 677              		.loc 1 610 0
+ 678 02b0 0120     		mov	r0, #1
+ 679 02b2 00E0     		b	.L141
+ 680              	.L126:
+ 611:i2c.c         ****           }
+ 612:i2c.c         ****           else
+ 613:i2c.c         ****           {
+ 614:i2c.c         ****             retCode = i2cGetChar(I2C_MODE_ACK0, pBuf);
+ 681              		.loc 1 614 0
+ 682 02b4 0020     		mov	r0, #0
+ 683              	.L141:
+ 684 02b6 291C     		mov	r1, r5
+ 685 02b8 FFF7FEFF 		bl	i2cGetChar
+ 686              	.LVL66:
+ 687              	.L130:
+ 615:i2c.c         ****           }
+ 616:i2c.c         **** 
+ 617:i2c.c         ****           /* Read data */
+ 618:i2c.c         ****           retCode = i2cGetChar(I2C_MODE_READ, pBuf);
+ 619:i2c.c         ****           while(retCode == I2C_CODE_EMPTY)
+ 620:i2c.c         ****           {
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 24
+
+
+ 621:i2c.c         ****             retCode = i2cGetChar(I2C_MODE_READ, pBuf);
+ 688              		.loc 1 621 0
+ 689 02bc 0220     		mov	r0, #2
+ 690 02be 291C     		mov	r1, r5
+ 691 02c0 FFF7FEFF 		bl	i2cGetChar
+ 692 02c4 0006     		lsl	r0, r0, #24
+ 693 02c6 040E     		lsr	r4, r0, #24
+ 694              		.loc 1 619 0
+ 695 02c8 FD2C     		cmp	r4, #253
+ 696 02ca F7D0     		beq	.L130
+ 622:i2c.c         ****           }
+ 623:i2c.c         ****           pBuf++;
+ 697              		.loc 1 623 0
+ 698 02cc 0135     		add	r5, r5, #1
+ 699 02ce 04E0     		b	.L132
+ 700              	.LVL67:
+ 701              	.L125:
+ 624:i2c.c         **** 
+ 625:i2c.c         ****           break;
+ 626:i2c.c         ****         }
+ 627:i2c.c         **** 
+ 628:i2c.c         ****         /* no relevant status information */
+ 629:i2c.c         ****         else if(status != 0xf8 )
+ 702              		.loc 1 629 0
+ 703 02d0 F82B     		cmp	r3, #248
+ 704 02d2 DFD0     		beq	.L142
+ 630:i2c.c         ****         {
+ 631:i2c.c         ****           /* error */
+ 632:i2c.c         ****           i = len;
+ 705              		.loc 1 632 0
+ 706 02d4 3B06     		lsl	r3, r7, #24
+ 707              	.LVL68:
+ 708 02d6 1E0E     		lsr	r6, r3, #24
+ 709 02d8 FF24     		mov	r4, #255
+ 710              	.L132:
+ 711              		.loc 1 590 0
+ 712 02da 731C     		add	r3, r6, #1
+ 713 02dc 1B06     		lsl	r3, r3, #24
+ 714 02de 1E0E     		lsr	r6, r3, #24
+ 715              	.L119:
+ 716 02e0 BE42     		cmp	r6, r7
+ 717 02e2 D7D9     		bls	.L142
+ 718              	.LVL69:
+ 719              	.L113:
+ 633:i2c.c         ****           retCode = I2C_CODE_ERROR;
+ 634:i2c.c         ****           break;
+ 635:i2c.c         ****         }
+ 636:i2c.c         ****       }
+ 637:i2c.c         ****     }
+ 638:i2c.c         ****   }
+ 639:i2c.c         **** 
+ 640:i2c.c         ****   /*--- Generate Stop condition ---*/
+ 641:i2c.c         ****   i2cStop();
+ 720              		.loc 1 641 0
+ 721 02e4 FFF7FEFF 		bl	i2cStop
+ 722 02e8 2006     		lsl	r0, r4, #24
+ 723 02ea 0016     		asr	r0, r0, #24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 25
+
+
+ 642:i2c.c         **** 
+ 643:i2c.c         ****   return retCode;
+ 644:i2c.c         **** }
+ 724              		.loc 1 644 0
+ 725              		@ sp needed for prologue
+ 726              	.LVL70:
+ 727              	.LVL71:
+ 728              	.LVL72:
+ 729              	.LVL73:
+ 730 02ec F0BC     		pop	{r4, r5, r6, r7}
+ 731 02ee 02BC     		pop	{r1}
+ 732 02f0 0847     		bx	r1
+ 733              	.L144:
+ 734 02f2 0000     		.align	2
+ 735              	.L143:
+ 736 02f4 00C001E0 		.word	-536756224
+ 737 02f8 04C001E0 		.word	-536756220
+ 738              	.LFE13:
+ 739              		.size	i2cRead, .-i2cRead
+ 740              		.align	2
+ 741              		.global	i2cWrite
+ 742              		.code 16
+ 743              		.thumb_func
+ 744              		.type	i2cWrite, %function
+ 745              	i2cWrite:
+ 746              	.LFB9:
+ 747              		.loc 1 366 0
+ 748 02fc F0B5     		push	{r4, r5, r6, r7, lr}
+ 749              	.LCFI3:
+ 750              	.LVL74:
+ 751              		.loc 1 366 0
+ 752 02fe 0006     		lsl	r0, r0, #24
+ 753              	.LVL75:
+ 754 0300 1204     		lsl	r2, r2, #16
+ 755              	.LVL76:
+ 756 0302 0E1C     		mov	r6, r1
+ 757 0304 050E     		lsr	r5, r0, #24
+ 758              	.LVL77:
+ 759 0306 170C     		lsr	r7, r2, #16
+ 760              	.LVL78:
+ 761              		.loc 1 372 0
+ 762 0308 FFF7FEFF 		bl	i2cStart
+ 763              	.LVL79:
+ 764 030c 0006     		lsl	r0, r0, #24
+ 765              		.loc 1 375 0
+ 766 030e 040E     		lsr	r4, r0, #24
+ 767              	.LVL80:
+ 768 0310 0016     		asr	r0, r0, #24
+ 769 0312 0128     		cmp	r0, #1
+ 770 0314 2BD1     		bne	.L186
+ 771              	.L149:
+ 772              		.loc 1 381 0
+ 773 0316 281C     		mov	r0, r5
+ 774 0318 FFF7FEFF 		bl	i2cPutChar
+ 775 031c 0006     		lsl	r0, r0, #24
+ 776 031e 040E     		lsr	r4, r0, #24
+ 777              		.loc 1 379 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 26
+
+
+ 778 0320 2306     		lsl	r3, r4, #24
+ 779 0322 FC2C     		cmp	r4, #252
+ 780 0324 F7D0     		beq	.L149
+ 781              		.loc 1 385 0
+ 782 0326 1A1C     		mov	r2, r3
+ 783 0328 1B16     		asr	r3, r3, #24
+ 784 032a 012B     		cmp	r3, #1
+ 785 032c 1FD1     		bne	.L186
+ 786 032e 140E     		lsr	r4, r2, #24
+ 787 0330 0025     		mov	r5, #0
+ 788              	.LVL81:
+ 789 0332 1AE0     		b	.L152
+ 790              	.LVL82:
+ 791              	.L185:
+ 792              	.LBB22:
+ 793              	.LBB23:
+ 794              		.loc 1 80 0
+ 795 0334 184B     		ldr	r3, .L187
+ 796              	.LVL83:
+ 797 0336 1B78     		ldrb	r3, [r3]
+ 798 0338 1A07     		lsl	r2, r3, #28
+ 799 033a FBD5     		bpl	.L185
+ 800              		.loc 1 86 0
+ 801 033c 174B     		ldr	r3, .L187+4
+ 802 033e 1B78     		ldrb	r3, [r3]
+ 803              	.LVL84:
+ 804              	.LBE23:
+ 805              	.LBE22:
+ 806              		.loc 1 401 0
+ 807 0340 182B     		cmp	r3, #24
+ 808 0342 01D0     		beq	.L159
+ 809 0344 282B     		cmp	r3, #40
+ 810 0346 08D1     		bne	.L157
+ 811              	.L159:
+ 812              		.loc 1 409 0
+ 813 0348 3078     		ldrb	r0, [r6]
+ 814 034a FFF7FEFF 		bl	i2cPutChar
+ 815              	.LVL85:
+ 816 034e 0006     		lsl	r0, r0, #24
+ 817 0350 040E     		lsr	r4, r0, #24
+ 818              		.loc 1 407 0
+ 819 0352 FC2C     		cmp	r4, #252
+ 820 0354 F8D0     		beq	.L159
+ 821              		.loc 1 411 0
+ 822 0356 0136     		add	r6, r6, #1
+ 823 0358 04E0     		b	.L161
+ 824              	.LVL86:
+ 825              	.L157:
+ 826              		.loc 1 417 0
+ 827 035a F82B     		cmp	r3, #248
+ 828 035c EAD0     		beq	.L185
+ 829              		.loc 1 420 0
+ 830 035e 3B06     		lsl	r3, r7, #24
+ 831              	.LVL87:
+ 832 0360 1D0E     		lsr	r5, r3, #24
+ 833 0362 FF24     		mov	r4, #255
+ 834              	.L161:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 27
+
+
+ 835              		.loc 1 388 0
+ 836 0364 6B1C     		add	r3, r5, #1
+ 837 0366 1B06     		lsl	r3, r3, #24
+ 838 0368 1D0E     		lsr	r5, r3, #24
+ 839              	.L152:
+ 840 036a BD42     		cmp	r5, r7
+ 841 036c E2D3     		bcc	.L185
+ 842              	.LVL88:
+ 843              	.L186:
+ 844              	.LBB24:
+ 845              	.LBB25:
+ 846              		.loc 1 80 0
+ 847 036e 0A4B     		ldr	r3, .L187
+ 848              	.LVL89:
+ 849 0370 1B78     		ldrb	r3, [r3]
+ 850 0372 1A07     		lsl	r2, r3, #28
+ 851 0374 FBD5     		bpl	.L186
+ 852              		.loc 1 86 0
+ 853 0376 094B     		ldr	r3, .L187+4
+ 854 0378 1B78     		ldrb	r3, [r3]
+ 855              	.LVL90:
+ 856              	.LBE25:
+ 857              	.LBE24:
+ 858              		.loc 1 438 0
+ 859 037a 182B     		cmp	r3, #24
+ 860 037c 04D0     		beq	.L164
+ 861 037e 282B     		cmp	r3, #40
+ 862 0380 02D0     		beq	.L164
+ 863              		.loc 1 445 0
+ 864 0382 F82B     		cmp	r3, #248
+ 865 0384 F3D0     		beq	.L186
+ 866 0386 FF24     		mov	r4, #255
+ 867              	.L164:
+ 868              		.loc 1 455 0
+ 869 0388 FFF7FEFF 		bl	i2cStop
+ 870              	.LVL91:
+ 871 038c 2006     		lsl	r0, r4, #24
+ 872 038e 0016     		asr	r0, r0, #24
+ 873              		.loc 1 458 0
+ 874              		@ sp needed for prologue
+ 875              	.LVL92:
+ 876              	.LVL93:
+ 877              	.LVL94:
+ 878              	.LVL95:
+ 879 0390 F0BC     		pop	{r4, r5, r6, r7}
+ 880 0392 02BC     		pop	{r1}
+ 881 0394 0847     		bx	r1
+ 882              	.L188:
+ 883 0396 0000     		.align	2
+ 884              	.L187:
+ 885 0398 00C001E0 		.word	-536756224
+ 886 039c 04C001E0 		.word	-536756220
+ 887              	.LFE9:
+ 888              		.size	i2cWrite, .-i2cWrite
+ 889              		.section	.debug_frame,"",%progbits
+ 890              	.Lframe0:
+ 891 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 28
+
+
+ 892              	.LSCIE0:
+ 893 0004 FFFFFFFF 		.4byte	0xffffffff
+ 894 0008 01       		.byte	0x1
+ 895 0009 00       		.ascii	"\000"
+ 896 000a 01       		.uleb128 0x1
+ 897 000b 7C       		.sleb128 -4
+ 898 000c 0E       		.byte	0xe
+ 899 000d 0C       		.byte	0xc
+ 900 000e 0D       		.uleb128 0xd
+ 901 000f 00       		.uleb128 0x0
+ 902              		.align	2
+ 903              	.LECIE0:
+ 904              	.LSFDE0:
+ 905 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
+ 906              	.LASFDE0:
+ 907 0014 00000000 		.4byte	.Lframe0
+ 908 0018 00000000 		.4byte	.LFB2
+ 909 001c 18000000 		.4byte	.LFE2-.LFB2
+ 910              		.align	2
+ 911              	.LEFDE0:
+ 912              	.LSFDE2:
+ 913 0020 0C000000 		.4byte	.LEFDE2-.LASFDE2
+ 914              	.LASFDE2:
+ 915 0024 00000000 		.4byte	.Lframe0
+ 916 0028 18000000 		.4byte	.LFB3
+ 917 002c 4C000000 		.4byte	.LFE3-.LFB3
+ 918              		.align	2
+ 919              	.LEFDE2:
+ 920              	.LSFDE4:
+ 921 0030 0C000000 		.4byte	.LEFDE4-.LASFDE4
+ 922              	.LASFDE4:
+ 923 0034 00000000 		.4byte	.Lframe0
+ 924 0038 64000000 		.4byte	.LFB4
+ 925 003c 4C000000 		.4byte	.LFE4-.LFB4
+ 926              		.align	2
+ 927              	.LEFDE4:
+ 928              	.LSFDE6:
+ 929 0040 0C000000 		.4byte	.LEFDE6-.LASFDE6
+ 930              	.LASFDE6:
+ 931 0044 00000000 		.4byte	.Lframe0
+ 932 0048 B0000000 		.4byte	.LFB6
+ 933 004c 28000000 		.4byte	.LFE6-.LFB6
+ 934              		.align	2
+ 935              	.LEFDE6:
+ 936              	.LSFDE8:
+ 937 0050 0C000000 		.4byte	.LEFDE8-.LASFDE8
+ 938              	.LASFDE8:
+ 939 0054 00000000 		.4byte	.Lframe0
+ 940 0058 D8000000 		.4byte	.LFB7
+ 941 005c 2C000000 		.4byte	.LFE7-.LFB7
+ 942              		.align	2
+ 943              	.LEFDE8:
+ 944              	.LSFDE10:
+ 945 0060 0C000000 		.4byte	.LEFDE10-.LASFDE10
+ 946              	.LASFDE10:
+ 947 0064 00000000 		.4byte	.Lframe0
+ 948 0068 04010000 		.4byte	.LFB8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 29
+
+
+ 949 006c 58000000 		.4byte	.LFE8-.LFB8
+ 950              		.align	2
+ 951              	.LEFDE10:
+ 952              	.LSFDE12:
+ 953 0070 0C000000 		.4byte	.LEFDE12-.LASFDE12
+ 954              	.LASFDE12:
+ 955 0074 00000000 		.4byte	.Lframe0
+ 956 0078 5C010000 		.4byte	.LFB10
+ 957 007c 2C000000 		.4byte	.LFE10-.LFB10
+ 958              		.align	2
+ 959              	.LEFDE12:
+ 960              	.LSFDE14:
+ 961 0080 14000000 		.4byte	.LEFDE14-.LASFDE14
+ 962              	.LASFDE14:
+ 963 0084 00000000 		.4byte	.Lframe0
+ 964 0088 88010000 		.4byte	.LFB11
+ 965 008c 2E000000 		.4byte	.LFE11-.LFB11
+ 966 0090 42       		.byte	0x4
+ 967              		.4byte	.LCFI0-.LFB11
+ 968 0091 0E       		.byte	0xe
+ 969 0092 08       		.uleb128 0x8
+ 970 0093 84       		.byte	0x84
+ 971 0094 02       		.uleb128 0x2
+ 972 0095 8E       		.byte	0x8e
+ 973 0096 01       		.uleb128 0x1
+ 974 0097 00       		.align	2
+ 975              	.LEFDE14:
+ 976              	.LSFDE16:
+ 977 0098 1C000000 		.4byte	.LEFDE16-.LASFDE16
+ 978              	.LASFDE16:
+ 979 009c 00000000 		.4byte	.Lframe0
+ 980 00a0 B8010000 		.4byte	.LFB12
+ 981 00a4 58000000 		.4byte	.LFE12-.LFB12
+ 982 00a8 42       		.byte	0x4
+ 983              		.4byte	.LCFI1-.LFB12
+ 984 00a9 0E       		.byte	0xe
+ 985 00aa 14       		.uleb128 0x14
+ 986 00ab 84       		.byte	0x84
+ 987 00ac 05       		.uleb128 0x5
+ 988 00ad 85       		.byte	0x85
+ 989 00ae 04       		.uleb128 0x4
+ 990 00af 86       		.byte	0x86
+ 991 00b0 03       		.uleb128 0x3
+ 992 00b1 87       		.byte	0x87
+ 993 00b2 02       		.uleb128 0x2
+ 994 00b3 8E       		.byte	0x8e
+ 995 00b4 01       		.uleb128 0x1
+ 996 00b5 000000   		.align	2
+ 997              	.LEFDE16:
+ 998              	.LSFDE18:
+ 999 00b8 0C000000 		.4byte	.LEFDE18-.LASFDE18
+ 1000              	.LASFDE18:
+ 1001 00bc 00000000 		.4byte	.Lframe0
+ 1002 00c0 10020000 		.4byte	.LFB5
+ 1003 00c4 4C000000 		.4byte	.LFE5-.LFB5
+ 1004              		.align	2
+ 1005              	.LEFDE18:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 30
+
+
+ 1006              	.LSFDE20:
+ 1007 00c8 1C000000 		.4byte	.LEFDE20-.LASFDE20
+ 1008              	.LASFDE20:
+ 1009 00cc 00000000 		.4byte	.Lframe0
+ 1010 00d0 5C020000 		.4byte	.LFB13
+ 1011 00d4 A0000000 		.4byte	.LFE13-.LFB13
+ 1012 00d8 42       		.byte	0x4
+ 1013              		.4byte	.LCFI2-.LFB13
+ 1014 00d9 0E       		.byte	0xe
+ 1015 00da 14       		.uleb128 0x14
+ 1016 00db 84       		.byte	0x84
+ 1017 00dc 05       		.uleb128 0x5
+ 1018 00dd 85       		.byte	0x85
+ 1019 00de 04       		.uleb128 0x4
+ 1020 00df 86       		.byte	0x86
+ 1021 00e0 03       		.uleb128 0x3
+ 1022 00e1 87       		.byte	0x87
+ 1023 00e2 02       		.uleb128 0x2
+ 1024 00e3 8E       		.byte	0x8e
+ 1025 00e4 01       		.uleb128 0x1
+ 1026 00e5 000000   		.align	2
+ 1027              	.LEFDE20:
+ 1028              	.LSFDE22:
+ 1029 00e8 1C000000 		.4byte	.LEFDE22-.LASFDE22
+ 1030              	.LASFDE22:
+ 1031 00ec 00000000 		.4byte	.Lframe0
+ 1032 00f0 FC020000 		.4byte	.LFB9
+ 1033 00f4 A4000000 		.4byte	.LFE9-.LFB9
+ 1034 00f8 42       		.byte	0x4
+ 1035              		.4byte	.LCFI3-.LFB9
+ 1036 00f9 0E       		.byte	0xe
+ 1037 00fa 14       		.uleb128 0x14
+ 1038 00fb 84       		.byte	0x84
+ 1039 00fc 05       		.uleb128 0x5
+ 1040 00fd 85       		.byte	0x85
+ 1041 00fe 04       		.uleb128 0x4
+ 1042 00ff 86       		.byte	0x86
+ 1043 0100 03       		.uleb128 0x3
+ 1044 0101 87       		.byte	0x87
+ 1045 0102 02       		.uleb128 0x2
+ 1046 0103 8E       		.byte	0x8e
+ 1047 0104 01       		.uleb128 0x1
+ 1048 0105 000000   		.align	2
+ 1049              	.LEFDE22:
+ 1050              		.file 2 "../pre_emptive_os/api/general.h"
+ 1051              		.text
+ 1052              	.Letext0:
+ 1053              		.section	.debug_loc,"",%progbits
+ 1054              	.Ldebug_loc0:
+ 1055              	.LLST3:
+ 1056 0000 80000000 		.4byte	.LVL0-.Ltext0
+ 1057 0004 92000000 		.4byte	.LVL3-.Ltext0
+ 1058 0008 0100     		.2byte	0x1
+ 1059 000a 53       		.byte	0x53
+ 1060 000b 94000000 		.4byte	.LVL4-.Ltext0
+ 1061 000f 98000000 		.4byte	.LVL6-.Ltext0
+ 1062 0013 0100     		.2byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 31
+
+
+ 1063 0015 53       		.byte	0x53
+ 1064 0016 00000000 		.4byte	0x0
+ 1065 001a 00000000 		.4byte	0x0
+ 1066              	.LLST4:
+ 1067 001e 8E000000 		.4byte	.LVL1-.Ltext0
+ 1068 0022 90000000 		.4byte	.LVL2-.Ltext0
+ 1069 0026 0100     		.2byte	0x1
+ 1070 0028 50       		.byte	0x50
+ 1071 0029 96000000 		.4byte	.LVL5-.Ltext0
+ 1072 002d 9A000000 		.4byte	.LVL7-.Ltext0
+ 1073 0031 0100     		.2byte	0x1
+ 1074 0033 50       		.byte	0x50
+ 1075 0034 00000000 		.4byte	0x0
+ 1076 0038 00000000 		.4byte	0x0
+ 1077              	.LLST7:
+ 1078 003c D8000000 		.4byte	.LVL8-.Ltext0
+ 1079 0040 DE000000 		.4byte	.LVL9-.Ltext0
+ 1080 0044 0100     		.2byte	0x1
+ 1081 0046 50       		.byte	0x50
+ 1082 0047 E2000000 		.4byte	.LVL10-.Ltext0
+ 1083 004b E8000000 		.4byte	.LVL11-.Ltext0
+ 1084 004f 0100     		.2byte	0x1
+ 1085 0051 50       		.byte	0x50
+ 1086 0052 EA000000 		.4byte	.LVL12-.Ltext0
+ 1087 0056 F4000000 		.4byte	.LVL13-.Ltext0
+ 1088 005a 0100     		.2byte	0x1
+ 1089 005c 50       		.byte	0x50
+ 1090 005d 00000000 		.4byte	0x0
+ 1091 0061 00000000 		.4byte	0x0
+ 1092              	.LLST8:
+ 1093 0065 E8000000 		.4byte	.LVL11-.Ltext0
+ 1094 0069 EA000000 		.4byte	.LVL12-.Ltext0
+ 1095 006d 0100     		.2byte	0x1
+ 1096 006f 50       		.byte	0x50
+ 1097 0070 F4000000 		.4byte	.LVL13-.Ltext0
+ 1098 0074 F6000000 		.4byte	.LVL14-.Ltext0
+ 1099 0078 0100     		.2byte	0x1
+ 1100 007a 50       		.byte	0x50
+ 1101 007b 00000000 		.4byte	0x0
+ 1102 007f 00000000 		.4byte	0x0
+ 1103              	.LLST10:
+ 1104 0083 04010000 		.4byte	.LVL15-.Ltext0
+ 1105 0087 06010000 		.4byte	.LVL16-.Ltext0
+ 1106 008b 0100     		.2byte	0x1
+ 1107 008d 50       		.byte	0x50
+ 1108 008e 08010000 		.4byte	.LVL17-.Ltext0
+ 1109 0092 40010000 		.4byte	.LVL20-.Ltext0
+ 1110 0096 0100     		.2byte	0x1
+ 1111 0098 50       		.byte	0x50
+ 1112 0099 42010000 		.4byte	.LVL21-.Ltext0
+ 1113 009d 4A010000 		.4byte	.LVL22-.Ltext0
+ 1114 00a1 0100     		.2byte	0x1
+ 1115 00a3 50       		.byte	0x50
+ 1116 00a4 4A010000 		.4byte	.LVL22-.Ltext0
+ 1117 00a8 4A010000 		.4byte	.LVL23-.Ltext0
+ 1118 00ac 0100     		.2byte	0x1
+ 1119 00ae 50       		.byte	0x50
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 32
+
+
+ 1120 00af 00000000 		.4byte	0x0
+ 1121 00b3 00000000 		.4byte	0x0
+ 1122              	.LLST11:
+ 1123 00b7 04010000 		.4byte	.LVL15-.Ltext0
+ 1124 00bb 0E010000 		.4byte	.LVL18-.Ltext0
+ 1125 00bf 0100     		.2byte	0x1
+ 1126 00c1 51       		.byte	0x51
+ 1127 00c2 22010000 		.4byte	.LVL19-.Ltext0
+ 1128 00c6 5C010000 		.4byte	.LFE8-.Ltext0
+ 1129 00ca 0100     		.2byte	0x1
+ 1130 00cc 51       		.byte	0x51
+ 1131 00cd 00000000 		.4byte	0x0
+ 1132 00d1 00000000 		.4byte	0x0
+ 1133              	.LLST12:
+ 1134 00d5 40010000 		.4byte	.LVL20-.Ltext0
+ 1135 00d9 42010000 		.4byte	.LVL21-.Ltext0
+ 1136 00dd 0100     		.2byte	0x1
+ 1137 00df 50       		.byte	0x50
+ 1138 00e0 4A010000 		.4byte	.LVL22-.Ltext0
+ 1139 00e4 4C010000 		.4byte	.LVL24-.Ltext0
+ 1140 00e8 0100     		.2byte	0x1
+ 1141 00ea 50       		.byte	0x50
+ 1142 00eb 00000000 		.4byte	0x0
+ 1143 00ef 00000000 		.4byte	0x0
+ 1144              	.LLST14:
+ 1145 00f3 5C010000 		.4byte	.LVL25-.Ltext0
+ 1146 00f7 5E010000 		.4byte	.LVL26-.Ltext0
+ 1147 00fb 0100     		.2byte	0x1
+ 1148 00fd 53       		.byte	0x53
+ 1149 00fe 68010000 		.4byte	.LVL27-.Ltext0
+ 1150 0102 88010000 		.4byte	.LFE10-.Ltext0
+ 1151 0106 0100     		.2byte	0x1
+ 1152 0108 53       		.byte	0x53
+ 1153 0109 00000000 		.4byte	0x0
+ 1154 010d 00000000 		.4byte	0x0
+ 1155              	.LLST15:
+ 1156 0111 88010000 		.4byte	.LFB11-.Ltext0
+ 1157 0115 8A010000 		.4byte	.LCFI0-.Ltext0
+ 1158 0119 0100     		.2byte	0x1
+ 1159 011b 5D       		.byte	0x5d
+ 1160 011c 8A010000 		.4byte	.LCFI0-.Ltext0
+ 1161 0120 B6010000 		.4byte	.LFE11-.Ltext0
+ 1162 0124 0200     		.2byte	0x2
+ 1163 0126 7D       		.byte	0x7d
+ 1164 0127 08       		.sleb128 8
+ 1165 0128 00000000 		.4byte	0x0
+ 1166 012c 00000000 		.4byte	0x0
+ 1167              	.LLST16:
+ 1168 0130 8A010000 		.4byte	.LVL28-.Ltext0
+ 1169 0134 8C010000 		.4byte	.LVL29-.Ltext0
+ 1170 0138 0100     		.2byte	0x1
+ 1171 013a 50       		.byte	0x50
+ 1172 013b 00000000 		.4byte	0x0
+ 1173 013f 00000000 		.4byte	0x0
+ 1174              	.LLST17:
+ 1175 0143 98010000 		.4byte	.LVL30-.Ltext0
+ 1176 0147 A8010000 		.4byte	.LVL31-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 33
+
+
+ 1177 014b 0100     		.2byte	0x1
+ 1178 014d 50       		.byte	0x50
+ 1179 014e AC010000 		.4byte	.LVL32-.Ltext0
+ 1180 0152 AE010000 		.4byte	.LVL33-.Ltext0
+ 1181 0156 0100     		.2byte	0x1
+ 1182 0158 50       		.byte	0x50
+ 1183 0159 00000000 		.4byte	0x0
+ 1184 015d 00000000 		.4byte	0x0
+ 1185              	.LLST18:
+ 1186 0161 B8010000 		.4byte	.LFB12-.Ltext0
+ 1187 0165 BA010000 		.4byte	.LCFI1-.Ltext0
+ 1188 0169 0100     		.2byte	0x1
+ 1189 016b 5D       		.byte	0x5d
+ 1190 016c BA010000 		.4byte	.LCFI1-.Ltext0
+ 1191 0170 10020000 		.4byte	.LFE12-.Ltext0
+ 1192 0174 0200     		.2byte	0x2
+ 1193 0176 7D       		.byte	0x7d
+ 1194 0177 14       		.sleb128 20
+ 1195 0178 00000000 		.4byte	0x0
+ 1196 017c 00000000 		.4byte	0x0
+ 1197              	.LLST19:
+ 1198 0180 BA010000 		.4byte	.LVL34-.Ltext0
+ 1199 0184 BC010000 		.4byte	.LVL35-.Ltext0
+ 1200 0188 0100     		.2byte	0x1
+ 1201 018a 50       		.byte	0x50
+ 1202 018b C2010000 		.4byte	.LVL37-.Ltext0
+ 1203 018f E4010000 		.4byte	.LVL41-.Ltext0
+ 1204 0193 0100     		.2byte	0x1
+ 1205 0195 54       		.byte	0x54
+ 1206 0196 02020000 		.4byte	.LVL42-.Ltext0
+ 1207 019a 0A020000 		.4byte	.LVL43-.Ltext0
+ 1208 019e 0100     		.2byte	0x1
+ 1209 01a0 54       		.byte	0x54
+ 1210 01a1 00000000 		.4byte	0x0
+ 1211 01a5 00000000 		.4byte	0x0
+ 1212              	.LLST20:
+ 1213 01a9 BA010000 		.4byte	.LVL34-.Ltext0
+ 1214 01ad C8010000 		.4byte	.LVL39-.Ltext0
+ 1215 01b1 0100     		.2byte	0x1
+ 1216 01b3 51       		.byte	0x51
+ 1217 01b4 C8010000 		.4byte	.LVL39-.Ltext0
+ 1218 01b8 0A020000 		.4byte	.LVL46-.Ltext0
+ 1219 01bc 0100     		.2byte	0x1
+ 1220 01be 57       		.byte	0x57
+ 1221 01bf 00000000 		.4byte	0x0
+ 1222 01c3 00000000 		.4byte	0x0
+ 1223              	.LLST21:
+ 1224 01c7 BA010000 		.4byte	.LVL34-.Ltext0
+ 1225 01cb BE010000 		.4byte	.LVL36-.Ltext0
+ 1226 01cf 0100     		.2byte	0x1
+ 1227 01d1 52       		.byte	0x52
+ 1228 01d2 C4010000 		.4byte	.LVL38-.Ltext0
+ 1229 01d6 0A020000 		.4byte	.LVL45-.Ltext0
+ 1230 01da 0100     		.2byte	0x1
+ 1231 01dc 56       		.byte	0x56
+ 1232 01dd 00000000 		.4byte	0x0
+ 1233 01e1 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 34
+
+
+ 1234              	.LLST22:
+ 1235 01e5 CC010000 		.4byte	.LVL40-.Ltext0
+ 1236 01e9 0A020000 		.4byte	.LVL44-.Ltext0
+ 1237 01ed 0100     		.2byte	0x1
+ 1238 01ef 55       		.byte	0x55
+ 1239 01f0 00000000 		.4byte	0x0
+ 1240 01f4 00000000 		.4byte	0x0
+ 1241              	.LLST24:
+ 1242 01f8 20020000 		.4byte	.LVL47-.Ltext0
+ 1243 01fc 22020000 		.4byte	.LVL48-.Ltext0
+ 1244 0200 0100     		.2byte	0x1
+ 1245 0202 53       		.byte	0x53
+ 1246 0203 32020000 		.4byte	.LVL49-.Ltext0
+ 1247 0207 46020000 		.4byte	.LVL53-.Ltext0
+ 1248 020b 0100     		.2byte	0x1
+ 1249 020d 53       		.byte	0x53
+ 1250 020e 00000000 		.4byte	0x0
+ 1251 0212 00000000 		.4byte	0x0
+ 1252              	.LLST25:
+ 1253 0216 40020000 		.4byte	.LVL50-.Ltext0
+ 1254 021a 42020000 		.4byte	.LVL51-.Ltext0
+ 1255 021e 0100     		.2byte	0x1
+ 1256 0220 50       		.byte	0x50
+ 1257 0221 44020000 		.4byte	.LVL52-.Ltext0
+ 1258 0225 48020000 		.4byte	.LVL54-.Ltext0
+ 1259 0229 0100     		.2byte	0x1
+ 1260 022b 50       		.byte	0x50
+ 1261 022c 00000000 		.4byte	0x0
+ 1262 0230 00000000 		.4byte	0x0
+ 1263              	.LLST26:
+ 1264 0234 5C020000 		.4byte	.LFB13-.Ltext0
+ 1265 0238 5E020000 		.4byte	.LCFI2-.Ltext0
+ 1266 023c 0100     		.2byte	0x1
+ 1267 023e 5D       		.byte	0x5d
+ 1268 023f 5E020000 		.4byte	.LCFI2-.Ltext0
+ 1269 0243 FC020000 		.4byte	.LFE13-.Ltext0
+ 1270 0247 0200     		.2byte	0x2
+ 1271 0249 7D       		.byte	0x7d
+ 1272 024a 14       		.sleb128 20
+ 1273 024b 00000000 		.4byte	0x0
+ 1274 024f 00000000 		.4byte	0x0
+ 1275              	.LLST27:
+ 1276 0253 5E020000 		.4byte	.LVL55-.Ltext0
+ 1277 0257 60020000 		.4byte	.LVL56-.Ltext0
+ 1278 025b 0100     		.2byte	0x1
+ 1279 025d 50       		.byte	0x50
+ 1280 025e 66020000 		.4byte	.LVL58-.Ltext0
+ 1281 0262 92020000 		.4byte	.LVL62-.Ltext0
+ 1282 0266 0100     		.2byte	0x1
+ 1283 0268 56       		.byte	0x56
+ 1284 0269 E4020000 		.4byte	.LVL69-.Ltext0
+ 1285 026d EC020000 		.4byte	.LVL72-.Ltext0
+ 1286 0271 0100     		.2byte	0x1
+ 1287 0273 56       		.byte	0x56
+ 1288 0274 00000000 		.4byte	0x0
+ 1289 0278 00000000 		.4byte	0x0
+ 1290              	.LLST28:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 35
+
+
+ 1291 027c 5E020000 		.4byte	.LVL55-.Ltext0
+ 1292 0280 6C020000 		.4byte	.LVL60-.Ltext0
+ 1293 0284 0100     		.2byte	0x1
+ 1294 0286 51       		.byte	0x51
+ 1295 0287 6C020000 		.4byte	.LVL60-.Ltext0
+ 1296 028b EC020000 		.4byte	.LVL71-.Ltext0
+ 1297 028f 0100     		.2byte	0x1
+ 1298 0291 55       		.byte	0x55
+ 1299 0292 00000000 		.4byte	0x0
+ 1300 0296 00000000 		.4byte	0x0
+ 1301              	.LLST29:
+ 1302 029a 5E020000 		.4byte	.LVL55-.Ltext0
+ 1303 029e 62020000 		.4byte	.LVL57-.Ltext0
+ 1304 02a2 0100     		.2byte	0x1
+ 1305 02a4 52       		.byte	0x52
+ 1306 02a5 68020000 		.4byte	.LVL59-.Ltext0
+ 1307 02a9 EC020000 		.4byte	.LVL73-.Ltext0
+ 1308 02ad 0100     		.2byte	0x1
+ 1309 02af 57       		.byte	0x57
+ 1310 02b0 00000000 		.4byte	0x0
+ 1311 02b4 00000000 		.4byte	0x0
+ 1312              	.LLST30:
+ 1313 02b8 70020000 		.4byte	.LVL61-.Ltext0
+ 1314 02bc EC020000 		.4byte	.LVL70-.Ltext0
+ 1315 02c0 0100     		.2byte	0x1
+ 1316 02c2 54       		.byte	0x54
+ 1317 02c3 00000000 		.4byte	0x0
+ 1318 02c7 00000000 		.4byte	0x0
+ 1319              	.LLST31:
+ 1320 02cb 94020000 		.4byte	.LVL63-.Ltext0
+ 1321 02cf 96020000 		.4byte	.LVL64-.Ltext0
+ 1322 02d3 0100     		.2byte	0x1
+ 1323 02d5 53       		.byte	0x53
+ 1324 02d6 A0020000 		.4byte	.LVL65-.Ltext0
+ 1325 02da BC020000 		.4byte	.LVL66-.Ltext0
+ 1326 02de 0100     		.2byte	0x1
+ 1327 02e0 53       		.byte	0x53
+ 1328 02e1 D0020000 		.4byte	.LVL67-.Ltext0
+ 1329 02e5 D6020000 		.4byte	.LVL68-.Ltext0
+ 1330 02e9 0100     		.2byte	0x1
+ 1331 02eb 53       		.byte	0x53
+ 1332 02ec 00000000 		.4byte	0x0
+ 1333 02f0 00000000 		.4byte	0x0
+ 1334              	.LLST32:
+ 1335 02f4 92020000 		.4byte	.LVL62-.Ltext0
+ 1336 02f8 EC020000 		.4byte	.LVL72-.Ltext0
+ 1337 02fc 0100     		.2byte	0x1
+ 1338 02fe 56       		.byte	0x56
+ 1339 02ff 00000000 		.4byte	0x0
+ 1340 0303 00000000 		.4byte	0x0
+ 1341              	.LLST33:
+ 1342 0307 FC020000 		.4byte	.LFB9-.Ltext0
+ 1343 030b FE020000 		.4byte	.LCFI3-.Ltext0
+ 1344 030f 0100     		.2byte	0x1
+ 1345 0311 5D       		.byte	0x5d
+ 1346 0312 FE020000 		.4byte	.LCFI3-.Ltext0
+ 1347 0316 A0030000 		.4byte	.LFE9-.Ltext0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 36
+
+
+ 1348 031a 0200     		.2byte	0x2
+ 1349 031c 7D       		.byte	0x7d
+ 1350 031d 14       		.sleb128 20
+ 1351 031e 00000000 		.4byte	0x0
+ 1352 0322 00000000 		.4byte	0x0
+ 1353              	.LLST34:
+ 1354 0326 FE020000 		.4byte	.LVL74-.Ltext0
+ 1355 032a 00030000 		.4byte	.LVL75-.Ltext0
+ 1356 032e 0100     		.2byte	0x1
+ 1357 0330 50       		.byte	0x50
+ 1358 0331 06030000 		.4byte	.LVL77-.Ltext0
+ 1359 0335 32030000 		.4byte	.LVL81-.Ltext0
+ 1360 0339 0100     		.2byte	0x1
+ 1361 033b 55       		.byte	0x55
+ 1362 033c 6E030000 		.4byte	.LVL88-.Ltext0
+ 1363 0340 90030000 		.4byte	.LVL93-.Ltext0
+ 1364 0344 0100     		.2byte	0x1
+ 1365 0346 55       		.byte	0x55
+ 1366 0347 00000000 		.4byte	0x0
+ 1367 034b 00000000 		.4byte	0x0
+ 1368              	.LLST35:
+ 1369 034f FE020000 		.4byte	.LVL74-.Ltext0
+ 1370 0353 0C030000 		.4byte	.LVL79-.Ltext0
+ 1371 0357 0100     		.2byte	0x1
+ 1372 0359 51       		.byte	0x51
+ 1373 035a 0C030000 		.4byte	.LVL79-.Ltext0
+ 1374 035e 90030000 		.4byte	.LVL94-.Ltext0
+ 1375 0362 0100     		.2byte	0x1
+ 1376 0364 56       		.byte	0x56
+ 1377 0365 00000000 		.4byte	0x0
+ 1378 0369 00000000 		.4byte	0x0
+ 1379              	.LLST36:
+ 1380 036d FE020000 		.4byte	.LVL74-.Ltext0
+ 1381 0371 02030000 		.4byte	.LVL76-.Ltext0
+ 1382 0375 0100     		.2byte	0x1
+ 1383 0377 52       		.byte	0x52
+ 1384 0378 08030000 		.4byte	.LVL78-.Ltext0
+ 1385 037c 90030000 		.4byte	.LVL95-.Ltext0
+ 1386 0380 0100     		.2byte	0x1
+ 1387 0382 57       		.byte	0x57
+ 1388 0383 00000000 		.4byte	0x0
+ 1389 0387 00000000 		.4byte	0x0
+ 1390              	.LLST37:
+ 1391 038b 10030000 		.4byte	.LVL80-.Ltext0
+ 1392 038f 90030000 		.4byte	.LVL92-.Ltext0
+ 1393 0393 0100     		.2byte	0x1
+ 1394 0395 54       		.byte	0x54
+ 1395 0396 00000000 		.4byte	0x0
+ 1396 039a 00000000 		.4byte	0x0
+ 1397              	.LLST38:
+ 1398 039e 34030000 		.4byte	.LVL82-.Ltext0
+ 1399 03a2 36030000 		.4byte	.LVL83-.Ltext0
+ 1400 03a6 0100     		.2byte	0x1
+ 1401 03a8 53       		.byte	0x53
+ 1402 03a9 40030000 		.4byte	.LVL84-.Ltext0
+ 1403 03ad 4E030000 		.4byte	.LVL85-.Ltext0
+ 1404 03b1 0100     		.2byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 37
+
+
+ 1405 03b3 53       		.byte	0x53
+ 1406 03b4 5A030000 		.4byte	.LVL86-.Ltext0
+ 1407 03b8 60030000 		.4byte	.LVL87-.Ltext0
+ 1408 03bc 0100     		.2byte	0x1
+ 1409 03be 53       		.byte	0x53
+ 1410 03bf 6E030000 		.4byte	.LVL88-.Ltext0
+ 1411 03c3 70030000 		.4byte	.LVL89-.Ltext0
+ 1412 03c7 0100     		.2byte	0x1
+ 1413 03c9 53       		.byte	0x53
+ 1414 03ca 7A030000 		.4byte	.LVL90-.Ltext0
+ 1415 03ce 8C030000 		.4byte	.LVL91-.Ltext0
+ 1416 03d2 0100     		.2byte	0x1
+ 1417 03d4 53       		.byte	0x53
+ 1418 03d5 00000000 		.4byte	0x0
+ 1419 03d9 00000000 		.4byte	0x0
+ 1420              	.LLST39:
+ 1421 03dd 32030000 		.4byte	.LVL81-.Ltext0
+ 1422 03e1 90030000 		.4byte	.LVL93-.Ltext0
+ 1423 03e5 0100     		.2byte	0x1
+ 1424 03e7 55       		.byte	0x55
+ 1425 03e8 00000000 		.4byte	0x0
+ 1426 03ec 00000000 		.4byte	0x0
+ 1427              		.section	.debug_info
+ 1428 0000 8A040000 		.4byte	0x48a
+ 1429 0004 0200     		.2byte	0x2
+ 1430 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1431 000a 04       		.byte	0x4
+ 1432 000b 01       		.uleb128 0x1
+ 1433 000c 00000000 		.4byte	.Ldebug_line0
+ 1434 0010 A0030000 		.4byte	.Letext0
+ 1435 0014 00000000 		.4byte	.Ltext0
+ 1436 0018 0F010000 		.4byte	.LASF29
+ 1437 001c 01       		.byte	0x1
+ 1438 001d 95000000 		.4byte	.LASF30
+ 1439 0021 B3000000 		.4byte	.LASF31
+ 1440 0025 02       		.uleb128 0x2
+ 1441 0026 74553800 		.ascii	"tU8\000"
+ 1442 002a 02       		.byte	0x2
+ 1443 002b 49       		.byte	0x49
+ 1444 002c 30000000 		.4byte	0x30
+ 1445 0030 03       		.uleb128 0x3
+ 1446 0031 5D000000 		.4byte	.LASF1
+ 1447 0035 01       		.byte	0x1
+ 1448 0036 08       		.byte	0x8
+ 1449 0037 04       		.uleb128 0x4
+ 1450 0038 1B010000 		.4byte	.LASF0
+ 1451 003c 02       		.byte	0x2
+ 1452 003d 4A       		.byte	0x4a
+ 1453 003e 42000000 		.4byte	0x42
+ 1454 0042 03       		.uleb128 0x3
+ 1455 0043 0E000000 		.4byte	.LASF2
+ 1456 0047 02       		.byte	0x2
+ 1457 0048 07       		.byte	0x7
+ 1458 0049 03       		.uleb128 0x3
+ 1459 004a A6000000 		.4byte	.LASF3
+ 1460 004e 04       		.byte	0x4
+ 1461 004f 07       		.byte	0x7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 38
+
+
+ 1462 0050 02       		.uleb128 0x2
+ 1463 0051 74533800 		.ascii	"tS8\000"
+ 1464 0055 02       		.byte	0x2
+ 1465 0056 4C       		.byte	0x4c
+ 1466 0057 5B000000 		.4byte	0x5b
+ 1467 005b 03       		.uleb128 0x3
+ 1468 005c 6D010000 		.4byte	.LASF4
+ 1469 0060 01       		.byte	0x1
+ 1470 0061 06       		.byte	0x6
+ 1471 0062 03       		.uleb128 0x3
+ 1472 0063 45010000 		.4byte	.LASF5
+ 1473 0067 02       		.byte	0x2
+ 1474 0068 05       		.byte	0x5
+ 1475 0069 05       		.uleb128 0x5
+ 1476 006a 696E7400 		.ascii	"int\000"
+ 1477 006e 04       		.byte	0x4
+ 1478 006f 05       		.byte	0x5
+ 1479 0070 04       		.uleb128 0x4
+ 1480 0071 7C000000 		.4byte	.LASF6
+ 1481 0075 02       		.byte	0x2
+ 1482 0076 58       		.byte	0x58
+ 1483 0077 30000000 		.4byte	0x30
+ 1484 007b 03       		.uleb128 0x3
+ 1485 007c 20010000 		.4byte	.LASF7
+ 1486 0080 08       		.byte	0x8
+ 1487 0081 05       		.byte	0x5
+ 1488 0082 03       		.uleb128 0x3
+ 1489 0083 46000000 		.4byte	.LASF8
+ 1490 0087 08       		.byte	0x8
+ 1491 0088 07       		.byte	0x7
+ 1492 0089 06       		.uleb128 0x6
+ 1493 008a A7000000 		.4byte	0xa7
+ 1494 008e 01       		.byte	0x1
+ 1495 008f F3000000 		.4byte	.LASF9
+ 1496 0093 01       		.byte	0x1
+ 1497 0094 4C       		.byte	0x4c
+ 1498 0095 01       		.byte	0x1
+ 1499 0096 25000000 		.4byte	0x25
+ 1500 009a 01       		.byte	0x1
+ 1501 009b 07       		.uleb128 0x7
+ 1502 009c 2A000000 		.4byte	.LASF11
+ 1503 00a0 01       		.byte	0x1
+ 1504 00a1 4D       		.byte	0x4d
+ 1505 00a2 25000000 		.4byte	0x25
+ 1506 00a6 00       		.byte	0x0
+ 1507 00a7 08       		.uleb128 0x8
+ 1508 00a8 C2000000 		.4byte	0xc2
+ 1509 00ac 89000000 		.4byte	0x89
+ 1510 00b0 00000000 		.4byte	.LFB2
+ 1511 00b4 18000000 		.4byte	.LFE2
+ 1512 00b8 01       		.byte	0x1
+ 1513 00b9 5D       		.byte	0x5d
+ 1514 00ba 09       		.uleb128 0x9
+ 1515 00bb 9B000000 		.4byte	0x9b
+ 1516 00bf 01       		.byte	0x1
+ 1517 00c0 50       		.byte	0x50
+ 1518 00c1 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 39
+
+
+ 1519 00c2 0A       		.uleb128 0xa
+ 1520 00c3 01       		.byte	0x1
+ 1521 00c4 82000000 		.4byte	.LASF13
+ 1522 00c8 01       		.byte	0x1
+ 1523 00c9 65       		.byte	0x65
+ 1524 00ca 01       		.byte	0x1
+ 1525 00cb 18000000 		.4byte	.LFB3
+ 1526 00cf 64000000 		.4byte	.LFE3
+ 1527 00d3 01       		.byte	0x1
+ 1528 00d4 5D       		.byte	0x5d
+ 1529 00d5 0B       		.uleb128 0xb
+ 1530 00d6 2E010000 		.4byte	0x12e
+ 1531 00da 01       		.byte	0x1
+ 1532 00db 00000000 		.4byte	.LASF10
+ 1533 00df 01       		.byte	0x1
+ 1534 00e0 81       		.byte	0x81
+ 1535 00e1 01       		.byte	0x1
+ 1536 00e2 50000000 		.4byte	0x50
+ 1537 00e6 64000000 		.4byte	.LFB4
+ 1538 00ea B0000000 		.4byte	.LFE4
+ 1539 00ee 01       		.byte	0x1
+ 1540 00ef 5D       		.byte	0x5d
+ 1541 00f0 0C       		.uleb128 0xc
+ 1542 00f1 2A000000 		.4byte	.LASF11
+ 1543 00f5 01       		.byte	0x1
+ 1544 00f6 82       		.byte	0x82
+ 1545 00f7 25000000 		.4byte	0x25
+ 1546 00fb 00000000 		.4byte	.LLST3
+ 1547 00ff 0C       		.uleb128 0xc
+ 1548 0100 07010000 		.4byte	.LASF12
+ 1549 0104 01       		.byte	0x1
+ 1550 0105 83       		.byte	0x83
+ 1551 0106 50000000 		.4byte	0x50
+ 1552 010a 1E000000 		.4byte	.LLST4
+ 1553 010e 0D       		.uleb128 0xd
+ 1554 010f 89000000 		.4byte	0x89
+ 1555 0113 72000000 		.4byte	.LBB6
+ 1556 0117 80000000 		.4byte	.LBE6
+ 1557 011b 01       		.byte	0x1
+ 1558 011c 8B       		.byte	0x8b
+ 1559 011d 0E       		.uleb128 0xe
+ 1560 011e 72000000 		.4byte	.LBB7
+ 1561 0122 80000000 		.4byte	.LBE7
+ 1562 0126 0F       		.uleb128 0xf
+ 1563 0127 9B000000 		.4byte	0x9b
+ 1564 012b 00       		.byte	0x0
+ 1565 012c 00       		.byte	0x0
+ 1566 012d 00       		.byte	0x0
+ 1567 012e 10       		.uleb128 0x10
+ 1568 012f 01       		.byte	0x1
+ 1569 0130 3D010000 		.4byte	.LASF14
+ 1570 0134 01       		.byte	0x1
+ 1571 0135 EE       		.byte	0xee
+ 1572 0136 01       		.byte	0x1
+ 1573 0137 50000000 		.4byte	0x50
+ 1574 013b B0000000 		.4byte	.LFB6
+ 1575 013f D8000000 		.4byte	.LFE6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 40
+
+
+ 1576 0143 01       		.byte	0x1
+ 1577 0144 5D       		.byte	0x5d
+ 1578 0145 11       		.uleb128 0x11
+ 1579 0146 82010000 		.4byte	0x182
+ 1580 014a 01       		.byte	0x1
+ 1581 014b 36000000 		.4byte	.LASF15
+ 1582 014f 01       		.byte	0x1
+ 1583 0150 0B01     		.2byte	0x10b
+ 1584 0152 01       		.byte	0x1
+ 1585 0153 50000000 		.4byte	0x50
+ 1586 0157 D8000000 		.4byte	.LFB7
+ 1587 015b 04010000 		.4byte	.LFE7
+ 1588 015f 01       		.byte	0x1
+ 1589 0160 5D       		.byte	0x5d
+ 1590 0161 12       		.uleb128 0x12
+ 1591 0162 41000000 		.4byte	.LASF17
+ 1592 0166 01       		.byte	0x1
+ 1593 0167 0A01     		.2byte	0x10a
+ 1594 0169 25000000 		.4byte	0x25
+ 1595 016d 3C000000 		.4byte	.LLST7
+ 1596 0171 13       		.uleb128 0x13
+ 1597 0172 07010000 		.4byte	.LASF12
+ 1598 0176 01       		.byte	0x1
+ 1599 0177 0C01     		.2byte	0x10c
+ 1600 0179 50000000 		.4byte	0x50
+ 1601 017d 65000000 		.4byte	.LLST8
+ 1602 0181 00       		.byte	0x0
+ 1603 0182 11       		.uleb128 0x11
+ 1604 0183 CF010000 		.4byte	0x1cf
+ 1605 0187 01       		.byte	0x1
+ 1606 0188 9B000000 		.4byte	.LASF16
+ 1607 018c 01       		.byte	0x1
+ 1608 018d 3401     		.2byte	0x134
+ 1609 018f 01       		.byte	0x1
+ 1610 0190 50000000 		.4byte	0x50
+ 1611 0194 04010000 		.4byte	.LFB8
+ 1612 0198 5C010000 		.4byte	.LFE8
+ 1613 019c 01       		.byte	0x1
+ 1614 019d 5D       		.byte	0x5d
+ 1615 019e 12       		.uleb128 0x12
+ 1616 019f 02010000 		.4byte	.LASF18
+ 1617 01a3 01       		.byte	0x1
+ 1618 01a4 3201     		.2byte	0x132
+ 1619 01a6 25000000 		.4byte	0x25
+ 1620 01aa 83000000 		.4byte	.LLST10
+ 1621 01ae 12       		.uleb128 0x12
+ 1622 01af 4F010000 		.4byte	.LASF19
+ 1623 01b3 01       		.byte	0x1
+ 1624 01b4 3301     		.2byte	0x133
+ 1625 01b6 CF010000 		.4byte	0x1cf
+ 1626 01ba B7000000 		.4byte	.LLST11
+ 1627 01be 13       		.uleb128 0x13
+ 1628 01bf 07010000 		.4byte	.LASF12
+ 1629 01c3 01       		.byte	0x1
+ 1630 01c4 3501     		.2byte	0x135
+ 1631 01c6 50000000 		.4byte	0x50
+ 1632 01ca D5000000 		.4byte	.LLST12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 41
+
+
+ 1633 01ce 00       		.byte	0x0
+ 1634 01cf 14       		.uleb128 0x14
+ 1635 01d0 04       		.byte	0x4
+ 1636 01d1 25000000 		.4byte	0x25
+ 1637 01d5 11       		.uleb128 0x11
+ 1638 01d6 22020000 		.4byte	0x222
+ 1639 01da 01       		.byte	0x1
+ 1640 01db 5D010000 		.4byte	.LASF20
+ 1641 01df 01       		.byte	0x1
+ 1642 01e0 CE01     		.2byte	0x1ce
+ 1643 01e2 01       		.byte	0x1
+ 1644 01e3 50000000 		.4byte	0x50
+ 1645 01e7 5C010000 		.4byte	.LFB10
+ 1646 01eb 88010000 		.4byte	.LFE10
+ 1647 01ef 01       		.byte	0x1
+ 1648 01f0 5D       		.byte	0x5d
+ 1649 01f1 13       		.uleb128 0x13
+ 1650 01f2 2A000000 		.4byte	.LASF11
+ 1651 01f6 01       		.byte	0x1
+ 1652 01f7 CF01     		.2byte	0x1cf
+ 1653 01f9 25000000 		.4byte	0x25
+ 1654 01fd F3000000 		.4byte	.LLST14
+ 1655 0201 15       		.uleb128 0x15
+ 1656 0202 89000000 		.4byte	0x89
+ 1657 0206 5C010000 		.4byte	.LBB8
+ 1658 020a 68010000 		.4byte	.LBE8
+ 1659 020e 01       		.byte	0x1
+ 1660 020f D501     		.2byte	0x1d5
+ 1661 0211 0E       		.uleb128 0xe
+ 1662 0212 5C010000 		.4byte	.LBB9
+ 1663 0216 68010000 		.4byte	.LBE9
+ 1664 021a 0F       		.uleb128 0xf
+ 1665 021b 9B000000 		.4byte	0x9b
+ 1666 021f 00       		.byte	0x0
+ 1667 0220 00       		.byte	0x0
+ 1668 0221 00       		.byte	0x0
+ 1669 0222 16       		.uleb128 0x16
+ 1670 0223 61020000 		.4byte	0x261
+ 1671 0227 01       		.byte	0x1
+ 1672 0228 6B000000 		.4byte	.LASF21
+ 1673 022c 01       		.byte	0x1
+ 1674 022d ED01     		.2byte	0x1ed
+ 1675 022f 01       		.byte	0x1
+ 1676 0230 50000000 		.4byte	0x50
+ 1677 0234 88010000 		.4byte	.LFB11
+ 1678 0238 B6010000 		.4byte	.LFE11
+ 1679 023c 11010000 		.4byte	.LLST15
+ 1680 0240 12       		.uleb128 0x12
+ 1681 0241 41000000 		.4byte	.LASF17
+ 1682 0245 01       		.byte	0x1
+ 1683 0246 EC01     		.2byte	0x1ec
+ 1684 0248 25000000 		.4byte	0x25
+ 1685 024c 30010000 		.4byte	.LLST16
+ 1686 0250 13       		.uleb128 0x13
+ 1687 0251 07010000 		.4byte	.LASF12
+ 1688 0255 01       		.byte	0x1
+ 1689 0256 EE01     		.2byte	0x1ee
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 42
+
+
+ 1690 0258 50000000 		.4byte	0x50
+ 1691 025c 43010000 		.4byte	.LLST17
+ 1692 0260 00       		.byte	0x0
+ 1693 0261 16       		.uleb128 0x16
+ 1694 0262 CA020000 		.4byte	0x2ca
+ 1695 0266 01       		.byte	0x1
+ 1696 0267 8A000000 		.4byte	.LASF22
+ 1697 026b 01       		.byte	0x1
+ 1698 026c 0002     		.2byte	0x200
+ 1699 026e 01       		.byte	0x1
+ 1700 026f 50000000 		.4byte	0x50
+ 1701 0273 B8010000 		.4byte	.LFB12
+ 1702 0277 10020000 		.4byte	.LFE12
+ 1703 027b 61010000 		.4byte	.LLST18
+ 1704 027f 12       		.uleb128 0x12
+ 1705 0280 31000000 		.4byte	.LASF23
+ 1706 0284 01       		.byte	0x1
+ 1707 0285 FD01     		.2byte	0x1fd
+ 1708 0287 25000000 		.4byte	0x25
+ 1709 028b 80010000 		.4byte	.LLST19
+ 1710 028f 12       		.uleb128 0x12
+ 1711 0290 4F010000 		.4byte	.LASF19
+ 1712 0294 01       		.byte	0x1
+ 1713 0295 FE01     		.2byte	0x1fe
+ 1714 0297 CF010000 		.4byte	0x1cf
+ 1715 029b A9010000 		.4byte	.LLST20
+ 1716 029f 17       		.uleb128 0x17
+ 1717 02a0 6C656E00 		.ascii	"len\000"
+ 1718 02a4 01       		.byte	0x1
+ 1719 02a5 FF01     		.2byte	0x1ff
+ 1720 02a7 37000000 		.4byte	0x37
+ 1721 02ab C7010000 		.4byte	.LLST21
+ 1722 02af 13       		.uleb128 0x13
+ 1723 02b0 07010000 		.4byte	.LASF12
+ 1724 02b4 01       		.byte	0x1
+ 1725 02b5 0102     		.2byte	0x201
+ 1726 02b7 50000000 		.4byte	0x50
+ 1727 02bb E5010000 		.4byte	.LLST22
+ 1728 02bf 18       		.uleb128 0x18
+ 1729 02c0 6900     		.ascii	"i\000"
+ 1730 02c2 01       		.byte	0x1
+ 1731 02c3 0202     		.2byte	0x202
+ 1732 02c5 25000000 		.4byte	0x25
+ 1733 02c9 00       		.byte	0x0
+ 1734 02ca 0B       		.uleb128 0xb
+ 1735 02cb 23030000 		.4byte	0x323
+ 1736 02cf 01       		.byte	0x1
+ 1737 02d0 2E010000 		.4byte	.LASF24
+ 1738 02d4 01       		.byte	0x1
+ 1739 02d5 B7       		.byte	0xb7
+ 1740 02d6 01       		.byte	0x1
+ 1741 02d7 50000000 		.4byte	0x50
+ 1742 02db 10020000 		.4byte	.LFB5
+ 1743 02df 5C020000 		.4byte	.LFE5
+ 1744 02e3 01       		.byte	0x1
+ 1745 02e4 5D       		.byte	0x5d
+ 1746 02e5 0C       		.uleb128 0xc
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 43
+
+
+ 1747 02e6 2A000000 		.4byte	.LASF11
+ 1748 02ea 01       		.byte	0x1
+ 1749 02eb B8       		.byte	0xb8
+ 1750 02ec 25000000 		.4byte	0x25
+ 1751 02f0 F8010000 		.4byte	.LLST24
+ 1752 02f4 0C       		.uleb128 0xc
+ 1753 02f5 07010000 		.4byte	.LASF12
+ 1754 02f9 01       		.byte	0x1
+ 1755 02fa B9       		.byte	0xb9
+ 1756 02fb 50000000 		.4byte	0x50
+ 1757 02ff 16020000 		.4byte	.LLST25
+ 1758 0303 0D       		.uleb128 0xd
+ 1759 0304 89000000 		.4byte	0x89
+ 1760 0308 24020000 		.4byte	.LBB12
+ 1761 030c 32020000 		.4byte	.LBE12
+ 1762 0310 01       		.byte	0x1
+ 1763 0311 C2       		.byte	0xc2
+ 1764 0312 0E       		.uleb128 0xe
+ 1765 0313 24020000 		.4byte	.LBB13
+ 1766 0317 32020000 		.4byte	.LBE13
+ 1767 031b 0F       		.uleb128 0xf
+ 1768 031c 9B000000 		.4byte	0x9b
+ 1769 0320 00       		.byte	0x0
+ 1770 0321 00       		.byte	0x0
+ 1771 0322 00       		.byte	0x0
+ 1772 0323 16       		.uleb128 0x16
+ 1773 0324 C0030000 		.4byte	0x3c0
+ 1774 0328 01       		.byte	0x1
+ 1775 0329 55010000 		.4byte	.LASF25
+ 1776 032d 01       		.byte	0x1
+ 1777 032e 3802     		.2byte	0x238
+ 1778 0330 01       		.byte	0x1
+ 1779 0331 50000000 		.4byte	0x50
+ 1780 0335 5C020000 		.4byte	.LFB13
+ 1781 0339 FC020000 		.4byte	.LFE13
+ 1782 033d 34020000 		.4byte	.LLST26
+ 1783 0341 12       		.uleb128 0x12
+ 1784 0342 31000000 		.4byte	.LASF23
+ 1785 0346 01       		.byte	0x1
+ 1786 0347 3502     		.2byte	0x235
+ 1787 0349 25000000 		.4byte	0x25
+ 1788 034d 53020000 		.4byte	.LLST27
+ 1789 0351 12       		.uleb128 0x12
+ 1790 0352 09000000 		.4byte	.LASF26
+ 1791 0356 01       		.byte	0x1
+ 1792 0357 3602     		.2byte	0x236
+ 1793 0359 CF010000 		.4byte	0x1cf
+ 1794 035d 7C020000 		.4byte	.LLST28
+ 1795 0361 17       		.uleb128 0x17
+ 1796 0362 6C656E00 		.ascii	"len\000"
+ 1797 0366 01       		.byte	0x1
+ 1798 0367 3702     		.2byte	0x237
+ 1799 0369 37000000 		.4byte	0x37
+ 1800 036d 9A020000 		.4byte	.LLST29
+ 1801 0371 13       		.uleb128 0x13
+ 1802 0372 07010000 		.4byte	.LASF12
+ 1803 0376 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 44
+
+
+ 1804 0377 3902     		.2byte	0x239
+ 1805 0379 50000000 		.4byte	0x50
+ 1806 037d B8020000 		.4byte	.LLST30
+ 1807 0381 13       		.uleb128 0x13
+ 1808 0382 2A000000 		.4byte	.LASF11
+ 1809 0386 01       		.byte	0x1
+ 1810 0387 3A02     		.2byte	0x23a
+ 1811 0389 25000000 		.4byte	0x25
+ 1812 038d CB020000 		.4byte	.LLST31
+ 1813 0391 19       		.uleb128 0x19
+ 1814 0392 6900     		.ascii	"i\000"
+ 1815 0394 01       		.byte	0x1
+ 1816 0395 3B02     		.2byte	0x23b
+ 1817 0397 25000000 		.4byte	0x25
+ 1818 039b F4020000 		.4byte	.LLST32
+ 1819 039f 15       		.uleb128 0x15
+ 1820 03a0 89000000 		.4byte	0x89
+ 1821 03a4 94020000 		.4byte	.LBB16
+ 1822 03a8 A0020000 		.4byte	.LBE16
+ 1823 03ac 01       		.byte	0x1
+ 1824 03ad 5402     		.2byte	0x254
+ 1825 03af 0E       		.uleb128 0xe
+ 1826 03b0 94020000 		.4byte	.LBB17
+ 1827 03b4 A0020000 		.4byte	.LBE17
+ 1828 03b8 0F       		.uleb128 0xf
+ 1829 03b9 9B000000 		.4byte	0x9b
+ 1830 03bd 00       		.byte	0x0
+ 1831 03be 00       		.byte	0x0
+ 1832 03bf 00       		.byte	0x0
+ 1833 03c0 16       		.uleb128 0x16
+ 1834 03c1 81040000 		.4byte	0x481
+ 1835 03c5 01       		.byte	0x1
+ 1836 03c6 21000000 		.4byte	.LASF27
+ 1837 03ca 01       		.byte	0x1
+ 1838 03cb 6E01     		.2byte	0x16e
+ 1839 03cd 01       		.byte	0x1
+ 1840 03ce 50000000 		.4byte	0x50
+ 1841 03d2 FC020000 		.4byte	.LFB9
+ 1842 03d6 A0030000 		.4byte	.LFE9
+ 1843 03da 07030000 		.4byte	.LLST33
+ 1844 03de 12       		.uleb128 0x12
+ 1845 03df 31000000 		.4byte	.LASF23
+ 1846 03e3 01       		.byte	0x1
+ 1847 03e4 6B01     		.2byte	0x16b
+ 1848 03e6 25000000 		.4byte	0x25
+ 1849 03ea 26030000 		.4byte	.LLST34
+ 1850 03ee 12       		.uleb128 0x12
+ 1851 03ef 4F010000 		.4byte	.LASF19
+ 1852 03f3 01       		.byte	0x1
+ 1853 03f4 6C01     		.2byte	0x16c
+ 1854 03f6 CF010000 		.4byte	0x1cf
+ 1855 03fa 4F030000 		.4byte	.LLST35
+ 1856 03fe 17       		.uleb128 0x17
+ 1857 03ff 6C656E00 		.ascii	"len\000"
+ 1858 0403 01       		.byte	0x1
+ 1859 0404 6D01     		.2byte	0x16d
+ 1860 0406 37000000 		.4byte	0x37
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 45
+
+
+ 1861 040a 6D030000 		.4byte	.LLST36
+ 1862 040e 13       		.uleb128 0x13
+ 1863 040f 07010000 		.4byte	.LASF12
+ 1864 0413 01       		.byte	0x1
+ 1865 0414 6F01     		.2byte	0x16f
+ 1866 0416 50000000 		.4byte	0x50
+ 1867 041a 8B030000 		.4byte	.LLST37
+ 1868 041e 13       		.uleb128 0x13
+ 1869 041f 2A000000 		.4byte	.LASF11
+ 1870 0423 01       		.byte	0x1
+ 1871 0424 7001     		.2byte	0x170
+ 1872 0426 25000000 		.4byte	0x25
+ 1873 042a 9E030000 		.4byte	.LLST38
+ 1874 042e 19       		.uleb128 0x19
+ 1875 042f 6900     		.ascii	"i\000"
+ 1876 0431 01       		.byte	0x1
+ 1877 0432 7101     		.2byte	0x171
+ 1878 0434 25000000 		.4byte	0x25
+ 1879 0438 DD030000 		.4byte	.LLST39
+ 1880 043c 1A       		.uleb128 0x1a
+ 1881 043d 60040000 		.4byte	0x460
+ 1882 0441 89000000 		.4byte	0x89
+ 1883 0445 34030000 		.4byte	.LBB22
+ 1884 0449 40030000 		.4byte	.LBE22
+ 1885 044d 01       		.byte	0x1
+ 1886 044e 8B01     		.2byte	0x18b
+ 1887 0450 0E       		.uleb128 0xe
+ 1888 0451 34030000 		.4byte	.LBB23
+ 1889 0455 40030000 		.4byte	.LBE23
+ 1890 0459 0F       		.uleb128 0xf
+ 1891 045a 9B000000 		.4byte	0x9b
+ 1892 045e 00       		.byte	0x0
+ 1893 045f 00       		.byte	0x0
+ 1894 0460 15       		.uleb128 0x15
+ 1895 0461 89000000 		.4byte	0x89
+ 1896 0465 6E030000 		.4byte	.LBB24
+ 1897 0469 7A030000 		.4byte	.LBE24
+ 1898 046d 01       		.byte	0x1
+ 1899 046e B001     		.2byte	0x1b0
+ 1900 0470 0E       		.uleb128 0xe
+ 1901 0471 6E030000 		.4byte	.LBB25
+ 1902 0475 7A030000 		.4byte	.LBE25
+ 1903 0479 0F       		.uleb128 0xf
+ 1904 047a 9B000000 		.4byte	0x9b
+ 1905 047e 00       		.byte	0x0
+ 1906 047f 00       		.byte	0x0
+ 1907 0480 00       		.byte	0x0
+ 1908 0481 1B       		.uleb128 0x1b
+ 1909 0482 79010000 		.4byte	.LASF28
+ 1910 0486 02       		.byte	0x2
+ 1911 0487 67       		.byte	0x67
+ 1912 0488 70000000 		.4byte	0x70
+ 1913 048c 00       		.byte	0x0
+ 1914 048d 00       		.byte	0x0
+ 1915              		.section	.debug_abbrev
+ 1916 0000 01       		.uleb128 0x1
+ 1917 0001 11       		.uleb128 0x11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 46
+
+
+ 1918 0002 01       		.byte	0x1
+ 1919 0003 10       		.uleb128 0x10
+ 1920 0004 06       		.uleb128 0x6
+ 1921 0005 12       		.uleb128 0x12
+ 1922 0006 01       		.uleb128 0x1
+ 1923 0007 11       		.uleb128 0x11
+ 1924 0008 01       		.uleb128 0x1
+ 1925 0009 25       		.uleb128 0x25
+ 1926 000a 0E       		.uleb128 0xe
+ 1927 000b 13       		.uleb128 0x13
+ 1928 000c 0B       		.uleb128 0xb
+ 1929 000d 03       		.uleb128 0x3
+ 1930 000e 0E       		.uleb128 0xe
+ 1931 000f 1B       		.uleb128 0x1b
+ 1932 0010 0E       		.uleb128 0xe
+ 1933 0011 00       		.byte	0x0
+ 1934 0012 00       		.byte	0x0
+ 1935 0013 02       		.uleb128 0x2
+ 1936 0014 16       		.uleb128 0x16
+ 1937 0015 00       		.byte	0x0
+ 1938 0016 03       		.uleb128 0x3
+ 1939 0017 08       		.uleb128 0x8
+ 1940 0018 3A       		.uleb128 0x3a
+ 1941 0019 0B       		.uleb128 0xb
+ 1942 001a 3B       		.uleb128 0x3b
+ 1943 001b 0B       		.uleb128 0xb
+ 1944 001c 49       		.uleb128 0x49
+ 1945 001d 13       		.uleb128 0x13
+ 1946 001e 00       		.byte	0x0
+ 1947 001f 00       		.byte	0x0
+ 1948 0020 03       		.uleb128 0x3
+ 1949 0021 24       		.uleb128 0x24
+ 1950 0022 00       		.byte	0x0
+ 1951 0023 03       		.uleb128 0x3
+ 1952 0024 0E       		.uleb128 0xe
+ 1953 0025 0B       		.uleb128 0xb
+ 1954 0026 0B       		.uleb128 0xb
+ 1955 0027 3E       		.uleb128 0x3e
+ 1956 0028 0B       		.uleb128 0xb
+ 1957 0029 00       		.byte	0x0
+ 1958 002a 00       		.byte	0x0
+ 1959 002b 04       		.uleb128 0x4
+ 1960 002c 16       		.uleb128 0x16
+ 1961 002d 00       		.byte	0x0
+ 1962 002e 03       		.uleb128 0x3
+ 1963 002f 0E       		.uleb128 0xe
+ 1964 0030 3A       		.uleb128 0x3a
+ 1965 0031 0B       		.uleb128 0xb
+ 1966 0032 3B       		.uleb128 0x3b
+ 1967 0033 0B       		.uleb128 0xb
+ 1968 0034 49       		.uleb128 0x49
+ 1969 0035 13       		.uleb128 0x13
+ 1970 0036 00       		.byte	0x0
+ 1971 0037 00       		.byte	0x0
+ 1972 0038 05       		.uleb128 0x5
+ 1973 0039 24       		.uleb128 0x24
+ 1974 003a 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 47
+
+
+ 1975 003b 03       		.uleb128 0x3
+ 1976 003c 08       		.uleb128 0x8
+ 1977 003d 0B       		.uleb128 0xb
+ 1978 003e 0B       		.uleb128 0xb
+ 1979 003f 3E       		.uleb128 0x3e
+ 1980 0040 0B       		.uleb128 0xb
+ 1981 0041 00       		.byte	0x0
+ 1982 0042 00       		.byte	0x0
+ 1983 0043 06       		.uleb128 0x6
+ 1984 0044 2E       		.uleb128 0x2e
+ 1985 0045 01       		.byte	0x1
+ 1986 0046 01       		.uleb128 0x1
+ 1987 0047 13       		.uleb128 0x13
+ 1988 0048 3F       		.uleb128 0x3f
+ 1989 0049 0C       		.uleb128 0xc
+ 1990 004a 03       		.uleb128 0x3
+ 1991 004b 0E       		.uleb128 0xe
+ 1992 004c 3A       		.uleb128 0x3a
+ 1993 004d 0B       		.uleb128 0xb
+ 1994 004e 3B       		.uleb128 0x3b
+ 1995 004f 0B       		.uleb128 0xb
+ 1996 0050 27       		.uleb128 0x27
+ 1997 0051 0C       		.uleb128 0xc
+ 1998 0052 49       		.uleb128 0x49
+ 1999 0053 13       		.uleb128 0x13
+ 2000 0054 20       		.uleb128 0x20
+ 2001 0055 0B       		.uleb128 0xb
+ 2002 0056 00       		.byte	0x0
+ 2003 0057 00       		.byte	0x0
+ 2004 0058 07       		.uleb128 0x7
+ 2005 0059 34       		.uleb128 0x34
+ 2006 005a 00       		.byte	0x0
+ 2007 005b 03       		.uleb128 0x3
+ 2008 005c 0E       		.uleb128 0xe
+ 2009 005d 3A       		.uleb128 0x3a
+ 2010 005e 0B       		.uleb128 0xb
+ 2011 005f 3B       		.uleb128 0x3b
+ 2012 0060 0B       		.uleb128 0xb
+ 2013 0061 49       		.uleb128 0x49
+ 2014 0062 13       		.uleb128 0x13
+ 2015 0063 00       		.byte	0x0
+ 2016 0064 00       		.byte	0x0
+ 2017 0065 08       		.uleb128 0x8
+ 2018 0066 2E       		.uleb128 0x2e
+ 2019 0067 01       		.byte	0x1
+ 2020 0068 01       		.uleb128 0x1
+ 2021 0069 13       		.uleb128 0x13
+ 2022 006a 31       		.uleb128 0x31
+ 2023 006b 13       		.uleb128 0x13
+ 2024 006c 11       		.uleb128 0x11
+ 2025 006d 01       		.uleb128 0x1
+ 2026 006e 12       		.uleb128 0x12
+ 2027 006f 01       		.uleb128 0x1
+ 2028 0070 40       		.uleb128 0x40
+ 2029 0071 0A       		.uleb128 0xa
+ 2030 0072 00       		.byte	0x0
+ 2031 0073 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 48
+
+
+ 2032 0074 09       		.uleb128 0x9
+ 2033 0075 34       		.uleb128 0x34
+ 2034 0076 00       		.byte	0x0
+ 2035 0077 31       		.uleb128 0x31
+ 2036 0078 13       		.uleb128 0x13
+ 2037 0079 02       		.uleb128 0x2
+ 2038 007a 0A       		.uleb128 0xa
+ 2039 007b 00       		.byte	0x0
+ 2040 007c 00       		.byte	0x0
+ 2041 007d 0A       		.uleb128 0xa
+ 2042 007e 2E       		.uleb128 0x2e
+ 2043 007f 00       		.byte	0x0
+ 2044 0080 3F       		.uleb128 0x3f
+ 2045 0081 0C       		.uleb128 0xc
+ 2046 0082 03       		.uleb128 0x3
+ 2047 0083 0E       		.uleb128 0xe
+ 2048 0084 3A       		.uleb128 0x3a
+ 2049 0085 0B       		.uleb128 0xb
+ 2050 0086 3B       		.uleb128 0x3b
+ 2051 0087 0B       		.uleb128 0xb
+ 2052 0088 27       		.uleb128 0x27
+ 2053 0089 0C       		.uleb128 0xc
+ 2054 008a 11       		.uleb128 0x11
+ 2055 008b 01       		.uleb128 0x1
+ 2056 008c 12       		.uleb128 0x12
+ 2057 008d 01       		.uleb128 0x1
+ 2058 008e 40       		.uleb128 0x40
+ 2059 008f 0A       		.uleb128 0xa
+ 2060 0090 00       		.byte	0x0
+ 2061 0091 00       		.byte	0x0
+ 2062 0092 0B       		.uleb128 0xb
+ 2063 0093 2E       		.uleb128 0x2e
+ 2064 0094 01       		.byte	0x1
+ 2065 0095 01       		.uleb128 0x1
+ 2066 0096 13       		.uleb128 0x13
+ 2067 0097 3F       		.uleb128 0x3f
+ 2068 0098 0C       		.uleb128 0xc
+ 2069 0099 03       		.uleb128 0x3
+ 2070 009a 0E       		.uleb128 0xe
+ 2071 009b 3A       		.uleb128 0x3a
+ 2072 009c 0B       		.uleb128 0xb
+ 2073 009d 3B       		.uleb128 0x3b
+ 2074 009e 0B       		.uleb128 0xb
+ 2075 009f 27       		.uleb128 0x27
+ 2076 00a0 0C       		.uleb128 0xc
+ 2077 00a1 49       		.uleb128 0x49
+ 2078 00a2 13       		.uleb128 0x13
+ 2079 00a3 11       		.uleb128 0x11
+ 2080 00a4 01       		.uleb128 0x1
+ 2081 00a5 12       		.uleb128 0x12
+ 2082 00a6 01       		.uleb128 0x1
+ 2083 00a7 40       		.uleb128 0x40
+ 2084 00a8 0A       		.uleb128 0xa
+ 2085 00a9 00       		.byte	0x0
+ 2086 00aa 00       		.byte	0x0
+ 2087 00ab 0C       		.uleb128 0xc
+ 2088 00ac 34       		.uleb128 0x34
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 49
+
+
+ 2089 00ad 00       		.byte	0x0
+ 2090 00ae 03       		.uleb128 0x3
+ 2091 00af 0E       		.uleb128 0xe
+ 2092 00b0 3A       		.uleb128 0x3a
+ 2093 00b1 0B       		.uleb128 0xb
+ 2094 00b2 3B       		.uleb128 0x3b
+ 2095 00b3 0B       		.uleb128 0xb
+ 2096 00b4 49       		.uleb128 0x49
+ 2097 00b5 13       		.uleb128 0x13
+ 2098 00b6 02       		.uleb128 0x2
+ 2099 00b7 06       		.uleb128 0x6
+ 2100 00b8 00       		.byte	0x0
+ 2101 00b9 00       		.byte	0x0
+ 2102 00ba 0D       		.uleb128 0xd
+ 2103 00bb 1D       		.uleb128 0x1d
+ 2104 00bc 01       		.byte	0x1
+ 2105 00bd 31       		.uleb128 0x31
+ 2106 00be 13       		.uleb128 0x13
+ 2107 00bf 11       		.uleb128 0x11
+ 2108 00c0 01       		.uleb128 0x1
+ 2109 00c1 12       		.uleb128 0x12
+ 2110 00c2 01       		.uleb128 0x1
+ 2111 00c3 58       		.uleb128 0x58
+ 2112 00c4 0B       		.uleb128 0xb
+ 2113 00c5 59       		.uleb128 0x59
+ 2114 00c6 0B       		.uleb128 0xb
+ 2115 00c7 00       		.byte	0x0
+ 2116 00c8 00       		.byte	0x0
+ 2117 00c9 0E       		.uleb128 0xe
+ 2118 00ca 0B       		.uleb128 0xb
+ 2119 00cb 01       		.byte	0x1
+ 2120 00cc 11       		.uleb128 0x11
+ 2121 00cd 01       		.uleb128 0x1
+ 2122 00ce 12       		.uleb128 0x12
+ 2123 00cf 01       		.uleb128 0x1
+ 2124 00d0 00       		.byte	0x0
+ 2125 00d1 00       		.byte	0x0
+ 2126 00d2 0F       		.uleb128 0xf
+ 2127 00d3 34       		.uleb128 0x34
+ 2128 00d4 00       		.byte	0x0
+ 2129 00d5 31       		.uleb128 0x31
+ 2130 00d6 13       		.uleb128 0x13
+ 2131 00d7 00       		.byte	0x0
+ 2132 00d8 00       		.byte	0x0
+ 2133 00d9 10       		.uleb128 0x10
+ 2134 00da 2E       		.uleb128 0x2e
+ 2135 00db 00       		.byte	0x0
+ 2136 00dc 3F       		.uleb128 0x3f
+ 2137 00dd 0C       		.uleb128 0xc
+ 2138 00de 03       		.uleb128 0x3
+ 2139 00df 0E       		.uleb128 0xe
+ 2140 00e0 3A       		.uleb128 0x3a
+ 2141 00e1 0B       		.uleb128 0xb
+ 2142 00e2 3B       		.uleb128 0x3b
+ 2143 00e3 0B       		.uleb128 0xb
+ 2144 00e4 27       		.uleb128 0x27
+ 2145 00e5 0C       		.uleb128 0xc
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 50
+
+
+ 2146 00e6 49       		.uleb128 0x49
+ 2147 00e7 13       		.uleb128 0x13
+ 2148 00e8 11       		.uleb128 0x11
+ 2149 00e9 01       		.uleb128 0x1
+ 2150 00ea 12       		.uleb128 0x12
+ 2151 00eb 01       		.uleb128 0x1
+ 2152 00ec 40       		.uleb128 0x40
+ 2153 00ed 0A       		.uleb128 0xa
+ 2154 00ee 00       		.byte	0x0
+ 2155 00ef 00       		.byte	0x0
+ 2156 00f0 11       		.uleb128 0x11
+ 2157 00f1 2E       		.uleb128 0x2e
+ 2158 00f2 01       		.byte	0x1
+ 2159 00f3 01       		.uleb128 0x1
+ 2160 00f4 13       		.uleb128 0x13
+ 2161 00f5 3F       		.uleb128 0x3f
+ 2162 00f6 0C       		.uleb128 0xc
+ 2163 00f7 03       		.uleb128 0x3
+ 2164 00f8 0E       		.uleb128 0xe
+ 2165 00f9 3A       		.uleb128 0x3a
+ 2166 00fa 0B       		.uleb128 0xb
+ 2167 00fb 3B       		.uleb128 0x3b
+ 2168 00fc 05       		.uleb128 0x5
+ 2169 00fd 27       		.uleb128 0x27
+ 2170 00fe 0C       		.uleb128 0xc
+ 2171 00ff 49       		.uleb128 0x49
+ 2172 0100 13       		.uleb128 0x13
+ 2173 0101 11       		.uleb128 0x11
+ 2174 0102 01       		.uleb128 0x1
+ 2175 0103 12       		.uleb128 0x12
+ 2176 0104 01       		.uleb128 0x1
+ 2177 0105 40       		.uleb128 0x40
+ 2178 0106 0A       		.uleb128 0xa
+ 2179 0107 00       		.byte	0x0
+ 2180 0108 00       		.byte	0x0
+ 2181 0109 12       		.uleb128 0x12
+ 2182 010a 05       		.uleb128 0x5
+ 2183 010b 00       		.byte	0x0
+ 2184 010c 03       		.uleb128 0x3
+ 2185 010d 0E       		.uleb128 0xe
+ 2186 010e 3A       		.uleb128 0x3a
+ 2187 010f 0B       		.uleb128 0xb
+ 2188 0110 3B       		.uleb128 0x3b
+ 2189 0111 05       		.uleb128 0x5
+ 2190 0112 49       		.uleb128 0x49
+ 2191 0113 13       		.uleb128 0x13
+ 2192 0114 02       		.uleb128 0x2
+ 2193 0115 06       		.uleb128 0x6
+ 2194 0116 00       		.byte	0x0
+ 2195 0117 00       		.byte	0x0
+ 2196 0118 13       		.uleb128 0x13
+ 2197 0119 34       		.uleb128 0x34
+ 2198 011a 00       		.byte	0x0
+ 2199 011b 03       		.uleb128 0x3
+ 2200 011c 0E       		.uleb128 0xe
+ 2201 011d 3A       		.uleb128 0x3a
+ 2202 011e 0B       		.uleb128 0xb
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 51
+
+
+ 2203 011f 3B       		.uleb128 0x3b
+ 2204 0120 05       		.uleb128 0x5
+ 2205 0121 49       		.uleb128 0x49
+ 2206 0122 13       		.uleb128 0x13
+ 2207 0123 02       		.uleb128 0x2
+ 2208 0124 06       		.uleb128 0x6
+ 2209 0125 00       		.byte	0x0
+ 2210 0126 00       		.byte	0x0
+ 2211 0127 14       		.uleb128 0x14
+ 2212 0128 0F       		.uleb128 0xf
+ 2213 0129 00       		.byte	0x0
+ 2214 012a 0B       		.uleb128 0xb
+ 2215 012b 0B       		.uleb128 0xb
+ 2216 012c 49       		.uleb128 0x49
+ 2217 012d 13       		.uleb128 0x13
+ 2218 012e 00       		.byte	0x0
+ 2219 012f 00       		.byte	0x0
+ 2220 0130 15       		.uleb128 0x15
+ 2221 0131 1D       		.uleb128 0x1d
+ 2222 0132 01       		.byte	0x1
+ 2223 0133 31       		.uleb128 0x31
+ 2224 0134 13       		.uleb128 0x13
+ 2225 0135 11       		.uleb128 0x11
+ 2226 0136 01       		.uleb128 0x1
+ 2227 0137 12       		.uleb128 0x12
+ 2228 0138 01       		.uleb128 0x1
+ 2229 0139 58       		.uleb128 0x58
+ 2230 013a 0B       		.uleb128 0xb
+ 2231 013b 59       		.uleb128 0x59
+ 2232 013c 05       		.uleb128 0x5
+ 2233 013d 00       		.byte	0x0
+ 2234 013e 00       		.byte	0x0
+ 2235 013f 16       		.uleb128 0x16
+ 2236 0140 2E       		.uleb128 0x2e
+ 2237 0141 01       		.byte	0x1
+ 2238 0142 01       		.uleb128 0x1
+ 2239 0143 13       		.uleb128 0x13
+ 2240 0144 3F       		.uleb128 0x3f
+ 2241 0145 0C       		.uleb128 0xc
+ 2242 0146 03       		.uleb128 0x3
+ 2243 0147 0E       		.uleb128 0xe
+ 2244 0148 3A       		.uleb128 0x3a
+ 2245 0149 0B       		.uleb128 0xb
+ 2246 014a 3B       		.uleb128 0x3b
+ 2247 014b 05       		.uleb128 0x5
+ 2248 014c 27       		.uleb128 0x27
+ 2249 014d 0C       		.uleb128 0xc
+ 2250 014e 49       		.uleb128 0x49
+ 2251 014f 13       		.uleb128 0x13
+ 2252 0150 11       		.uleb128 0x11
+ 2253 0151 01       		.uleb128 0x1
+ 2254 0152 12       		.uleb128 0x12
+ 2255 0153 01       		.uleb128 0x1
+ 2256 0154 40       		.uleb128 0x40
+ 2257 0155 06       		.uleb128 0x6
+ 2258 0156 00       		.byte	0x0
+ 2259 0157 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 52
+
+
+ 2260 0158 17       		.uleb128 0x17
+ 2261 0159 05       		.uleb128 0x5
+ 2262 015a 00       		.byte	0x0
+ 2263 015b 03       		.uleb128 0x3
+ 2264 015c 08       		.uleb128 0x8
+ 2265 015d 3A       		.uleb128 0x3a
+ 2266 015e 0B       		.uleb128 0xb
+ 2267 015f 3B       		.uleb128 0x3b
+ 2268 0160 05       		.uleb128 0x5
+ 2269 0161 49       		.uleb128 0x49
+ 2270 0162 13       		.uleb128 0x13
+ 2271 0163 02       		.uleb128 0x2
+ 2272 0164 06       		.uleb128 0x6
+ 2273 0165 00       		.byte	0x0
+ 2274 0166 00       		.byte	0x0
+ 2275 0167 18       		.uleb128 0x18
+ 2276 0168 34       		.uleb128 0x34
+ 2277 0169 00       		.byte	0x0
+ 2278 016a 03       		.uleb128 0x3
+ 2279 016b 08       		.uleb128 0x8
+ 2280 016c 3A       		.uleb128 0x3a
+ 2281 016d 0B       		.uleb128 0xb
+ 2282 016e 3B       		.uleb128 0x3b
+ 2283 016f 05       		.uleb128 0x5
+ 2284 0170 49       		.uleb128 0x49
+ 2285 0171 13       		.uleb128 0x13
+ 2286 0172 00       		.byte	0x0
+ 2287 0173 00       		.byte	0x0
+ 2288 0174 19       		.uleb128 0x19
+ 2289 0175 34       		.uleb128 0x34
+ 2290 0176 00       		.byte	0x0
+ 2291 0177 03       		.uleb128 0x3
+ 2292 0178 08       		.uleb128 0x8
+ 2293 0179 3A       		.uleb128 0x3a
+ 2294 017a 0B       		.uleb128 0xb
+ 2295 017b 3B       		.uleb128 0x3b
+ 2296 017c 05       		.uleb128 0x5
+ 2297 017d 49       		.uleb128 0x49
+ 2298 017e 13       		.uleb128 0x13
+ 2299 017f 02       		.uleb128 0x2
+ 2300 0180 06       		.uleb128 0x6
+ 2301 0181 00       		.byte	0x0
+ 2302 0182 00       		.byte	0x0
+ 2303 0183 1A       		.uleb128 0x1a
+ 2304 0184 1D       		.uleb128 0x1d
+ 2305 0185 01       		.byte	0x1
+ 2306 0186 01       		.uleb128 0x1
+ 2307 0187 13       		.uleb128 0x13
+ 2308 0188 31       		.uleb128 0x31
+ 2309 0189 13       		.uleb128 0x13
+ 2310 018a 11       		.uleb128 0x11
+ 2311 018b 01       		.uleb128 0x1
+ 2312 018c 12       		.uleb128 0x12
+ 2313 018d 01       		.uleb128 0x1
+ 2314 018e 58       		.uleb128 0x58
+ 2315 018f 0B       		.uleb128 0xb
+ 2316 0190 59       		.uleb128 0x59
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 53
+
+
+ 2317 0191 05       		.uleb128 0x5
+ 2318 0192 00       		.byte	0x0
+ 2319 0193 00       		.byte	0x0
+ 2320 0194 1B       		.uleb128 0x1b
+ 2321 0195 34       		.uleb128 0x34
+ 2322 0196 00       		.byte	0x0
+ 2323 0197 03       		.uleb128 0x3
+ 2324 0198 0E       		.uleb128 0xe
+ 2325 0199 3A       		.uleb128 0x3a
+ 2326 019a 0B       		.uleb128 0xb
+ 2327 019b 3B       		.uleb128 0x3b
+ 2328 019c 0B       		.uleb128 0xb
+ 2329 019d 49       		.uleb128 0x49
+ 2330 019e 13       		.uleb128 0x13
+ 2331 019f 1C       		.uleb128 0x1c
+ 2332 01a0 0B       		.uleb128 0xb
+ 2333 01a1 00       		.byte	0x0
+ 2334 01a2 00       		.byte	0x0
+ 2335 01a3 00       		.byte	0x0
+ 2336              		.section	.debug_pubnames,"",%progbits
+ 2337 0000 C8000000 		.4byte	0xc8
+ 2338 0004 0200     		.2byte	0x2
+ 2339 0006 00000000 		.4byte	.Ldebug_info0
+ 2340 000a 8E040000 		.4byte	0x48e
+ 2341 000e A7000000 		.4byte	0xa7
+ 2342 0012 69326343 		.ascii	"i2cCheckStatus\000"
+ 2342      6865636B 
+ 2342      53746174 
+ 2342      757300
+ 2343 0021 C2000000 		.4byte	0xc2
+ 2344 0025 69326349 		.ascii	"i2cInit\000"
+ 2344      6E697400 
+ 2345 002d D5000000 		.4byte	0xd5
+ 2346 0031 69326353 		.ascii	"i2cStart\000"
+ 2346      74617274 
+ 2346      00
+ 2347 003a 2E010000 		.4byte	0x12e
+ 2348 003e 69326353 		.ascii	"i2cStop\000"
+ 2348      746F7000 
+ 2349 0046 45010000 		.4byte	0x145
+ 2350 004a 69326350 		.ascii	"i2cPutChar\000"
+ 2350      75744368 
+ 2350      617200
+ 2351 0055 82010000 		.4byte	0x182
+ 2352 0059 69326347 		.ascii	"i2cGetChar\000"
+ 2352      65744368 
+ 2352      617200
+ 2353 0064 D5010000 		.4byte	0x1d5
+ 2354 0068 69326357 		.ascii	"i2cWaitTransmit\000"
+ 2354      61697454 
+ 2354      72616E73 
+ 2354      6D697400 
+ 2355 0078 22020000 		.4byte	0x222
+ 2356 007c 69326357 		.ascii	"i2cWriteWithWait\000"
+ 2356      72697465 
+ 2356      57697468 
+ 2356      57616974 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 54
+
+
+ 2356      00
+ 2357 008d 61020000 		.4byte	0x261
+ 2358 0091 6932634D 		.ascii	"i2cMyWrite\000"
+ 2358      79577269 
+ 2358      746500
+ 2359 009c CA020000 		.4byte	0x2ca
+ 2360 00a0 69326352 		.ascii	"i2cRepeatStart\000"
+ 2360      65706561 
+ 2360      74537461 
+ 2360      727400
+ 2361 00af 23030000 		.4byte	0x323
+ 2362 00b3 69326352 		.ascii	"i2cRead\000"
+ 2362      65616400 
+ 2363 00bb C0030000 		.4byte	0x3c0
+ 2364 00bf 69326357 		.ascii	"i2cWrite\000"
+ 2364      72697465 
+ 2364      00
+ 2365 00c8 00000000 		.4byte	0x0
+ 2366              		.section	.debug_aranges,"",%progbits
+ 2367 0000 1C000000 		.4byte	0x1c
+ 2368 0004 0200     		.2byte	0x2
+ 2369 0006 00000000 		.4byte	.Ldebug_info0
+ 2370 000a 04       		.byte	0x4
+ 2371 000b 00       		.byte	0x0
+ 2372 000c 0000     		.2byte	0x0
+ 2373 000e 0000     		.2byte	0x0
+ 2374 0010 00000000 		.4byte	.Ltext0
+ 2375 0014 A0030000 		.4byte	.Letext0-.Ltext0
+ 2376 0018 00000000 		.4byte	0x0
+ 2377 001c 00000000 		.4byte	0x0
+ 2378              		.section	.debug_str,"MS",%progbits,1
+ 2379              	.LASF10:
+ 2380 0000 69326353 		.ascii	"i2cStart\000"
+ 2380      74617274 
+ 2380      00
+ 2381              	.LASF26:
+ 2382 0009 70427566 		.ascii	"pBuf\000"
+ 2382      00
+ 2383              	.LASF2:
+ 2384 000e 73686F72 		.ascii	"short unsigned int\000"
+ 2384      7420756E 
+ 2384      7369676E 
+ 2384      65642069 
+ 2384      6E7400
+ 2385              	.LASF27:
+ 2386 0021 69326357 		.ascii	"i2cWrite\000"
+ 2386      72697465 
+ 2386      00
+ 2387              	.LASF11:
+ 2388 002a 73746174 		.ascii	"status\000"
+ 2388      757300
+ 2389              	.LASF23:
+ 2390 0031 61646472 		.ascii	"addr\000"
+ 2390      00
+ 2391              	.LASF15:
+ 2392 0036 69326350 		.ascii	"i2cPutChar\000"
+ 2392      75744368 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 55
+
+
+ 2392      617200
+ 2393              	.LASF17:
+ 2394 0041 64617461 		.ascii	"data\000"
+ 2394      00
+ 2395              	.LASF8:
+ 2396 0046 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2396      206C6F6E 
+ 2396      6720756E 
+ 2396      7369676E 
+ 2396      65642069 
+ 2397              	.LASF1:
+ 2398 005d 756E7369 		.ascii	"unsigned char\000"
+ 2398      676E6564 
+ 2398      20636861 
+ 2398      7200
+ 2399              	.LASF21:
+ 2400 006b 69326357 		.ascii	"i2cWriteWithWait\000"
+ 2400      72697465 
+ 2400      57697468 
+ 2400      57616974 
+ 2400      00
+ 2401              	.LASF6:
+ 2402 007c 75696E74 		.ascii	"uint8\000"
+ 2402      3800
+ 2403              	.LASF13:
+ 2404 0082 69326349 		.ascii	"i2cInit\000"
+ 2404      6E697400 
+ 2405              	.LASF22:
+ 2406 008a 6932634D 		.ascii	"i2cMyWrite\000"
+ 2406      79577269 
+ 2406      746500
+ 2407              	.LASF30:
+ 2408 0095 6932632E 		.ascii	"i2c.c\000"
+ 2408      6300
+ 2409              	.LASF16:
+ 2410 009b 69326347 		.ascii	"i2cGetChar\000"
+ 2410      65744368 
+ 2410      617200
+ 2411              	.LASF3:
+ 2412 00a6 756E7369 		.ascii	"unsigned int\000"
+ 2412      676E6564 
+ 2412      20696E74 
+ 2412      00
+ 2413              	.LASF31:
+ 2414 00b3 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
+ 2414      64726976 
+ 2414      652F672F 
+ 2414      73657276 
+ 2414      6572732F 
+ 2415 00e6 5F6C7063 		.ascii	"_lpc2148_edu\000"
+ 2415      32313438 
+ 2415      5F656475 
+ 2415      00
+ 2416              	.LASF9:
+ 2417 00f3 69326343 		.ascii	"i2cCheckStatus\000"
+ 2417      6865636B 
+ 2417      53746174 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 56
+
+
+ 2417      757300
+ 2418              	.LASF18:
+ 2419 0102 6D6F6465 		.ascii	"mode\000"
+ 2419      00
+ 2420              	.LASF12:
+ 2421 0107 72657443 		.ascii	"retCode\000"
+ 2421      6F646500 
+ 2422              	.LASF29:
+ 2423 010f 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 2423      4320342E 
+ 2423      312E3100 
+ 2424              	.LASF0:
+ 2425 011b 74553136 		.ascii	"tU16\000"
+ 2425      00
+ 2426              	.LASF7:
+ 2427 0120 6C6F6E67 		.ascii	"long long int\000"
+ 2427      206C6F6E 
+ 2427      6720696E 
+ 2427      7400
+ 2428              	.LASF24:
+ 2429 012e 69326352 		.ascii	"i2cRepeatStart\000"
+ 2429      65706561 
+ 2429      74537461 
+ 2429      727400
+ 2430              	.LASF14:
+ 2431 013d 69326353 		.ascii	"i2cStop\000"
+ 2431      746F7000 
+ 2432              	.LASF5:
+ 2433 0145 73686F72 		.ascii	"short int\000"
+ 2433      7420696E 
+ 2433      7400
+ 2434              	.LASF19:
+ 2435 014f 70446174 		.ascii	"pData\000"
+ 2435      6100
+ 2436              	.LASF25:
+ 2437 0155 69326352 		.ascii	"i2cRead\000"
+ 2437      65616400 
+ 2438              	.LASF20:
+ 2439 015d 69326357 		.ascii	"i2cWaitTransmit\000"
+ 2439      61697454 
+ 2439      72616E73 
+ 2439      6D697400 
+ 2440              	.LASF4:
+ 2441 016d 7369676E 		.ascii	"signed char\000"
+ 2441      65642063 
+ 2441      68617200 
+ 2442              	.LASF28:
+ 2443 0179 53454D41 		.ascii	"SEMAFOR_SPI\000"
+ 2443      464F525F 
+ 2443      53504900 
+ 2444              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s 			page 57
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 i2c.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:16     .text:00000000 i2cCheckStatus
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:36     .text:00000010 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:45     .text:00000018 i2cInit
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:42     .text:00000018 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:91     .text:00000054 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:102    .text:00000064 i2cStart
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:99     .text:00000064 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:170    .text:000000a4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:180    .text:000000b0 i2cStop
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:177    .text:000000b0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:210    .text:000000d0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:219    .text:000000d8 i2cPutChar
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:216    .text:000000d8 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:262    .text:000000fc $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:271    .text:00000104 i2cGetChar
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:268    .text:00000104 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:342    .text:00000150 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:352    .text:0000015c i2cWaitTransmit
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:349    .text:0000015c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:392    .text:00000180 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:401    .text:00000188 i2cWriteWithWait
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:398    .text:00000188 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:447    .text:000001b8 i2cMyWrite
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:528    .text:00000210 i2cRepeatStart
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:595    .text:00000250 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:605    .text:0000025c i2cRead
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:602    .text:0000025c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:736    .text:000002f4 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:745    .text:000002fc i2cWrite
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:742    .text:000002fc $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccNWUGI7.s:885    .text:00000398 $d
+
+NO UNDEFINED SYMBOLS

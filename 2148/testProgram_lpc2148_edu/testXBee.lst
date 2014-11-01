@@ -1,0 +1,894 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"testXBee.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 97000000 		.text
+   9      02004B00 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.section	.rodata.str1.4,"aMS",%progbits,1
+  12              		.align	2
+  13              	.LC0:
+  14 0000 0A0A2A2A 		.ascii	"\012\012*******************************************"
+  14      2A2A2A2A 
+  14      2A2A2A2A 
+  14      2A2A2A2A 
+  14      2A2A2A2A 
+  15 002d 2A2A2A2A 		.ascii	"************\012\000"
+  15      2A2A2A2A 
+  15      2A2A2A2A 
+  15      0A00
+  16 003b 00       		.align	2
+  17              	.LC2:
+  18 003c 2A202020 		.ascii	"*                                                  "
+  18      20202020 
+  18      20202020 
+  18      20202020 
+  18      20202020 
+  19 006f 2020202A 		.ascii	"   *\012\000"
+  19      0A00
+  20 0075 000000   		.align	2
+  21              	.LC4:
+  22 0078 2A20436F 		.ascii	"* Communication with the XBee ZigBee module is test"
+  22      6D6D756E 
+  22      69636174 
+  22      696F6E20 
+  22      77697468 
+  23 00ab 6564202A 		.ascii	"ed *\012\000"
+  23      0A00
+  24 00b1 000000   		.align	2
+  25              	.LC6:
+  26 00b4 2A2A2A2A 		.ascii	"***************************************************"
+  26      2A2A2A2A 
+  26      2A2A2A2A 
+  26      2A2A2A2A 
+  26      2A2A2A2A 
+  27 00e7 2A2A2A2A 		.ascii	"****\012\000"
+  27      0A00
+  28 00ed 000000   		.align	2
+  29              	.LC8:
+  30 00f0 2A202043 		.ascii	"*  Communication with XBee module below:           "
+  30      6F6D6D75 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 2
+
+
+  30      6E696361 
+  30      74696F6E 
+  30      20776974 
+  31 0123 2020202A 		.ascii	"   *\012\012\000"
+  31      0A0A00
+  32 012a 0000     		.align	2
+  33              	.LC11:
+  34 012c 0A256300 		.ascii	"\012%c\000"
+  35              		.align	2
+  36              	.LC13:
+  37 0130 256300   		.ascii	"%c\000"
+  38 0133 00       		.align	2
+  39              	.LC15:
+  40 0134 0A2A2A2A 		.ascii	"\012***********************************************"
+  40      2A2A2A2A 
+  40      2A2A2A2A 
+  40      2A2A2A2A 
+  40      2A2A2A2A 
+  41 0164 2A2A2A2A 		.ascii	"********\000"
+  41      2A2A2A2A 
+  41      00
+  42 016d 000000   		.align	2
+  43              	.LC17:
+  44 0170 0A2A2020 		.ascii	"\012*  XBee module detected!!!                     "
+  44      58426565 
+  44      206D6F64 
+  44      756C6520 
+  44      64657465 
+  45 01a0 20202020 		.ascii	"       *\000"
+  45      2020202A 
+  45      00
+  46 01a9 000000   		.align	2
+  47              	.LC19:
+  48 01ac 0A2A2A2A 		.ascii	"\012***********************************************"
+  48      2A2A2A2A 
+  48      2A2A2A2A 
+  48      2A2A2A2A 
+  48      2A2A2A2A 
+  49 01dc 2A2A2A2A 		.ascii	"********\012\012\012\000"
+  49      2A2A2A2A 
+  49      0A0A0A00 
+  50              		.align	2
+  51              	.LC21:
+  52 01e8 0A2A2020 		.ascii	"\012*  No XBee module detected...                  "
+  52      4E6F2058 
+  52      42656520 
+  52      6D6F6475 
+  52      6C652064 
+  53 0218 20202020 		.ascii	"       *\000"
+  53      2020202A 
+  53      00
+  54 0221 000000   		.text
+  55              		.align	2
+  56              		.global	testXBee
+  57              		.code 16
+  58              		.thumb_func
+  59              		.type	testXBee, %function
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 3
+
+
+  60              	testXBee:
+  61              	.LFB2:
+  62              		.file 1 "testXBee.c"
+   1:testXBee.c    **** /******************************************************************************
+   2:testXBee.c    ****  *
+   3:testXBee.c    ****  * Copyright:
+   4:testXBee.c    ****  *    (C) 2000 - 2007 Embedded Artists AB
+   5:testXBee.c    ****  *
+   6:testXBee.c    ****  *****************************************************************************/
+   7:testXBee.c    **** 
+   8:testXBee.c    **** 
+   9:testXBee.c    **** #include "../pre_emptive_os/api/osapi.h"
+  10:testXBee.c    **** #include "../pre_emptive_os/api/general.h"
+  11:testXBee.c    **** #include <printf_P.h>
+  12:testXBee.c    **** #include <lpc2xxx.h>
+  13:testXBee.c    **** #include <consol.h>
+  14:testXBee.c    **** #include "uart.h"
+  15:testXBee.c    **** 
+  16:testXBee.c    **** extern volatile tU32 msClock;
+  17:testXBee.c    **** 
+  18:testXBee.c    **** /*****************************************************************************
+  19:testXBee.c    ****  *
+  20:testXBee.c    ****  * Description:
+  21:testXBee.c    ****  *    
+  22:testXBee.c    ****  *
+  23:testXBee.c    ****  ****************************************************************************/
+  24:testXBee.c    **** tU8
+  25:testXBee.c    **** testXBee(void)
+  26:testXBee.c    **** {
+  63              		.loc 1 26 0
+  64 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  65              	.LCFI0:
+  66 0002 81B0     		sub	sp, sp, #4
+  67              	.LCFI1:
+  27:testXBee.c    ****   tU32 rxChars = 0;
+  28:testXBee.c    ****   tU32 timeStamp;
+  29:testXBee.c    **** 
+  30:testXBee.c    ****   printf("\n\n*******************************************************\n");
+  68              		.loc 1 30 0
+  69 0004 4248     		ldr	r0, .L19
+  70 0006 FFF7FEFF 		bl	simplePrintf
+  31:testXBee.c    ****   printf("*                                                     *\n");
+  71              		.loc 1 31 0
+  72 000a 424C     		ldr	r4, .L19+4
+  73 000c 201C     		mov	r0, r4
+  74 000e FFF7FEFF 		bl	simplePrintf
+  32:testXBee.c    ****   printf("* Communication with the XBee ZigBee module is tested *\n");
+  75              		.loc 1 32 0
+  76 0012 4148     		ldr	r0, .L19+8
+  77 0014 FFF7FEFF 		bl	simplePrintf
+  33:testXBee.c    ****   printf("*                                                     *\n");
+  78              		.loc 1 33 0
+  79 0018 201C     		mov	r0, r4
+  80 001a FFF7FEFF 		bl	simplePrintf
+  34:testXBee.c    ****   printf("*******************************************************\n");
+  81              		.loc 1 34 0
+  82 001e 3F48     		ldr	r0, .L19+12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 4
+
+
+  35:testXBee.c    ****   printf("*  Communication with XBee module below:              *\n\n");
+  36:testXBee.c    **** 
+  37:testXBee.c    ****   //initialize uart #1: 9600 bps, 8N1, no FIFO
+  38:testXBee.c    ****   initUart1(B9600((FOSC * PLL_MUL) / PBSD), UART_8N1, UART_FIFO_4);
+  39:testXBee.c    **** 
+  40:testXBee.c    ****   IODIR0 |= 0x00008000;
+  83              		.loc 1 40 0
+  84 0020 3F4D     		ldr	r5, .L19+16
+  85              		.loc 1 34 0
+  86 0022 FFF7FEFF 		bl	simplePrintf
+  87              		.loc 1 35 0
+  88 0026 3F48     		ldr	r0, .L19+20
+  89 0028 FFF7FEFF 		bl	simplePrintf
+  90              		.loc 1 38 0
+  91 002c 0321     		mov	r1, #3
+  92 002e 4122     		mov	r2, #65
+  93 0030 3D48     		ldr	r0, .L19+24
+  94 0032 FFF7FEFF 		bl	initUart1
+  95              		.loc 1 40 0
+  96 0036 8024     		mov	r4, #128
+  97 0038 2B68     		ldr	r3, [r5]
+  98 003a 2402     		lsl	r4, r4, #8
+  41:testXBee.c    ****   IOSET0  = 0x00008000;
+  99              		.loc 1 41 0
+ 100 003c 3B4E     		ldr	r6, .L19+28
+  42:testXBee.c    ****   IOCLR0  = 0x00008000;
+ 101              		.loc 1 42 0
+ 102 003e 3C4F     		ldr	r7, .L19+32
+ 103              		.loc 1 40 0
+ 104 0040 2343     		orr	r3, r3, r4
+ 105 0042 2B60     		str	r3, [r5]
+  43:testXBee.c    ****   osSleep(1);
+ 106              		.loc 1 43 0
+ 107 0044 0120     		mov	r0, #1
+ 108              		.loc 1 41 0
+ 109 0046 3460     		str	r4, [r6]
+ 110              		.loc 1 42 0
+ 111 0048 3C60     		str	r4, [r7]
+ 112              		.loc 1 43 0
+ 113 004a FFF7FEFF 		bl	osSleep
+  44:testXBee.c    ****   IOSET0  = 0x00008000;
+ 114              		.loc 1 44 0
+ 115 004e 3460     		str	r4, [r6]
+  45:testXBee.c    **** 
+  46:testXBee.c    ****   IODIR0 |= 0x00000400;  //P0.10-RTS output
+ 116              		.loc 1 46 0
+ 117 0050 8023     		mov	r3, #128
+ 118 0052 2A68     		ldr	r2, [r5]
+ 119 0054 DB00     		lsl	r3, r3, #3
+ 120 0056 1A43     		orr	r2, r2, r3
+ 121 0058 2A60     		str	r2, [r5]
+  47:testXBee.c    ****   IOCLR0  = 0x00000400;
+ 122              		.loc 1 47 0
+ 123 005a 3B60     		str	r3, [r7]
+  48:testXBee.c    ****   IODIR0 |= 0x00002000;  //P0.13-DTR output
+ 124              		.loc 1 48 0
+ 125 005c 8023     		mov	r3, #128
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 5
+
+
+ 126 005e 2A68     		ldr	r2, [r5]
+ 127 0060 9B01     		lsl	r3, r3, #6
+ 128 0062 1A43     		orr	r2, r2, r3
+ 129 0064 2A60     		str	r2, [r5]
+  49:testXBee.c    ****   IOSET0  = 0x00002000;
+  50:testXBee.c    ****   
+  51:testXBee.c    ****   osSleep(20);
+ 130              		.loc 1 51 0
+ 131 0066 1420     		mov	r0, #20
+ 132              		.loc 1 49 0
+ 133 0068 3360     		str	r3, [r6]
+ 134              		.loc 1 51 0
+ 135 006a FFF7FEFF 		bl	osSleep
+  52:testXBee.c    ****   uart1SendCh('+');
+ 136              		.loc 1 52 0
+ 137 006e 2B20     		mov	r0, #43
+ 138 0070 FFF7FEFF 		bl	uart1SendCh
+  53:testXBee.c    ****   uart1SendCh('+');
+ 139              		.loc 1 53 0
+ 140 0074 2B20     		mov	r0, #43
+ 141 0076 FFF7FEFF 		bl	uart1SendCh
+  54:testXBee.c    ****   uart1SendCh('+');
+ 142              		.loc 1 54 0
+ 143 007a 2B20     		mov	r0, #43
+ 144 007c FFF7FEFF 		bl	uart1SendCh
+  55:testXBee.c    ****   osSleep(110);
+ 145              		.loc 1 55 0
+ 146 0080 6E20     		mov	r0, #110
+ 147 0082 FFF7FEFF 		bl	osSleep
+  56:testXBee.c    ****   uart1SendCh('A');
+ 148              		.loc 1 56 0
+ 149 0086 4120     		mov	r0, #65
+ 150 0088 FFF7FEFF 		bl	uart1SendCh
+  57:testXBee.c    ****   uart1SendCh('T');
+ 151              		.loc 1 57 0
+ 152 008c 5420     		mov	r0, #84
+ 153 008e FFF7FEFF 		bl	uart1SendCh
+  58:testXBee.c    ****   uart1SendCh('V');
+ 154              		.loc 1 58 0
+ 155 0092 5620     		mov	r0, #86
+ 156 0094 FFF7FEFF 		bl	uart1SendCh
+  59:testXBee.c    ****   uart1SendCh('L');
+ 157              		.loc 1 59 0
+ 158 0098 4C20     		mov	r0, #76
+ 159 009a FFF7FEFF 		bl	uart1SendCh
+  60:testXBee.c    ****   uart1SendCh('\n');
+ 160              		.loc 1 60 0
+ 161 009e 0A20     		mov	r0, #10
+ 162 00a0 FFF7FEFF 		bl	uart1SendCh
+  61:testXBee.c    ****   rxChars = 0;
+  62:testXBee.c    **** 
+  63:testXBee.c    ****   //get current time
+  64:testXBee.c    ****   timeStamp = msClock;
+ 163              		.loc 1 64 0
+ 164 00a4 234B     		ldr	r3, .L19+36
+ 165 00a6 1E68     		ldr	r6, [r3]
+ 166              	.LVL0:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 6
+
+
+ 167 00a8 0025     		mov	r5, #0
+ 168              	.LVL1:
+ 169 00aa 0FE0     		b	.L18
+ 170              	.LVL2:
+ 171              	.L3:
+ 172              	.LBB2:
+  65:testXBee.c    **** 
+  66:testXBee.c    ****   while((msClock - timeStamp) < 1500)
+  67:testXBee.c    ****   {
+  68:testXBee.c    ****     tU8 rxChar;
+  69:testXBee.c    ****     
+  70:testXBee.c    ****     //check if any character has been received
+  71:testXBee.c    ****     if (TRUE == uart1GetChar(&rxChar))
+ 173              		.loc 1 71 0
+ 174 00ac 6C46     		mov	r4, sp
+ 175 00ae 0334     		add	r4, r4, #3
+ 176 00b0 201C     		mov	r0, r4
+ 177 00b2 FFF7FEFF 		bl	uart1GetChar
+ 178 00b6 0128     		cmp	r0, #1
+ 179 00b8 08D1     		bne	.L18
+  72:testXBee.c    ****     {
+  73:testXBee.c    ****       rxChars++;
+  74:testXBee.c    ****       if (rxChar == '\r')
+ 180              		.loc 1 74 0
+ 181 00ba 2178     		ldrb	r1, [r4]
+ 182              		.loc 1 73 0
+ 183 00bc 0135     		add	r5, r5, #1
+ 184              		.loc 1 74 0
+ 185 00be 0D29     		cmp	r1, #13
+ 186 00c0 01D1     		bne	.L5
+  75:testXBee.c    ****         printf("\n%c", rxChar);
+ 187              		.loc 1 75 0
+ 188 00c2 1D48     		ldr	r0, .L19+40
+ 189 00c4 00E0     		b	.L17
+ 190              	.L5:
+  76:testXBee.c    ****       else
+  77:testXBee.c    ****         printf("%c", rxChar);
+ 191              		.loc 1 77 0
+ 192 00c6 1D48     		ldr	r0, .L19+44
+ 193              	.L17:
+ 194 00c8 FFF7FEFF 		bl	simplePrintf
+ 195              	.L18:
+ 196              	.LBE2:
+ 197              		.loc 1 66 0
+ 198 00cc 194B     		ldr	r3, .L19+36
+ 199 00ce 1B68     		ldr	r3, [r3]
+ 200 00d0 1B4A     		ldr	r2, .L19+48
+ 201 00d2 9B1B     		sub	r3, r3, r6
+ 202 00d4 9342     		cmp	r3, r2
+ 203 00d6 E9D9     		bls	.L3
+ 204 00d8 1A48     		ldr	r0, .L19+52
+ 205 00da 1B4C     		ldr	r4, .L19+56
+  78:testXBee.c    ****     }
+  79:testXBee.c    ****   }
+  80:testXBee.c    ****   
+  81:testXBee.c    ****   if (rxChars > 75)
+ 206              		.loc 1 81 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 7
+
+
+ 207 00dc 4B2D     		cmp	r5, #75
+ 208 00de 09D9     		bls	.L8
+  82:testXBee.c    ****   {
+  83:testXBee.c    ****     printf("\n*******************************************************");
+ 209              		.loc 1 83 0
+ 210 00e0 FFF7FEFF 		bl	simplePrintf
+  84:testXBee.c    ****     printf("\n*  XBee module detected!!!                            *");
+ 211              		.loc 1 84 0
+ 212 00e4 1948     		ldr	r0, .L19+60
+ 213 00e6 FFF7FEFF 		bl	simplePrintf
+  85:testXBee.c    ****     printf("\n*******************************************************\n\n\n");
+ 214              		.loc 1 85 0
+ 215 00ea 201C     		mov	r0, r4
+ 216 00ec FFF7FEFF 		bl	simplePrintf
+ 217 00f0 0120     		mov	r0, #1
+ 218 00f2 08E0     		b	.L10
+ 219              	.L8:
+  86:testXBee.c    ****     return 1; //= XBee module present
+  87:testXBee.c    ****   }
+  88:testXBee.c    ****   else
+  89:testXBee.c    ****   {
+  90:testXBee.c    ****     printf("\n*******************************************************");
+ 220              		.loc 1 90 0
+ 221 00f4 FFF7FEFF 		bl	simplePrintf
+  91:testXBee.c    ****     printf("\n*  No XBee module detected...                         *");
+ 222              		.loc 1 91 0
+ 223 00f8 1548     		ldr	r0, .L19+64
+ 224 00fa FFF7FEFF 		bl	simplePrintf
+  92:testXBee.c    ****     printf("\n*******************************************************\n\n\n");
+ 225              		.loc 1 92 0
+ 226 00fe 201C     		mov	r0, r4
+ 227 0100 FFF7FEFF 		bl	simplePrintf
+ 228 0104 0020     		mov	r0, #0
+ 229              	.L10:
+  93:testXBee.c    ****     return 0; //= no XBee module present
+  94:testXBee.c    ****   }
+  95:testXBee.c    **** }
+ 230              		.loc 1 95 0
+ 231 0106 01B0     		add	sp, sp, #4
+ 232              		@ sp needed for prologue
+ 233              	.LVL3:
+ 234              	.LVL4:
+ 235 0108 F0BC     		pop	{r4, r5, r6, r7}
+ 236 010a 02BC     		pop	{r1}
+ 237 010c 0847     		bx	r1
+ 238              	.L20:
+ 239 010e 0000     		.align	2
+ 240              	.L19:
+ 241 0110 00000000 		.word	.LC0
+ 242 0114 3C000000 		.word	.LC2
+ 243 0118 78000000 		.word	.LC4
+ 244 011c B4000000 		.word	.LC6
+ 245 0120 088002E0 		.word	-536707064
+ 246 0124 F0000000 		.word	.LC8
+ 247 0128 87010000 		.word	391
+ 248 012c 048002E0 		.word	-536707068
+ 249 0130 0C8002E0 		.word	-536707060
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 8
+
+
+ 250 0134 00000000 		.word	msClock
+ 251 0138 2C010000 		.word	.LC11
+ 252 013c 30010000 		.word	.LC13
+ 253 0140 DB050000 		.word	1499
+ 254 0144 34010000 		.word	.LC15
+ 255 0148 AC010000 		.word	.LC19
+ 256 014c 70010000 		.word	.LC17
+ 257 0150 E8010000 		.word	.LC21
+ 258              	.LFE2:
+ 259              		.size	testXBee, .-testXBee
+ 260              		.section	.debug_frame,"",%progbits
+ 261              	.Lframe0:
+ 262 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+ 263              	.LSCIE0:
+ 264 0004 FFFFFFFF 		.4byte	0xffffffff
+ 265 0008 01       		.byte	0x1
+ 266 0009 00       		.ascii	"\000"
+ 267 000a 01       		.uleb128 0x1
+ 268 000b 7C       		.sleb128 -4
+ 269 000c 0E       		.byte	0xe
+ 270 000d 0C       		.byte	0xc
+ 271 000e 0D       		.uleb128 0xd
+ 272 000f 00       		.uleb128 0x0
+ 273              		.align	2
+ 274              	.LECIE0:
+ 275              	.LSFDE0:
+ 276 0010 1C000000 		.4byte	.LEFDE0-.LASFDE0
+ 277              	.LASFDE0:
+ 278 0014 00000000 		.4byte	.Lframe0
+ 279 0018 00000000 		.4byte	.LFB2
+ 280 001c 54010000 		.4byte	.LFE2-.LFB2
+ 281 0020 42       		.byte	0x4
+ 282              		.4byte	.LCFI0-.LFB2
+ 283 0021 0E       		.byte	0xe
+ 284 0022 14       		.uleb128 0x14
+ 285 0023 84       		.byte	0x84
+ 286 0024 05       		.uleb128 0x5
+ 287 0025 85       		.byte	0x85
+ 288 0026 04       		.uleb128 0x4
+ 289 0027 86       		.byte	0x86
+ 290 0028 03       		.uleb128 0x3
+ 291 0029 87       		.byte	0x87
+ 292 002a 02       		.uleb128 0x2
+ 293 002b 8E       		.byte	0x8e
+ 294 002c 01       		.uleb128 0x1
+ 295 002d 42       		.byte	0x4
+ 296              		.4byte	.LCFI1-.LCFI0
+ 297 002e 0E       		.byte	0xe
+ 298 002f 18       		.uleb128 0x18
+ 299              		.align	2
+ 300              	.LEFDE0:
+ 301              		.file 2 "../pre_emptive_os/api/../api/general.h"
+ 302              		.text
+ 303              	.Letext0:
+ 304              		.section	.debug_loc,"",%progbits
+ 305              	.Ldebug_loc0:
+ 306              	.LLST0:
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 9
+
+
+ 307 0000 00000000 		.4byte	.LFB2-.Ltext0
+ 308 0004 02000000 		.4byte	.LCFI0-.Ltext0
+ 309 0008 0100     		.2byte	0x1
+ 310 000a 5D       		.byte	0x5d
+ 311 000b 02000000 		.4byte	.LCFI0-.Ltext0
+ 312 000f 04000000 		.4byte	.LCFI1-.Ltext0
+ 313 0013 0200     		.2byte	0x2
+ 314 0015 7D       		.byte	0x7d
+ 315 0016 14       		.sleb128 20
+ 316 0017 04000000 		.4byte	.LCFI1-.Ltext0
+ 317 001b 54010000 		.4byte	.LFE2-.Ltext0
+ 318 001f 0200     		.2byte	0x2
+ 319 0021 7D       		.byte	0x7d
+ 320 0022 18       		.sleb128 24
+ 321 0023 00000000 		.4byte	0x0
+ 322 0027 00000000 		.4byte	0x0
+ 323              	.LLST1:
+ 324 002b AA000000 		.4byte	.LVL1-.Ltext0
+ 325 002f 08010000 		.4byte	.LVL3-.Ltext0
+ 326 0033 0100     		.2byte	0x1
+ 327 0035 55       		.byte	0x55
+ 328 0036 00000000 		.4byte	0x0
+ 329 003a 00000000 		.4byte	0x0
+ 330              	.LLST2:
+ 331 003e A8000000 		.4byte	.LVL0-.Ltext0
+ 332 0042 08010000 		.4byte	.LVL4-.Ltext0
+ 333 0046 0100     		.2byte	0x1
+ 334 0048 56       		.byte	0x56
+ 335 0049 00000000 		.4byte	0x0
+ 336 004d 00000000 		.4byte	0x0
+ 337              		.section	.debug_info
+ 338 0000 CF000000 		.4byte	0xcf
+ 339 0004 0200     		.2byte	0x2
+ 340 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 341 000a 04       		.byte	0x4
+ 342 000b 01       		.uleb128 0x1
+ 343 000c 00000000 		.4byte	.Ldebug_line0
+ 344 0010 54010000 		.4byte	.Letext0
+ 345 0014 00000000 		.4byte	.Ltext0
+ 346 0018 66000000 		.4byte	.LASF11
+ 347 001c 01       		.byte	0x1
+ 348 001d 09000000 		.4byte	.LASF12
+ 349 0021 90000000 		.4byte	.LASF13
+ 350 0025 02       		.uleb128 0x2
+ 351 0026 74553800 		.ascii	"tU8\000"
+ 352 002a 02       		.byte	0x2
+ 353 002b 47       		.byte	0x47
+ 354 002c 30000000 		.4byte	0x30
+ 355 0030 03       		.uleb128 0x3
+ 356 0031 1C000000 		.4byte	.LASF0
+ 357 0035 01       		.byte	0x1
+ 358 0036 08       		.byte	0x8
+ 359 0037 03       		.uleb128 0x3
+ 360 0038 46000000 		.4byte	.LASF1
+ 361 003c 02       		.byte	0x2
+ 362 003d 07       		.byte	0x7
+ 363 003e 04       		.uleb128 0x4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 10
+
+
+ 364 003f 72000000 		.4byte	.LASF2
+ 365 0043 02       		.byte	0x2
+ 366 0044 49       		.byte	0x49
+ 367 0045 49000000 		.4byte	0x49
+ 368 0049 03       		.uleb128 0x3
+ 369 004a 59000000 		.4byte	.LASF3
+ 370 004e 04       		.byte	0x4
+ 371 004f 07       		.byte	0x7
+ 372 0050 03       		.uleb128 0x3
+ 373 0051 E1000000 		.4byte	.LASF4
+ 374 0055 01       		.byte	0x1
+ 375 0056 06       		.byte	0x6
+ 376 0057 03       		.uleb128 0x3
+ 377 0058 77000000 		.4byte	.LASF5
+ 378 005c 02       		.byte	0x2
+ 379 005d 05       		.byte	0x5
+ 380 005e 05       		.uleb128 0x5
+ 381 005f 696E7400 		.ascii	"int\000"
+ 382 0063 04       		.byte	0x4
+ 383 0064 05       		.byte	0x5
+ 384 0065 03       		.uleb128 0x3
+ 385 0066 34000000 		.4byte	.LASF6
+ 386 006a 04       		.byte	0x4
+ 387 006b 07       		.byte	0x7
+ 388 006c 06       		.uleb128 0x6
+ 389 006d C0000000 		.4byte	0xc0
+ 390 0071 01       		.byte	0x1
+ 391 0072 00000000 		.4byte	.LASF14
+ 392 0076 01       		.byte	0x1
+ 393 0077 1A       		.byte	0x1a
+ 394 0078 01       		.byte	0x1
+ 395 0079 25000000 		.4byte	0x25
+ 396 007d 00000000 		.4byte	.LFB2
+ 397 0081 54010000 		.4byte	.LFE2
+ 398 0085 00000000 		.4byte	.LLST0
+ 399 0089 07       		.uleb128 0x7
+ 400 008a 14000000 		.4byte	.LASF7
+ 401 008e 01       		.byte	0x1
+ 402 008f 1B       		.byte	0x1b
+ 403 0090 3E000000 		.4byte	0x3e
+ 404 0094 2B000000 		.4byte	.LLST1
+ 405 0098 07       		.uleb128 0x7
+ 406 0099 2A000000 		.4byte	.LASF8
+ 407 009d 01       		.byte	0x1
+ 408 009e 1C       		.byte	0x1c
+ 409 009f 3E000000 		.4byte	0x3e
+ 410 00a3 3E000000 		.4byte	.LLST2
+ 411 00a7 08       		.uleb128 0x8
+ 412 00a8 AC000000 		.4byte	.LBB2
+ 413 00ac CC000000 		.4byte	.LBE2
+ 414 00b0 09       		.uleb128 0x9
+ 415 00b1 81000000 		.4byte	.LASF9
+ 416 00b5 01       		.byte	0x1
+ 417 00b6 44       		.byte	0x44
+ 418 00b7 25000000 		.4byte	0x25
+ 419 00bb 02       		.byte	0x2
+ 420 00bc 74       		.byte	0x74
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 11
+
+
+ 421 00bd 00       		.sleb128 0
+ 422 00be 00       		.byte	0x0
+ 423 00bf 00       		.byte	0x0
+ 424 00c0 0A       		.uleb128 0xa
+ 425 00c1 88000000 		.4byte	.LASF10
+ 426 00c5 01       		.byte	0x1
+ 427 00c6 10       		.byte	0x10
+ 428 00c7 CD000000 		.4byte	0xcd
+ 429 00cb 01       		.byte	0x1
+ 430 00cc 01       		.byte	0x1
+ 431 00cd 0B       		.uleb128 0xb
+ 432 00ce 3E000000 		.4byte	0x3e
+ 433 00d2 00       		.byte	0x0
+ 434              		.section	.debug_abbrev
+ 435 0000 01       		.uleb128 0x1
+ 436 0001 11       		.uleb128 0x11
+ 437 0002 01       		.byte	0x1
+ 438 0003 10       		.uleb128 0x10
+ 439 0004 06       		.uleb128 0x6
+ 440 0005 12       		.uleb128 0x12
+ 441 0006 01       		.uleb128 0x1
+ 442 0007 11       		.uleb128 0x11
+ 443 0008 01       		.uleb128 0x1
+ 444 0009 25       		.uleb128 0x25
+ 445 000a 0E       		.uleb128 0xe
+ 446 000b 13       		.uleb128 0x13
+ 447 000c 0B       		.uleb128 0xb
+ 448 000d 03       		.uleb128 0x3
+ 449 000e 0E       		.uleb128 0xe
+ 450 000f 1B       		.uleb128 0x1b
+ 451 0010 0E       		.uleb128 0xe
+ 452 0011 00       		.byte	0x0
+ 453 0012 00       		.byte	0x0
+ 454 0013 02       		.uleb128 0x2
+ 455 0014 16       		.uleb128 0x16
+ 456 0015 00       		.byte	0x0
+ 457 0016 03       		.uleb128 0x3
+ 458 0017 08       		.uleb128 0x8
+ 459 0018 3A       		.uleb128 0x3a
+ 460 0019 0B       		.uleb128 0xb
+ 461 001a 3B       		.uleb128 0x3b
+ 462 001b 0B       		.uleb128 0xb
+ 463 001c 49       		.uleb128 0x49
+ 464 001d 13       		.uleb128 0x13
+ 465 001e 00       		.byte	0x0
+ 466 001f 00       		.byte	0x0
+ 467 0020 03       		.uleb128 0x3
+ 468 0021 24       		.uleb128 0x24
+ 469 0022 00       		.byte	0x0
+ 470 0023 03       		.uleb128 0x3
+ 471 0024 0E       		.uleb128 0xe
+ 472 0025 0B       		.uleb128 0xb
+ 473 0026 0B       		.uleb128 0xb
+ 474 0027 3E       		.uleb128 0x3e
+ 475 0028 0B       		.uleb128 0xb
+ 476 0029 00       		.byte	0x0
+ 477 002a 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 12
+
+
+ 478 002b 04       		.uleb128 0x4
+ 479 002c 16       		.uleb128 0x16
+ 480 002d 00       		.byte	0x0
+ 481 002e 03       		.uleb128 0x3
+ 482 002f 0E       		.uleb128 0xe
+ 483 0030 3A       		.uleb128 0x3a
+ 484 0031 0B       		.uleb128 0xb
+ 485 0032 3B       		.uleb128 0x3b
+ 486 0033 0B       		.uleb128 0xb
+ 487 0034 49       		.uleb128 0x49
+ 488 0035 13       		.uleb128 0x13
+ 489 0036 00       		.byte	0x0
+ 490 0037 00       		.byte	0x0
+ 491 0038 05       		.uleb128 0x5
+ 492 0039 24       		.uleb128 0x24
+ 493 003a 00       		.byte	0x0
+ 494 003b 03       		.uleb128 0x3
+ 495 003c 08       		.uleb128 0x8
+ 496 003d 0B       		.uleb128 0xb
+ 497 003e 0B       		.uleb128 0xb
+ 498 003f 3E       		.uleb128 0x3e
+ 499 0040 0B       		.uleb128 0xb
+ 500 0041 00       		.byte	0x0
+ 501 0042 00       		.byte	0x0
+ 502 0043 06       		.uleb128 0x6
+ 503 0044 2E       		.uleb128 0x2e
+ 504 0045 01       		.byte	0x1
+ 505 0046 01       		.uleb128 0x1
+ 506 0047 13       		.uleb128 0x13
+ 507 0048 3F       		.uleb128 0x3f
+ 508 0049 0C       		.uleb128 0xc
+ 509 004a 03       		.uleb128 0x3
+ 510 004b 0E       		.uleb128 0xe
+ 511 004c 3A       		.uleb128 0x3a
+ 512 004d 0B       		.uleb128 0xb
+ 513 004e 3B       		.uleb128 0x3b
+ 514 004f 0B       		.uleb128 0xb
+ 515 0050 27       		.uleb128 0x27
+ 516 0051 0C       		.uleb128 0xc
+ 517 0052 49       		.uleb128 0x49
+ 518 0053 13       		.uleb128 0x13
+ 519 0054 11       		.uleb128 0x11
+ 520 0055 01       		.uleb128 0x1
+ 521 0056 12       		.uleb128 0x12
+ 522 0057 01       		.uleb128 0x1
+ 523 0058 40       		.uleb128 0x40
+ 524 0059 06       		.uleb128 0x6
+ 525 005a 00       		.byte	0x0
+ 526 005b 00       		.byte	0x0
+ 527 005c 07       		.uleb128 0x7
+ 528 005d 34       		.uleb128 0x34
+ 529 005e 00       		.byte	0x0
+ 530 005f 03       		.uleb128 0x3
+ 531 0060 0E       		.uleb128 0xe
+ 532 0061 3A       		.uleb128 0x3a
+ 533 0062 0B       		.uleb128 0xb
+ 534 0063 3B       		.uleb128 0x3b
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 13
+
+
+ 535 0064 0B       		.uleb128 0xb
+ 536 0065 49       		.uleb128 0x49
+ 537 0066 13       		.uleb128 0x13
+ 538 0067 02       		.uleb128 0x2
+ 539 0068 06       		.uleb128 0x6
+ 540 0069 00       		.byte	0x0
+ 541 006a 00       		.byte	0x0
+ 542 006b 08       		.uleb128 0x8
+ 543 006c 0B       		.uleb128 0xb
+ 544 006d 01       		.byte	0x1
+ 545 006e 11       		.uleb128 0x11
+ 546 006f 01       		.uleb128 0x1
+ 547 0070 12       		.uleb128 0x12
+ 548 0071 01       		.uleb128 0x1
+ 549 0072 00       		.byte	0x0
+ 550 0073 00       		.byte	0x0
+ 551 0074 09       		.uleb128 0x9
+ 552 0075 34       		.uleb128 0x34
+ 553 0076 00       		.byte	0x0
+ 554 0077 03       		.uleb128 0x3
+ 555 0078 0E       		.uleb128 0xe
+ 556 0079 3A       		.uleb128 0x3a
+ 557 007a 0B       		.uleb128 0xb
+ 558 007b 3B       		.uleb128 0x3b
+ 559 007c 0B       		.uleb128 0xb
+ 560 007d 49       		.uleb128 0x49
+ 561 007e 13       		.uleb128 0x13
+ 562 007f 02       		.uleb128 0x2
+ 563 0080 0A       		.uleb128 0xa
+ 564 0081 00       		.byte	0x0
+ 565 0082 00       		.byte	0x0
+ 566 0083 0A       		.uleb128 0xa
+ 567 0084 34       		.uleb128 0x34
+ 568 0085 00       		.byte	0x0
+ 569 0086 03       		.uleb128 0x3
+ 570 0087 0E       		.uleb128 0xe
+ 571 0088 3A       		.uleb128 0x3a
+ 572 0089 0B       		.uleb128 0xb
+ 573 008a 3B       		.uleb128 0x3b
+ 574 008b 0B       		.uleb128 0xb
+ 575 008c 49       		.uleb128 0x49
+ 576 008d 13       		.uleb128 0x13
+ 577 008e 3F       		.uleb128 0x3f
+ 578 008f 0C       		.uleb128 0xc
+ 579 0090 3C       		.uleb128 0x3c
+ 580 0091 0C       		.uleb128 0xc
+ 581 0092 00       		.byte	0x0
+ 582 0093 00       		.byte	0x0
+ 583 0094 0B       		.uleb128 0xb
+ 584 0095 35       		.uleb128 0x35
+ 585 0096 00       		.byte	0x0
+ 586 0097 49       		.uleb128 0x49
+ 587 0098 13       		.uleb128 0x13
+ 588 0099 00       		.byte	0x0
+ 589 009a 00       		.byte	0x0
+ 590 009b 00       		.byte	0x0
+ 591              		.section	.debug_pubnames,"",%progbits
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 14
+
+
+ 592 0000 1B000000 		.4byte	0x1b
+ 593 0004 0200     		.2byte	0x2
+ 594 0006 00000000 		.4byte	.Ldebug_info0
+ 595 000a D3000000 		.4byte	0xd3
+ 596 000e 6C000000 		.4byte	0x6c
+ 597 0012 74657374 		.ascii	"testXBee\000"
+ 597      58426565 
+ 597      00
+ 598 001b 00000000 		.4byte	0x0
+ 599              		.section	.debug_aranges,"",%progbits
+ 600 0000 1C000000 		.4byte	0x1c
+ 601 0004 0200     		.2byte	0x2
+ 602 0006 00000000 		.4byte	.Ldebug_info0
+ 603 000a 04       		.byte	0x4
+ 604 000b 00       		.byte	0x0
+ 605 000c 0000     		.2byte	0x0
+ 606 000e 0000     		.2byte	0x0
+ 607 0010 00000000 		.4byte	.Ltext0
+ 608 0014 54010000 		.4byte	.Letext0-.Ltext0
+ 609 0018 00000000 		.4byte	0x0
+ 610 001c 00000000 		.4byte	0x0
+ 611              		.section	.debug_str,"MS",%progbits,1
+ 612              	.LASF14:
+ 613 0000 74657374 		.ascii	"testXBee\000"
+ 613      58426565 
+ 613      00
+ 614              	.LASF12:
+ 615 0009 74657374 		.ascii	"testXBee.c\000"
+ 615      58426565 
+ 615      2E6300
+ 616              	.LASF7:
+ 617 0014 72784368 		.ascii	"rxChars\000"
+ 617      61727300 
+ 618              	.LASF0:
+ 619 001c 756E7369 		.ascii	"unsigned char\000"
+ 619      676E6564 
+ 619      20636861 
+ 619      7200
+ 620              	.LASF8:
+ 621 002a 74696D65 		.ascii	"timeStamp\000"
+ 621      5374616D 
+ 621      7000
+ 622              	.LASF6:
+ 623 0034 6C6F6E67 		.ascii	"long unsigned int\000"
+ 623      20756E73 
+ 623      69676E65 
+ 623      6420696E 
+ 623      7400
+ 624              	.LASF1:
+ 625 0046 73686F72 		.ascii	"short unsigned int\000"
+ 625      7420756E 
+ 625      7369676E 
+ 625      65642069 
+ 625      6E7400
+ 626              	.LASF3:
+ 627 0059 756E7369 		.ascii	"unsigned int\000"
+ 627      676E6564 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 15
+
+
+ 627      20696E74 
+ 627      00
+ 628              	.LASF11:
+ 629 0066 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 629      4320342E 
+ 629      312E3100 
+ 630              	.LASF2:
+ 631 0072 74553332 		.ascii	"tU32\000"
+ 631      00
+ 632              	.LASF5:
+ 633 0077 73686F72 		.ascii	"short int\000"
+ 633      7420696E 
+ 633      7400
+ 634              	.LASF9:
+ 635 0081 72784368 		.ascii	"rxChar\000"
+ 635      617200
+ 636              	.LASF10:
+ 637 0088 6D73436C 		.ascii	"msClock\000"
+ 637      6F636B00 
+ 638              	.LASF13:
+ 639 0090 2F637967 		.ascii	"/cygdrive/c/Embedded/workspace/2148/v3.0_without_fi"
+ 639      64726976 
+ 639      652F632F 
+ 639      456D6265 
+ 639      64646564 
+ 640 00c3 6C657379 		.ascii	"lesys/testProgram_lpc2148_edu\000"
+ 640      732F7465 
+ 640      73745072 
+ 640      6F677261 
+ 640      6D5F6C70 
+ 641              	.LASF4:
+ 642 00e1 7369676E 		.ascii	"signed char\000"
+ 642      65642063 
+ 642      68617200 
+ 643              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 testXBee.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s:60     .text:00000000 testXBee
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccx2unWy.s:241    .text:00000110 $d
+
+UNDEFINED SYMBOLS
+simplePrintf
+initUart1
+osSleep
+uart1SendCh
+uart1GetChar
+msClock
