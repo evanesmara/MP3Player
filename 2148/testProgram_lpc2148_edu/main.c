@@ -97,9 +97,10 @@ static void ProcMain(void* arg) {
 	initKeyProc();
 
 	// Wyœwietlacz 128x128, obs³uga joystick'a, dioda RGB, karta SD, d¿wiêk
-	osCreateProcess(ProcRest, stack_rest, STACK_SIZE_REST, &pid_rest, 3, NULL,
-			&error);
-	osStartProcess(pid_rest, &error);
+//	osCreateProcess(ProcRest, stack_rest, STACK_SIZE_REST, &pid_rest, 3, NULL,
+//			&error);
+//	osStartProcess(pid_rest, &error);
+	ProcRest(0);
 
 	// Zakoñczenie procesów.
 	osDeleteProcess();
@@ -180,7 +181,8 @@ static void ProcRest(void *arg) {
 				tekst = 0;
 				if (status == ZATRZYMAJ) {
 					status = GRAJ;
-					OdrwarzajDzwiek(&status);
+					kolorDiody = 3;
+					OdrwarzajDzwiek(status);
 				}
 			} else if (tekst == 6) {
 				tekst = 1;
@@ -192,7 +194,9 @@ static void ProcRest(void *arg) {
 		}
 	}
 	lcdInit();
-	WyswietlTekstNaLCD128x128("Blad karty.", FALSE);
+	if (wynikInicjalizacjiSd != FR_OK) {
+		WyswietlTekstNaLCD128x128("Blad karty.", FALSE);
+	}
 	ZapalajDiode(kolorDiody, 0);
 }
 
@@ -210,7 +214,7 @@ static void OdrwarzajDzwiek(StatusOdtwarzania *status) {
 	PINSEL1 |= 0x00080000;
 
 	cnt = 0;
-	while (cnt++ < 0xF890 && status == GRAJ) {
+	while (cnt++ < 0xF500/*0xF890*/ && status == GRAJ) {
 		tS32 val;
 
 		val = EAvoice[cnt] - 128;
@@ -225,10 +229,12 @@ static void OdrwarzajDzwiek(StatusOdtwarzania *status) {
 				(1 << 16); // BIAS = 1, 2.5uS settling time
 
 		// delay 125 us = 850 for 8kHz, 600 for 11 kHz
+		i = 0;
 		for (i = 0; i < 850; i++) {
 			asm volatile (" nop");
 		}
 	}
+	status = ZATRZYMAJ;
 
 }
 
