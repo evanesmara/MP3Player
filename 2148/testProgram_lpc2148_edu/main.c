@@ -112,13 +112,14 @@ static void ProcLCD2x16(void* arg) {
 static void ProcRest(void *arg) {
 
 	int tekst = 0;
+	int niepowodzenie = 0;
 	StatusOdtwarzania *status;
 	status = ZATRZYMAJ;
 
 	WyswietlNaLCD128x128(0);
 	//ZapalajDiode(kolorDiody, 0);
 
-	while (1 /*TODO: jeœli coœ nie dzia³a to przerwaæ*/) {
+	while (niepowodzenie < 5 /*TODO: jeœli coœ nie dzia³a to przerwaæ*/) {
 		tU8 ruchJoysticka = checkKey();
 
 		if (ruchJoysticka != KEY_NOTHING) {
@@ -139,7 +140,7 @@ static void ProcRest(void *arg) {
 				} else if (tekst == 0) {
 					tekst = 5; // mo¿na odtworzyæ d¿wiêk
 				} else if (tekst == 1) {
-					tekst == 6;
+					tekst = 6;
 				}
 				break;
 			}
@@ -150,12 +151,14 @@ static void ProcRest(void *arg) {
 
 				if (wynikInicjalizacjiSd == FR_OK) {
 					kolorDiody = 2;
-
+					niepowodzenie = 0;
 				} else {
 					kolorDiody = 1;
+					++niepowodzenie;
 				}
-
-				rc = listDir("/", TRUE); // poka¿ dok³adn¹ zawartoœæ karty
+				if (wynikInicjalizacjiSd == FR_OK) {
+					rc = listDir("/", TRUE); // poka¿ dok³adn¹ zawartoœæ karty
+				}
 				if (rc) {
 
 					lcdInit();
@@ -188,6 +191,9 @@ static void ProcRest(void *arg) {
 			ZapalajDiode(kolorDiody, 0);
 		}
 	}
+	lcdInit();
+	WyswietlTekstNaLCD128x128("Blad karty.", FALSE);
+	ZapalajDiode(kolorDiody, 0);
 }
 
 static void OdrwarzajDzwiek(StatusOdtwarzania *status) {
@@ -252,24 +258,28 @@ static void WyswietlNaLCD128x128(int nrTekstu) {
 	switch (nrTekstu) {
 	case 0:
 		lcdGotoxy(0, 30);
-		lcdPuts("Testuj dŸwiêk");
+		lcdPuts("Testuj dzwiek");
 		break;
 	case 1:
 		lcdGotoxy(0, 30);
-		lcdPuts("Zatrzymaj dŸwiêk");
+		lcdPuts("Zatrzymaj dzwiek");
 		break;
 	case 2:
-		lcdGotoxy(0, 30);
-		lcdPuts("Poka¿ pliki..");
-		lcdGotoxy(0, 70);
-		lcdPuts("zielona lampka - wczytano");
-		lcdGotoxy(0, 90);
-		lcdPuts("czerwona lampka - b³¹d karty");
+		lcdGotoxy(0, 10);
+		lcdPuts("Pokaz pliki..");
+		lcdGotoxy(0, 40);
+		lcdPuts("zielona lampka:");
+		lcdGotoxy(0, 60);
+		lcdPuts("wczytano");
+		lcdGotoxy(0, 80);
+		lcdPuts("czerwona lampka:");
+		lcdGotoxy(0, 100);
+		lcdPuts("blad karty");
 
 		break;
 	case 3:
 		lcdGotoxy(0, 30);
-		lcdPuts("Brak plików.");
+		lcdPuts("Brak plikow.");
 		break;
 	default:
 		break;
