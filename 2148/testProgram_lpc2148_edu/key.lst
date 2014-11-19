@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 1
 
 
    1              		.code	16
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
   33:key.c         **** #define KEYPIN_UP     0x00000400
   34:key.c         **** #define KEYPIN_DOWN   0x00001000
   35:key.c         **** #define KEYPIN_LEFT   0x00000200 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 2
 
 
   36:key.c         **** #define KEYPIN_RIGHT  0x00000800
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
   20              		.loc 1 88 0
   21 0000 124B     		ldr	r3, .L14
   22 0002 1B68     		ldr	r3, [r3]
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 3
 
 
   23              		.loc 1 85 0
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
   73              	.LVL3:
   93:key.c         **** 
   94:key.c         ****   return readKeys;
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 4
 
 
   95:key.c         **** }
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  113              		.type	checkKey2, %function
  114              	checkKey2:
  115              	.LFB4:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 5
 
 
  110:key.c         **** 
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  143 0072 051C     		mov	r5, r0
  137:key.c         ****   
  138:key.c         **** 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 6
 
 
  139:key.c         ****   //check center key
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  161:key.c         ****   		  activeKey = KEY_CENTER;
  176              		.loc 1 161 0
  177 00a0 454B     		ldr	r3, .L89+8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 7
 
 
  178 00a2 1870     		strb	r0, [r3]
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  211 00ca 0133     		add	r3, r3, #1
  212 00cc 1B06     		lsl	r3, r3, #24
  213 00ce 1B0E     		lsr	r3, r3, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 8
 
 
  214 00d0 0B70     		strb	r3, [r1]
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  247 00f8 012B     		cmp	r3, #1
  248 00fa 03D1     		bne	.L45
  204:key.c         ****   	{
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 9
 
 
  205:key.c         ****   		keyDownReleased = FALSE;
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  227:key.c         ****   	keyDownReleased = TRUE;
  281              		.loc 1 227 0
  282 0124 0123     		mov	r3, #1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 10
 
 
  283 0126 1370     		strb	r3, [r2]
@@ -598,7 +598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  314              	.L87:
  315 0152 0B70     		strb	r3, [r1]
  316              	.L81:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 11
 
 
  251:key.c         ****   		  activeKey = KEY_LEFT;
@@ -658,7 +658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  349 017e 0133     		add	r3, r3, #1
  350 0180 1B06     		lsl	r3, r3, #24
  351 0182 1B0E     		lsr	r3, r3, #24
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 12
 
 
  352 0184 0B70     		strb	r3, [r1]
@@ -718,7 +718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  387 01ac 0047     		bx	r0
  388              	.L90:
  389 01ae 0000     		.align	2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 13
 
 
  390              	.L89:
@@ -778,7 +778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  324:key.c         **** initKeyProc(void)
  325:key.c         **** {
  412              		.loc 1 325 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 14
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 14
 
 
  413 01e0 30B5     		push	{r4, r5, lr}
@@ -808,8 +808,9 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  433 0202 2878     		ldrb	r0, [r5]
  434 0204 211C     		mov	r1, r4
  435 0206 FFF7FEFF 		bl	osStartProcess
- 330:key.c         **** }
- 436              		.loc 1 330 0
+ 330:key.c         **** //  keyProcStack(0);
+ 331:key.c         **** }
+ 436              		.loc 1 331 0
  437 020a 04B0     		add	sp, sp, #16
  438              		@ sp needed for prologue
  439 020c 30BC     		pop	{r4, r5}
@@ -837,10 +838,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  461 0222 054B     		ldr	r3, .L98
  462 0224 0549     		ldr	r1, .L98+4
  463 0226 1A68     		ldr	r2, [r3]
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 15
+
+
  464 0228 0A40     		and	r2, r2, r1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 15
-
-
  465 022a 1A60     		str	r2, [r3]
  466              	.L96:
  467              		.loc 1 312 0
@@ -897,10 +898,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  518 0006 00       		.space	1
  519              	keyProcStack:
  520 0007 00000000 		.space	300
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 16
+
+
  520      00000000 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 16
-
-
  520      00000000 
  520      00000000 
  520      00000000 
@@ -957,10 +958,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  571 0052 0C       		.uleb128 0xc
  572 0053 84       		.byte	0x84
  573 0054 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 17
+
+
  574 0055 85       		.byte	0x85
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 17
-
-
  575 0056 02       		.uleb128 0x2
  576 0057 8E       		.byte	0x8e
  577 0058 01       		.uleb128 0x1
@@ -1017,10 +1018,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  628 0013 0100     		.2byte	0x1
  629 0015 50       		.byte	0x50
  630 0016 00000000 		.4byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 18
+
+
  631 001a 00000000 		.4byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 18
-
-
  632              	.LLST4:
  633 001e 6C000000 		.4byte	.LFB5-.Ltext0
  634 0022 6E000000 		.4byte	.LCFI0-.Ltext0
@@ -1077,10 +1078,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  685 00a5 22020000 		.4byte	.LVL8-.Ltext0
  686 00a9 30020000 		.4byte	.LVL9-.Ltext0
  687 00ad 0100     		.2byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 19
+
+
  688 00af 50       		.byte	0x50
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 19
-
-
  689 00b0 00000000 		.4byte	0x0
  690 00b4 00000000 		.4byte	0x0
  691              		.section	.debug_info
@@ -1095,7 +1096,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  700 0018 48000000 		.4byte	.LASF33
  701 001c 01       		.byte	0x1
  702 001d 88000000 		.4byte	.LASF34
- 703 0021 D6000000 		.4byte	.LASF35
+ 703 0021 7D010000 		.4byte	.LASF35
  704 0025 02       		.uleb128 0x2
  705 0026 74553800 		.ascii	"tU8\000"
  706 002a 02       		.byte	0x2
@@ -1106,11 +1107,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  711 0035 01       		.byte	0x1
  712 0036 08       		.byte	0x8
  713 0037 03       		.uleb128 0x3
- 714 0038 24010000 		.4byte	.LASF1
+ 714 0038 E4000000 		.4byte	.LASF1
  715 003c 02       		.byte	0x2
  716 003d 07       		.byte	0x7
  717 003e 03       		.uleb128 0x3
- 718 003f D2010000 		.4byte	.LASF2
+ 718 003f D4010000 		.4byte	.LASF2
  719 0043 04       		.byte	0x4
  720 0044 07       		.byte	0x7
  721 0045 03       		.uleb128 0x3
@@ -1137,17 +1138,17 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  742 006c 30000000 		.4byte	0x30
  743 0070 03       		.uleb128 0x3
  744 0071 54000000 		.4byte	.LASF7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 20
+
+
  745 0075 08       		.byte	0x8
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 20
-
-
  746 0076 05       		.byte	0x5
  747 0077 03       		.uleb128 0x3
  748 0078 BF000000 		.4byte	.LASF8
  749 007c 08       		.byte	0x8
  750 007d 07       		.byte	0x7
  751 007e 03       		.uleb128 0x3
- 752 007f 66010000 		.4byte	.LASF9
+ 752 007f 26010000 		.4byte	.LASF9
  753 0083 04       		.byte	0x4
  754 0084 07       		.byte	0x7
  755 0085 06       		.uleb128 0x6
@@ -1155,7 +1156,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  757 0087 07       		.uleb128 0x7
  758 0088 B2000000 		.4byte	0xb2
  759 008c 01       		.byte	0x1
- 760 008d CA010000 		.4byte	.LASF10
+ 760 008d CC010000 		.4byte	.LASF10
  761 0091 01       		.byte	0x1
  762 0092 55       		.byte	0x55
  763 0093 01       		.byte	0x1
@@ -1174,7 +1175,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  776 00b2 07       		.uleb128 0x7
  777 00b3 DB000000 		.4byte	0xdb
  778 00b7 01       		.byte	0x1
- 779 00b8 37010000 		.4byte	.LASF11
+ 779 00b8 F7000000 		.4byte	.LASF11
  780 00bc 01       		.byte	0x1
  781 00bd 69       		.byte	0x69
  782 00be 01       		.byte	0x1
@@ -1184,7 +1185,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  786 00cb 01       		.byte	0x1
  787 00cc 5D       		.byte	0x5d
  788 00cd 09       		.uleb128 0x9
- 789 00ce C3010000 		.4byte	.LASF13
+ 789 00ce C5010000 		.4byte	.LASF13
  790 00d2 01       		.byte	0x1
  791 00d3 6A       		.byte	0x6a
  792 00d4 25000000 		.4byte	0x25
@@ -1193,14 +1194,14 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  795 00da 00       		.byte	0x0
  796 00db 0A       		.uleb128 0xa
  797 00dc 01       		.byte	0x1
- 798 00dd AB010000 		.4byte	.LASF36
+ 798 00dd 6B010000 		.4byte	.LASF36
  799 00e1 01       		.byte	0x1
  800 00e2 77       		.byte	0x77
  801 00e3 01       		.byte	0x1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 21
+
+
  802 00e4 25000000 		.4byte	0x25
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 21
-
-
  803 00e8 60000000 		.4byte	.LFB4
  804 00ec 6C000000 		.4byte	.LFE4
  805 00f0 01       		.byte	0x1
@@ -1208,7 +1209,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  807 00f2 0B       		.uleb128 0xb
  808 00f3 26010000 		.4byte	0x126
  809 00f7 01       		.byte	0x1
- 810 00f8 78010000 		.4byte	.LASF14
+ 810 00f8 38010000 		.4byte	.LASF14
  811 00fc 01       		.byte	0x1
  812 00fd 83       		.byte	0x83
  813 00fe 01       		.byte	0x1
@@ -1216,7 +1217,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  815 0103 E0010000 		.4byte	.LFE5
  816 0107 1E000000 		.4byte	.LLST4
  817 010b 08       		.uleb128 0x8
- 818 010c 5E010000 		.4byte	.LASF15
+ 818 010c 1E010000 		.4byte	.LASF15
  819 0110 01       		.byte	0x1
  820 0111 84       		.byte	0x84
  821 0112 5A000000 		.4byte	0x5a
@@ -1238,7 +1239,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  837 0138 20020000 		.4byte	.LFE7
  838 013c 5B000000 		.4byte	.LLST6
  839 0140 0E       		.uleb128 0xe
- 840 0141 BD010000 		.4byte	.LASF17
+ 840 0141 BF010000 		.4byte	.LASF17
  841 0145 01       		.byte	0x1
  842 0146 4601     		.2byte	0x146
  843 0148 25000000 		.4byte	0x25
@@ -1248,7 +1249,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  847 014f 00       		.byte	0x0
  848 0150 0F       		.uleb128 0xf
  849 0151 7A010000 		.4byte	0x17a
- 850 0155 B5010000 		.4byte	.LASF37
+ 850 0155 75010000 		.4byte	.LASF37
  851 0159 01       		.byte	0x1
  852 015a 3101     		.2byte	0x131
  853 015c 01       		.byte	0x1
@@ -1257,16 +1258,16 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  856 0165 86000000 		.4byte	.LLST7
  857 0169 10       		.uleb128 0x10
  858 016a 61726700 		.ascii	"arg\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 22
+
+
  859 016e 01       		.byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 22
-
-
  860 016f 3001     		.2byte	0x130
  861 0171 85000000 		.4byte	0x85
  862 0175 A5000000 		.4byte	.LLST8
  863 0179 00       		.byte	0x0
  864 017a 11       		.uleb128 0x11
- 865 017b 9F010000 		.4byte	.LASF18
+ 865 017b 5F010000 		.4byte	.LASF18
  866 017f 02       		.byte	0x2
  867 0180 67       		.byte	0x67
  868 0181 65000000 		.4byte	0x65
@@ -1280,7 +1281,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  876 0192 03       		.byte	0x3
  877 0193 00000000 		.4byte	centerReleased
  878 0197 09       		.uleb128 0x9
- 879 0198 16010000 		.4byte	.LASF20
+ 879 0198 D6000000 		.4byte	.LASF20
  880 019c 01       		.byte	0x1
  881 019d 3B       		.byte	0x3b
  882 019e 25000000 		.4byte	0x25
@@ -1288,7 +1289,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  884 01a3 03       		.byte	0x3
  885 01a4 01000000 		.4byte	keyUpReleased
  886 01a8 09       		.uleb128 0x9
- 887 01a9 8F010000 		.4byte	.LASF21
+ 887 01a9 4F010000 		.4byte	.LASF21
  888 01ad 01       		.byte	0x1
  889 01ae 3C       		.byte	0x3c
  890 01af 25000000 		.4byte	0x25
@@ -1296,7 +1297,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  892 01b4 03       		.byte	0x3
  893 01b5 02000000 		.4byte	keyDownReleased
  894 01b9 09       		.uleb128 0x9
- 895 01ba DF010000 		.4byte	.LASF22
+ 895 01ba E1010000 		.4byte	.LASF22
  896 01be 01       		.byte	0x1
  897 01bf 3D       		.byte	0x3d
  898 01c0 25000000 		.4byte	0x25
@@ -1304,7 +1305,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  900 01c5 03       		.byte	0x3
  901 01c6 03000000 		.4byte	keyLeftReleased
  902 01ca 09       		.uleb128 0x9
- 903 01cb 4D010000 		.4byte	.LASF23
+ 903 01cb 0D010000 		.4byte	.LASF23
  904 01cf 01       		.byte	0x1
  905 01d0 3E       		.byte	0x3e
  906 01d1 25000000 		.4byte	0x25
@@ -1312,15 +1313,15 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  908 01d6 03       		.byte	0x3
  909 01d7 04000000 		.4byte	keyRightReleased
  910 01db 09       		.uleb128 0x9
- 911 01dc 40010000 		.4byte	.LASF24
+ 911 01dc 00010000 		.4byte	.LASF24
  912 01e0 01       		.byte	0x1
  913 01e1 3F       		.byte	0x3f
  914 01e2 25000000 		.4byte	0x25
  915 01e6 05       		.byte	0x5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 23
+
+
  916 01e7 03       		.byte	0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 23
-
-
  917 01e8 02000000 		.4byte	centerKeyCnt
  918 01ec 09       		.uleb128 0x9
  919 01ed 34000000 		.4byte	.LASF25
@@ -1377,13 +1378,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  970 025c 25000000 		.4byte	0x25
  971 0260 14       		.uleb128 0x14
  972 0261 7E000000 		.4byte	0x7e
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 24
+
+
  973 0265 2B01     		.2byte	0x12b
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 24
-
-
  974 0267 00       		.byte	0x0
  975 0268 09       		.uleb128 0x9
- 976 0269 82010000 		.4byte	.LASF31
+ 976 0269 42010000 		.4byte	.LASF31
  977 026d 01       		.byte	0x1
  978 026e 48       		.byte	0x48
  979 026f 57020000 		.4byte	0x257
@@ -1437,10 +1438,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1027 0022 00       		.byte	0x0
  1028 0023 03       		.uleb128 0x3
  1029 0024 0E       		.uleb128 0xe
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 25
+
+
  1030 0025 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 25
-
-
  1031 0026 0B       		.uleb128 0xb
  1032 0027 3E       		.uleb128 0x3e
  1033 0028 0B       		.uleb128 0xb
@@ -1497,10 +1498,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1084 005b 11       		.uleb128 0x11
  1085 005c 01       		.uleb128 0x1
  1086 005d 12       		.uleb128 0x12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 26
+
+
  1087 005e 01       		.uleb128 0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 26
-
-
  1088 005f 40       		.uleb128 0x40
  1089 0060 0A       		.uleb128 0xa
  1090 0061 00       		.byte	0x0
@@ -1557,10 +1558,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1141 0094 40       		.uleb128 0x40
  1142 0095 0A       		.uleb128 0xa
  1143 0096 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 27
+
+
  1144 0097 00       		.byte	0x0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 27
-
-
  1145 0098 0B       		.uleb128 0xb
  1146 0099 2E       		.uleb128 0x2e
  1147 009a 01       		.byte	0x1
@@ -1617,10 +1618,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1198 00cd 12       		.uleb128 0x12
  1199 00ce 01       		.uleb128 0x1
  1200 00cf 40       		.uleb128 0x40
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 28
+
+
  1201 00d0 06       		.uleb128 0x6
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 28
-
-
  1202 00d1 00       		.byte	0x0
  1203 00d2 00       		.byte	0x0
  1204 00d3 0E       		.uleb128 0xe
@@ -1677,10 +1678,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1255 0106 11       		.uleb128 0x11
  1256 0107 34       		.uleb128 0x34
  1257 0108 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 29
+
+
  1258 0109 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 29
-
-
  1259 010a 0E       		.uleb128 0xe
  1260 010b 3A       		.uleb128 0x3a
  1261 010c 0B       		.uleb128 0xb
@@ -1737,10 +1738,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1307 0035 F2000000 		.4byte	0xf2
  1308 0039 73616D70 		.ascii	"sampleKey\000"
  1308      6C654B65 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 30
+
+
  1308      7900
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 30
-
-
  1309 0043 26010000 		.4byte	0x126
  1310 0047 696E6974 		.ascii	"initKeyProc\000"
  1310      4B657950 
@@ -1797,10 +1798,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1344 0054 6C6F6E67 		.ascii	"long long int\000"
  1344      206C6F6E 
  1344      6720696E 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 31
+
+
  1344      7400
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 31
-
-
  1345              	.LASF16:
  1346 0062 696E6974 		.ascii	"initKeyProc\000"
  1346      4B657950 
@@ -1840,141 +1841,141 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 1
  1362      6720756E 
  1362      7369676E 
  1362      65642069 
- 1363              	.LASF35:
- 1364 00d6 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
- 1364      64726976 
- 1364      652F672F 
- 1364      73657276 
- 1364      6572732F 
- 1365 0109 5F6C7063 		.ascii	"_lpc2148_edu\000"
- 1365      32313438 
- 1365      5F656475 
- 1365      00
- 1366              	.LASF20:
- 1367 0116 6B657955 		.ascii	"keyUpReleased\000"
- 1367      7052656C 
- 1367      65617365 
- 1367      6400
- 1368              	.LASF1:
- 1369 0124 73686F72 		.ascii	"short unsigned int\000"
- 1369      7420756E 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 32
+ 1363              	.LASF20:
+ 1364 00d6 6B657955 		.ascii	"keyUpReleased\000"
+ 1364      7052656C 
+ 1364      65617365 
+ 1364      6400
+ 1365              	.LASF1:
+ 1366 00e4 73686F72 		.ascii	"short unsigned int\000"
+ 1366      7420756E 
+ 1366      7369676E 
+ 1366      65642069 
+ 1366      6E7400
+ 1367              	.LASF11:
+ 1368 00f7 63686563 		.ascii	"checkKey\000"
+ 1368      6B4B6579 
+ 1368      00
+ 1369              	.LASF24:
+ 1370 0100 63656E74 		.ascii	"centerKeyCnt\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 32
 
 
- 1369      7369676E 
- 1369      65642069 
- 1369      6E7400
- 1370              	.LASF11:
- 1371 0137 63686563 		.ascii	"checkKey\000"
- 1371      6B4B6579 
- 1371      00
- 1372              	.LASF24:
- 1373 0140 63656E74 		.ascii	"centerKeyCnt\000"
- 1373      65724B65 
- 1373      79436E74 
- 1373      00
- 1374              	.LASF23:
- 1375 014d 6B657952 		.ascii	"keyRightReleased\000"
- 1375      69676874 
- 1375      52656C65 
- 1375      61736564 
- 1375      00
- 1376              	.LASF15:
- 1377 015e 6E6F7468 		.ascii	"nothing\000"
- 1377      696E6700 
- 1378              	.LASF9:
- 1379 0166 6C6F6E67 		.ascii	"long unsigned int\000"
- 1379      20756E73 
- 1379      69676E65 
- 1379      6420696E 
- 1379      7400
- 1380              	.LASF14:
- 1381 0178 73616D70 		.ascii	"sampleKey\000"
- 1381      6C654B65 
- 1381      7900
- 1382              	.LASF31:
- 1383 0182 6B657950 		.ascii	"keyProcStack\000"
- 1383      726F6353 
- 1383      7461636B 
- 1383      00
- 1384              	.LASF21:
- 1385 018f 6B657944 		.ascii	"keyDownReleased\000"
- 1385      6F776E52 
- 1385      656C6561 
- 1385      73656400 
- 1386              	.LASF18:
- 1387 019f 53454D41 		.ascii	"SEMAFOR_SPI\000"
- 1387      464F525F 
- 1387      53504900 
- 1388              	.LASF36:
- 1389 01ab 63686563 		.ascii	"checkKey2\000"
- 1389      6B4B6579 
- 1389      3200
- 1390              	.LASF37:
- 1391 01b5 70726F63 		.ascii	"procKey\000"
- 1391      4B657900 
+ 1370      65724B65 
+ 1370      79436E74 
+ 1370      00
+ 1371              	.LASF23:
+ 1372 010d 6B657952 		.ascii	"keyRightReleased\000"
+ 1372      69676874 
+ 1372      52656C65 
+ 1372      61736564 
+ 1372      00
+ 1373              	.LASF15:
+ 1374 011e 6E6F7468 		.ascii	"nothing\000"
+ 1374      696E6700 
+ 1375              	.LASF9:
+ 1376 0126 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1376      20756E73 
+ 1376      69676E65 
+ 1376      6420696E 
+ 1376      7400
+ 1377              	.LASF14:
+ 1378 0138 73616D70 		.ascii	"sampleKey\000"
+ 1378      6C654B65 
+ 1378      7900
+ 1379              	.LASF31:
+ 1380 0142 6B657950 		.ascii	"keyProcStack\000"
+ 1380      726F6353 
+ 1380      7461636B 
+ 1380      00
+ 1381              	.LASF21:
+ 1382 014f 6B657944 		.ascii	"keyDownReleased\000"
+ 1382      6F776E52 
+ 1382      656C6561 
+ 1382      73656400 
+ 1383              	.LASF18:
+ 1384 015f 53454D41 		.ascii	"SEMAFOR_SPI\000"
+ 1384      464F525F 
+ 1384      53504900 
+ 1385              	.LASF36:
+ 1386 016b 63686563 		.ascii	"checkKey2\000"
+ 1386      6B4B6579 
+ 1386      3200
+ 1387              	.LASF37:
+ 1388 0175 70726F63 		.ascii	"procKey\000"
+ 1388      4B657900 
+ 1389              	.LASF35:
+ 1390 017d 2F637967 		.ascii	"/cygdrive/h/servers/github/MP3Player/2148/testProgr"
+ 1390      64726976 
+ 1390      652F682F 
+ 1390      73657276 
+ 1390      6572732F 
+ 1391 01b0 616D5F6C 		.ascii	"am_lpc2148_edu\000"
+ 1391      70633231 
+ 1391      34385F65 
+ 1391      647500
  1392              	.LASF17:
- 1393 01bd 6572726F 		.ascii	"error\000"
+ 1393 01bf 6572726F 		.ascii	"error\000"
  1393      7200
  1394              	.LASF13:
- 1395 01c3 72657456 		.ascii	"retVal\000"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 33
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 33
 
 
+ 1395 01c5 72657456 		.ascii	"retVal\000"
  1395      616C00
  1396              	.LASF10:
- 1397 01ca 6765744B 		.ascii	"getKeys\000"
+ 1397 01cc 6765744B 		.ascii	"getKeys\000"
  1397      65797300 
  1398              	.LASF2:
- 1399 01d2 756E7369 		.ascii	"unsigned int\000"
+ 1399 01d4 756E7369 		.ascii	"unsigned int\000"
  1399      676E6564 
  1399      20696E74 
  1399      00
  1400              	.LASF22:
- 1401 01df 6B65794C 		.ascii	"keyLeftReleased\000"
+ 1401 01e1 6B65794C 		.ascii	"keyLeftReleased\000"
  1401      65667452 
  1401      656C6561 
  1401      73656400 
  1402              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s 			page 34
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s 			page 34
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 key.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:1      .text:00000000 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:16     .text:00000000 getKeys
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:80     .text:0000004c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:88     .text:00000050 checkKey
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:85     .text:00000050 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:106    .text:0000005c $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:487    .bss:00000000 activeKey
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:114    .text:00000060 checkKey2
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:111    .text:00000060 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:128    .text:00000068 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:489    .bss:00000001 activeKey2
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:136    .text:0000006c sampleKey
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:133    .text:0000006c $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:391    .text:000001b0 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:484    .data:00000000 centerReleased
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:509    .bss:00000002 centerKeyCnt
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:494    .data:00000001 keyUpReleased
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:511    .bss:00000003 upKeyCnt
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:498    .data:00000002 keyDownReleased
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:513    .bss:00000004 downKeyCnt
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:502    .data:00000003 keyLeftReleased
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:515    .bss:00000005 leftKeyCnt
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:506    .data:00000004 keyRightReleased
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:517    .bss:00000006 rightKeyCnt
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:410    .text:000001e0 initKeyProc
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:407    .text:000001e0 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:445    .text:00000214 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:521    .bss:00000133 keyProcPid
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:454    .text:00000220 procKey
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:519    .bss:00000007 keyProcStack
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:451    .text:00000220 $t
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:477    .text:00000238 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:16     .text:00000000 getKeys
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:80     .text:0000004c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:88     .text:00000050 checkKey
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:85     .text:00000050 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:106    .text:0000005c $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:487    .bss:00000000 activeKey
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:114    .text:00000060 checkKey2
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:111    .text:00000060 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:128    .text:00000068 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:489    .bss:00000001 activeKey2
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:136    .text:0000006c sampleKey
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:133    .text:0000006c $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:391    .text:000001b0 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:484    .data:00000000 centerReleased
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:509    .bss:00000002 centerKeyCnt
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:494    .data:00000001 keyUpReleased
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:511    .bss:00000003 upKeyCnt
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:498    .data:00000002 keyDownReleased
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:513    .bss:00000004 downKeyCnt
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:502    .data:00000003 keyLeftReleased
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:515    .bss:00000005 leftKeyCnt
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:506    .data:00000004 keyRightReleased
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:517    .bss:00000006 rightKeyCnt
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:410    .text:000001e0 initKeyProc
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:407    .text:000001e0 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:445    .text:00000214 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:521    .bss:00000133 keyProcPid
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:454    .text:00000220 procKey
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:519    .bss:00000007 keyProcStack
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:451    .text:00000220 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:477    .text:00000238 $d
                              .bss:00000000 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/cc5VOCTR.s:491    .bss:00000002 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccI7N4N0.s:491    .bss:00000002 $d
 
 UNDEFINED SYMBOLS
 osCreateProcess

@@ -325,8 +325,8 @@ initKeyProc(void)
 {
   tU8 error;
 
-//  osCreateProcess(procKey, keyProcStack, KEYPROC_STACK_SIZE, &keyProcPid, 3, NULL, &error);
-//  osStartProcess(keyProcPid, &error);
-  keyProcStack(0);
+  osCreateProcess(procKey, keyProcStack, KEYPROC_STACK_SIZE, &keyProcPid, 3, NULL, &error);
+  osStartProcess(keyProcPid, &error);
+//  keyProcStack(0);
 }
 
