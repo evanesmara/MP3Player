@@ -120,7 +120,7 @@ static void ProcRest(void *arg) {
 	WyswietlNaLCD128x128(0);
 	//ZapalajDiode(kolorDiody, 0);
 
-	while (niepowodzenie < 5 /*TODO: jeœli coœ nie dzia³a to przerwaæ*/) {
+	while (niepowodzenie < 5) {
 		tU8 ruchJoysticka = checkKey();
 
 		if (ruchJoysticka != KEY_NOTHING) {
@@ -149,6 +149,7 @@ static void ProcRest(void *arg) {
 			if (tekst == 4 && wynikInicjalizacjiSd != FR_OK) {
 				tekst = 3;
 				wynikInicjalizacjiSd = pf_mount(&fatfs);
+				osSleep(500);
 
 				if (wynikInicjalizacjiSd == FR_OK) {
 					kolorDiody = 2;

@@ -95,7 +95,7 @@ BYTE spiSend(BYTE toSend) {
 
 	incoming = S0SPDR;
 
-	//UNSELECT_CARD();
+	UNSELECT_CARD();
 
 	return incoming;
 }
