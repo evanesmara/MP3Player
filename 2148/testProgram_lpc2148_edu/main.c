@@ -5,6 +5,7 @@
 #include <ea_init.h>
 #include <lpc2xxx.h>
 #include <consol.h>
+#include <string.h>
 
 #include "testLcd.c"
 #include "testRGB.c"
@@ -97,9 +98,9 @@ static void ProcMain(void* arg) {
 	initKeyProc();
 
 	// Wyœwietlacz 128x128, obs³uga joystick'a, dioda RGB, karta SD, d¿wiêk
-//	osCreateProcess(ProcRest, stack_rest, STACK_SIZE_REST, &pid_rest, 3, NULL,
-//			&error);
-//	osStartProcess(pid_rest, &error);
+	//	osCreateProcess(ProcRest, stack_rest, STACK_SIZE_REST, &pid_rest, 3, NULL,
+	//			&error);
+	//	osStartProcess(pid_rest, &error);
 	ProcRest(0);
 
 	// Zakoñczenie procesów.
@@ -149,7 +150,7 @@ static void ProcRest(void *arg) {
 			if (tekst == 4 && wynikInicjalizacjiSd != FR_OK) {
 				tekst = 3;
 				wynikInicjalizacjiSd = pf_mount(&fatfs);
-				osSleep(500);
+				//				osSleep(500);
 
 				if (wynikInicjalizacjiSd == FR_OK) {
 					kolorDiody = 2;
@@ -161,15 +162,23 @@ static void ProcRest(void *arg) {
 				if (wynikInicjalizacjiSd == FR_OK) {
 					rc = listDir("/", TRUE); // poka¿ dok³adn¹ zawartoœæ karty
 				}
-				if (rc) {
+				//				osSleep(500);
+				osSleep(100);
+				char pliki[256 * 12];
+				char nazwa[12];
+				uint32 filesCount = filesList("/", pliki); // stwórz liste plików
 
-					lcdInit();
-					osSleep(100);
-					WyswietlTekstNaLCD128x128(rc, FALSE);
+				if (filesCount > 0) {
+//					strncpy(nazwa, &pliki[i * 12], 12);
+					tekst = 0;
+					WyswietlTekstNaLCD128x128(/*nazwa*/"OK", FALSE);
+					kolorDiody = 2;
 
 				} else {
+					tekst = 1;
 					lcdInit();
 					WyswietlNaLCD128x128(3);
+					kolorDiody = 1;
 				}
 			} else if (tekst == 4) {
 				tekst = 3;
@@ -215,7 +224,7 @@ static void OdrwarzajDzwiek(StatusOdtwarzania *status) {
 	PINSEL1 |= 0x00080000;
 
 	cnt = 0;
-	while (cnt++ < 0xF500/*0xF890*/ && status == GRAJ) {
+	while (cnt++ < 0xF500/*0xF890*/&& status == GRAJ) {
 		tS32 val;
 
 		val = EAvoice[cnt] - 128;

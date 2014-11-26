@@ -10,11 +10,11 @@ FRESULT listDir(CHAR* path, tBool first) {
 	DIR dir;
 	int i;
 
-	if (first == TRUE) {
-		printf("D-Directory R-Read_Only H-Hidden S-System A-Archive\n");
-		printf("DRHSA path/fileName\n");
-		printf("-------------------------------------------------------\n");
-	}
+//	if (first == TRUE) {
+//		printf("D-Directory R-Read_Only H-Hidden S-System A-Archive\n");
+//		printf("DRHSA path/fileName\n");
+//		printf("-------------------------------------------------------\n");
+//	}
 
 	res = pf_opendir(&dir, path);
 	if (res == FR_OK) {
@@ -50,18 +50,16 @@ uint32 filesList(CHAR* path, CHAR* list) {
 	if (res == FR_OK) {
 		for (;;) {
 			res = pf_readdir(&dir, &fno);
-			if (res != FR_OK || fno.fname[0] == 0)
-			{
+			if (res != FR_OK || fno.fname[0] == 0) {
 				break;
 			}
 			if (fno.fattrib & AM_DIR) {
 				continue;
 			} else {
-				if (fno.fname[9] != 'W' || fno.fname[10] != 'A'
-						|| fno.fname[11] != 'V')
+				if (fno.fname[9] != 'M' || fno.fname[10] != 'P'
+						|| fno.fname[11] != '3')
 					continue;
-				if (i >= 256)
-				{
+				if (i >= 256) {
 					break;
 				}
 				char *p = &list[i * 12];
