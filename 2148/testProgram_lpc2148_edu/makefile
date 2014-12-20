@@ -61,7 +61,10 @@ CSRCS   = main.c		\
           lcd.c			\
           lcd_hw.c		\
           key.c       	\
-          functions.c       
+          functions.c   \
+          wave.c        \
+          timer.c       \
+          led.c             
 
 # List assembler source files here
 ASRCS   = 

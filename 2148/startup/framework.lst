@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 1
 
 
    1              		.file	"framework.c"
@@ -58,7 +58,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
   36:framework.c   ****  * External functions
   37:framework.c   ****  *****************************************************************************/
   38:framework.c   **** 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 2
 
 
   39:framework.c   **** /******************************************************************************
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
   93:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
   94:framework.c   ****  *
   95:framework.c   ****  ****************************************************************************/
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 3
 
 
   96:framework.c   **** static void exceptionHandlerPabort ()
@@ -178,7 +178,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  150:framework.c   ****  *    normally never be used.
  151:framework.c   ****  *    Prints information and halt. Observe that code execture in exception
  152:framework.c   ****  *    mode (as opposed to supervisor mode, which is the normal execution mode).
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 4
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 4
 
 
  153:framework.c   ****  *
@@ -238,7 +238,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
   31 0014 002083E5 		str	r2, [r3, #0]
  192:framework.c   **** 	pHeapEnd = (unsigned char*) ((STK_SADDR - 1) & 0xfffffffc);
   32              		.loc 1 192 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 5
 
 
   33 0018 3C309FE5 		ldr	r3, .L3+12
@@ -298,7 +298,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
   77              		@ Function supports interworking.
   78              		@ args = 0, pretend = 0, frame = 0
   79              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 6
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 6
 
 
  203:framework.c   **** 	PINSEL0 = 0x00000000;
@@ -358,7 +358,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  115              		.loc 1 221 0
  116 00c0 EB2F02E5 		str	r2, [r2, #-4075]
  222:framework.c   **** 	VICProtection = 0; /* Setup interrupt controller                         */
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 7
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 7
 
 
  117              		.loc 1 222 0
@@ -418,7 +418,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  241:framework.c   **** 
  242:framework.c   **** 	//enable interrupts (both IRQ and FIQ)
  243:framework.c   **** 	asm volatile ("mrs r3, cpsr       \n\t"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 8
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 8
 
 
  153              		.loc 1 243 0
@@ -478,7 +478,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  184 0138 0230A0E3 		mov	r3, #2
  185 013c 043082E5 		str	r3, [r2, #4]
  267:framework.c   **** 	TIMER1_PR = 0x00; //set prescaler to zero
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 9
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 9
 
 
  186              		.loc 1 267 0
@@ -538,7 +538,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  226              		.loc 1 156 0
  227              		@ Function supports interworking.
  228              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 10
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 10
 
 
  229              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -598,7 +598,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  279              		.loc 1 140 0
  280 01cc 1000A0E3 		mov	r0, #16
  281              	.LVL2:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 11
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 11
 
 
  282 01d0 04E04EE2 		sub	lr, lr, #4
@@ -658,7 +658,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  332              		.align	2
  333              	.L30:
  334 0220 40000000 		.word	.LC2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 12
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 12
 
 
  335              	.LFE5:
@@ -718,7 +718,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  381              		.text
  382              		.align	2
  383              		.type	exceptionHandlerSwi, %function
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 13
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 13
 
 
  384              	exceptionHandlerSwi:
@@ -778,7 +778,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  434              		.loc 1 59 0
  435 0294 04D04DE2 		sub	sp, sp, #4
  436              	.LCFI13:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 14
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 14
 
 
  437              		.loc 1 63 0
@@ -838,7 +838,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  491 0032 04       		.uleb128 0x4
  492 0033 8E       		.byte	0x8e
  493 0034 01       		.uleb128 0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 15
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 15
 
 
  494 0035 000000   		.align	2
@@ -898,7 +898,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  548              	.LASFDE10:
  549 0084 00000000 		.4byte	.Lframe0
  550 0088 F0010000 		.4byte	.LFB5
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 16
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 16
 
 
  551 008c 34000000 		.4byte	.LFE5-.LFB5
@@ -958,7 +958,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  605 00d4 34000000 		.4byte	.LFE2-.LFB2
  606 00d8 44       		.byte	0x4
  607              		.4byte	.LCFI12-.LFB2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 17
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 17
 
 
  608 00d9 0E       		.byte	0xe
@@ -1018,7 +1018,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  662 0065 00000000 		.4byte	0x0
  663              	.LLST4:
  664 0069 9C010000 		.4byte	.LVL0-.Ltext0
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 18
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 18
 
 
  665 006d A0010000 		.4byte	.LVL1-.Ltext0
@@ -1078,7 +1078,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  719 00f8 24020000 		.4byte	.LFB4-.Ltext0
  720 00fc 28020000 		.4byte	.LCFI8-.Ltext0
  721 0100 0100     		.2byte	0x1
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 19
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 19
 
 
  722 0102 5D       		.byte	0x5d
@@ -1138,7 +1138,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  776 018b 98020000 		.4byte	.LCFI13-.Ltext0
  777 018f C0020000 		.4byte	.LFE2-.Ltext0
  778 0193 0200     		.2byte	0x2
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 20
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 20
 
 
  779 0195 7D       		.byte	0x7d
@@ -1161,13 +1161,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  796 000c 00000000 		.4byte	.Ldebug_line0
  797 0010 C0020000 		.4byte	.Letext0
  798 0014 00000000 		.4byte	.Ltext0
- 799 0018 8B000000 		.4byte	.LASF16
+ 799 0018 BD000000 		.4byte	.LASF16
  800 001c 01       		.byte	0x1
- 801 001d 18000000 		.4byte	.LASF17
- 802 0021 D6000000 		.4byte	.LASF18
+ 801 001d 4A000000 		.4byte	.LASF17
+ 802 0021 18000000 		.4byte	.LASF18
  803 0025 02       		.uleb128 0x2
  804 0026 01       		.byte	0x1
- 805 0027 36000000 		.4byte	.LASF0
+ 805 0027 68000000 		.4byte	.LASF0
  806 002b 01       		.byte	0x1
  807 002c B3       		.byte	0xb3
  808 002d 01       		.byte	0x1
@@ -1177,7 +1177,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  812 0037 5D       		.byte	0x5d
  813 0038 03       		.uleb128 0x3
  814 0039 01       		.byte	0x1
- 815 003a 24000000 		.4byte	.LASF1
+ 815 003a 56000000 		.4byte	.LASF1
  816 003e 01       		.byte	0x1
  817 003f CA       		.byte	0xca
  818 0040 01       		.byte	0x1
@@ -1186,7 +1186,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  821 0049 00000000 		.4byte	.LLST1
  822 004d 04       		.uleb128 0x4
  823 004e 01       		.byte	0x1
- 824 004f 4B000000 		.4byte	.LASF2
+ 824 004f 7D000000 		.4byte	.LASF2
  825 0053 01       		.byte	0x1
  826 0054 0201     		.2byte	0x102
  827 0056 01       		.byte	0x1
@@ -1195,10 +1195,10 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  830 005f 1F000000 		.4byte	.LLST2
  831 0063 05       		.uleb128 0x5
  832 0064 96000000 		.4byte	0x96
- 833 0068 60000000 		.4byte	.LASF5
+ 833 0068 92000000 		.4byte	.LASF5
  834 006c 01       		.byte	0x1
  835 006d 9C       		.byte	0x9c
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 21
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 21
 
 
  836 006e 01       		.byte	0x1
@@ -1206,13 +1206,13 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  838 0073 BC010000 		.4byte	.LFE7
  839 0077 3E000000 		.4byte	.LLST3
  840 007b 06       		.uleb128 0x6
- 841 007c 14010000 		.4byte	.LASF3
+ 841 007c 16010000 		.4byte	.LASF3
  842 0080 01       		.byte	0x1
  843 0081 9D       		.byte	0x9d
  844 0082 96000000 		.4byte	0x96
  845 0086 69000000 		.4byte	.LLST4
  846 008a 07       		.uleb128 0x7
- 847 008b AB000000 		.4byte	.LASF4
+ 847 008b DD000000 		.4byte	.LASF4
  848 008f 01       		.byte	0x1
  849 0090 9E       		.byte	0x9e
  850 0091 96000000 		.4byte	0x96
@@ -1223,7 +1223,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  855 009c 07       		.byte	0x7
  856 009d 05       		.uleb128 0x5
  857 009e D0000000 		.4byte	0xd0
- 858 00a2 97000000 		.4byte	.LASF6
+ 858 00a2 C9000000 		.4byte	.LASF6
  859 00a6 01       		.byte	0x1
  860 00a7 87       		.byte	0x87
  861 00a8 01       		.byte	0x1
@@ -1231,20 +1231,20 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  863 00ad F0010000 		.4byte	.LFE6
  864 00b1 7C000000 		.4byte	.LLST5
  865 00b5 06       		.uleb128 0x6
- 866 00b6 14010000 		.4byte	.LASF3
+ 866 00b6 16010000 		.4byte	.LASF3
  867 00ba 01       		.byte	0x1
  868 00bb 88       		.byte	0x88
  869 00bc 96000000 		.4byte	0x96
  870 00c0 A7000000 		.4byte	.LLST6
  871 00c4 07       		.uleb128 0x7
- 872 00c5 AB000000 		.4byte	.LASF4
+ 872 00c5 DD000000 		.4byte	.LASF4
  873 00c9 01       		.byte	0x1
  874 00ca 89       		.byte	0x89
  875 00cb 96000000 		.4byte	0x96
  876 00cf 00       		.byte	0x0
  877 00d0 05       		.uleb128 0x5
  878 00d1 03010000 		.4byte	0x103
- 879 00d5 74000000 		.4byte	.LASF7
+ 879 00d5 A6000000 		.4byte	.LASF7
  880 00d9 01       		.byte	0x1
  881 00da 74       		.byte	0x74
  882 00db 01       		.byte	0x1
@@ -1252,43 +1252,43 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  884 00e0 24020000 		.4byte	.LFE5
  885 00e4 BA000000 		.4byte	.LLST7
  886 00e8 06       		.uleb128 0x6
- 887 00e9 14010000 		.4byte	.LASF3
+ 887 00e9 16010000 		.4byte	.LASF3
  888 00ed 01       		.byte	0x1
  889 00ee 75       		.byte	0x75
  890 00ef 96000000 		.4byte	0x96
  891 00f3 E5000000 		.4byte	.LLST8
  892 00f7 07       		.uleb128 0x7
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 22
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 22
 
 
- 893 00f8 AB000000 		.4byte	.LASF4
+ 893 00f8 DD000000 		.4byte	.LASF4
  894 00fc 01       		.byte	0x1
  895 00fd 76       		.byte	0x76
  896 00fe 96000000 		.4byte	0x96
  897 0102 00       		.byte	0x0
  898 0103 09       		.uleb128 0x9
  899 0104 35010000 		.4byte	0x135
- 900 0108 B1000000 		.4byte	.LASF8
+ 900 0108 E3000000 		.4byte	.LASF8
  901 010c 01       		.byte	0x1
  902 010d 61       		.byte	0x61
  903 010e 24020000 		.4byte	.LFB4
  904 0112 58020000 		.4byte	.LFE4
  905 0116 F8000000 		.4byte	.LLST9
  906 011a 06       		.uleb128 0x6
- 907 011b 14010000 		.4byte	.LASF3
+ 907 011b 16010000 		.4byte	.LASF3
  908 011f 01       		.byte	0x1
  909 0120 62       		.byte	0x62
  910 0121 96000000 		.4byte	0x96
  911 0125 23010000 		.4byte	.LLST10
  912 0129 07       		.uleb128 0x7
- 913 012a AB000000 		.4byte	.LASF4
+ 913 012a DD000000 		.4byte	.LASF4
  914 012e 01       		.byte	0x1
  915 012f 63       		.byte	0x63
  916 0130 96000000 		.4byte	0x96
  917 0134 00       		.byte	0x0
  918 0135 05       		.uleb128 0x5
  919 0136 68010000 		.4byte	0x168
- 920 013a 39010000 		.4byte	.LASF9
+ 920 013a 3B010000 		.4byte	.LASF9
  921 013e 01       		.byte	0x1
  922 013f 4E       		.byte	0x4e
  923 0140 01       		.byte	0x1
@@ -1296,20 +1296,20 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  925 0145 8C020000 		.4byte	.LFE3
  926 0149 36010000 		.4byte	.LLST11
  927 014d 06       		.uleb128 0x6
- 928 014e 14010000 		.4byte	.LASF3
+ 928 014e 16010000 		.4byte	.LASF3
  929 0152 01       		.byte	0x1
  930 0153 4F       		.byte	0x4f
  931 0154 96000000 		.4byte	0x96
  932 0158 61010000 		.4byte	.LLST12
  933 015c 07       		.uleb128 0x7
- 934 015d AB000000 		.4byte	.LASF4
+ 934 015d DD000000 		.4byte	.LASF4
  935 0161 01       		.byte	0x1
  936 0162 50       		.byte	0x50
  937 0163 96000000 		.4byte	0x96
  938 0167 00       		.byte	0x0
  939 0168 05       		.uleb128 0x5
  940 0169 9B010000 		.4byte	0x19b
- 941 016d 23010000 		.4byte	.LASF10
+ 941 016d 25010000 		.4byte	.LASF10
  942 0171 01       		.byte	0x1
  943 0172 3B       		.byte	0x3b
  944 0173 01       		.byte	0x1
@@ -1317,8 +1317,8 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  946 0178 C0020000 		.4byte	.LFE2
  947 017c 74010000 		.4byte	.LLST13
  948 0180 06       		.uleb128 0x6
- 949 0181 14010000 		.4byte	.LASF3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 23
+ 949 0181 16010000 		.4byte	.LASF3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 23
 
 
  950 0185 01       		.byte	0x1
@@ -1326,7 +1326,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  952 0187 96000000 		.4byte	0x96
  953 018b 9F010000 		.4byte	.LLST14
  954 018f 07       		.uleb128 0x7
- 955 0190 AB000000 		.4byte	.LASF4
+ 955 0190 DD000000 		.4byte	.LASF4
  956 0194 01       		.byte	0x1
  957 0195 3D       		.byte	0x3d
  958 0196 96000000 		.4byte	0x96
@@ -1344,11 +1344,11 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  970 01ae 04       		.byte	0x4
  971 01af B3010000 		.4byte	0x1b3
  972 01b3 08       		.uleb128 0x8
- 973 01b4 C8000000 		.4byte	.LASF13
+ 973 01b4 FA000000 		.4byte	.LASF13
  974 01b8 01       		.byte	0x1
  975 01b9 08       		.byte	0x8
  976 01ba 0A       		.uleb128 0xa
- 977 01bb 06010000 		.4byte	.LASF14
+ 977 01bb 08010000 		.4byte	.LASF14
  978 01bf 01       		.byte	0x1
  979 01c0 21       		.byte	0x21
  980 01c1 AD010000 		.4byte	0x1ad
@@ -1360,12 +1360,12 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  986 01cd 656E6400 		.ascii	"end\000"
  987 01d1 01       		.byte	0x1
  988 01d2 1A       		.byte	0x1a
- 989 01d3 31000000 		.4byte	.LASF19
+ 989 01d3 63000000 		.4byte	.LASF19
  990 01d7 DD010000 		.4byte	0x1dd
  991 01db 01       		.byte	0x1
  992 01dc 01       		.byte	0x1
  993 01dd 08       		.uleb128 0x8
- 994 01de 0F010000 		.4byte	.LASF15
+ 994 01de 11010000 		.4byte	.LASF15
  995 01e2 01       		.byte	0x1
  996 01e3 08       		.byte	0x8
  997 01e4 00       		.byte	0x0
@@ -1378,7 +1378,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1004 0005 12       		.uleb128 0x12
  1005 0006 01       		.uleb128 0x1
  1006 0007 11       		.uleb128 0x11
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 24
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 24
 
 
  1007 0008 01       		.uleb128 0x1
@@ -1438,7 +1438,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1061 003e 2E       		.uleb128 0x2e
  1062 003f 00       		.byte	0x0
  1063 0040 3F       		.uleb128 0x3f
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 25
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 25
 
 
  1064 0041 0C       		.uleb128 0xc
@@ -1498,7 +1498,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1118 0077 34       		.uleb128 0x34
  1119 0078 00       		.byte	0x0
  1120 0079 03       		.uleb128 0x3
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 26
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 26
 
 
  1121 007a 0E       		.uleb128 0xe
@@ -1558,7 +1558,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1175 00b0 00       		.byte	0x0
  1176 00b1 00       		.byte	0x0
  1177 00b2 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 27
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 27
 
 
  1178 00b3 0F       		.uleb128 0xf
@@ -1618,7 +1618,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1219 0060 BA010000 		.4byte	0x1ba
  1220 0064 70486561 		.ascii	"pHeapEnd\000"
  1220      70456E64 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 28
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 28
 
 
  1220      00
@@ -1645,137 +1645,137 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 1
  1238 000d 70486561 		.ascii	"pHeapStart\000"
  1238      70537461 
  1238      727400
- 1239              	.LASF17:
- 1240 0018 6672616D 		.ascii	"framework.c\000"
- 1240      65776F72 
- 1240      6B2E6300 
- 1241              	.LASF1:
- 1242 0024 6C6F774C 		.ascii	"lowLevelInit\000"
- 1242      6576656C 
- 1242      496E6974 
- 1242      00
- 1243              	.LASF19:
- 1244 0031 2A656E64 		.ascii	"*end\000"
+ 1239              	.LASF18:
+ 1240 0018 2F637967 		.ascii	"/cygdrive/h/servers/github/MP3Player/2148/startup\000"
+ 1240      64726976 
+ 1240      652F682F 
+ 1240      73657276 
+ 1240      6572732F 
+ 1241              	.LASF17:
+ 1242 004a 6672616D 		.ascii	"framework.c\000"
+ 1242      65776F72 
+ 1242      6B2E6300 
+ 1243              	.LASF1:
+ 1244 0056 6C6F774C 		.ascii	"lowLevelInit\000"
+ 1244      6576656C 
+ 1244      496E6974 
  1244      00
- 1245              	.LASF0:
- 1246 0036 65786365 		.ascii	"exceptionHandlerInit\000"
- 1246      7074696F 
- 1246      6E48616E 
- 1246      646C6572 
- 1246      496E6974 
- 1247              	.LASF2:
- 1248 004b 496E6963 		.ascii	"InicjalizacjaKonsoli\000"
- 1248      6A616C69 
- 1248      7A61636A 
- 1248      614B6F6E 
- 1248      736F6C69 
- 1249              	.LASF5:
- 1250 0060 65786365 		.ascii	"exceptionHandlerIrq\000"
- 1250      7074696F 
- 1250      6E48616E 
- 1250      646C6572 
- 1250      49727100 
- 1251              	.LASF7:
- 1252 0074 65786365 		.ascii	"exceptionHandlerDabort\000"
+ 1245              	.LASF19:
+ 1246 0063 2A656E64 		.ascii	"*end\000"
+ 1246      00
+ 1247              	.LASF0:
+ 1248 0068 65786365 		.ascii	"exceptionHandlerInit\000"
+ 1248      7074696F 
+ 1248      6E48616E 
+ 1248      646C6572 
+ 1248      496E6974 
+ 1249              	.LASF2:
+ 1250 007d 496E6963 		.ascii	"InicjalizacjaKonsoli\000"
+ 1250      6A616C69 
+ 1250      7A61636A 
+ 1250      614B6F6E 
+ 1250      736F6C69 
+ 1251              	.LASF5:
+ 1252 0092 65786365 		.ascii	"exceptionHandlerIrq\000"
  1252      7074696F 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 29
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 29
 
 
  1252      6E48616E 
  1252      646C6572 
- 1252      4461626F 
- 1253              	.LASF16:
- 1254 008b 474E5520 		.ascii	"GNU C 4.1.1\000"
- 1254      4320342E 
- 1254      312E3100 
- 1255              	.LASF6:
- 1256 0097 65786365 		.ascii	"exceptionHandlerFiq\000"
- 1256      7074696F 
- 1256      6E48616E 
- 1256      646C6572 
- 1256      46697100 
- 1257              	.LASF4:
- 1258 00ab 76616C75 		.ascii	"value\000"
- 1258      6500
- 1259              	.LASF8:
- 1260 00b1 65786365 		.ascii	"exceptionHandlerPabort\000"
- 1260      7074696F 
- 1260      6E48616E 
- 1260      646C6572 
- 1260      5061626F 
- 1261              	.LASF13:
- 1262 00c8 756E7369 		.ascii	"unsigned char\000"
- 1262      676E6564 
- 1262      20636861 
- 1262      7200
- 1263              	.LASF18:
- 1264 00d6 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/startup\000"
- 1264      64726976 
- 1264      652F672F 
- 1264      73657276 
- 1264      6572732F 
+ 1252      49727100 
+ 1253              	.LASF7:
+ 1254 00a6 65786365 		.ascii	"exceptionHandlerDabort\000"
+ 1254      7074696F 
+ 1254      6E48616E 
+ 1254      646C6572 
+ 1254      4461626F 
+ 1255              	.LASF16:
+ 1256 00bd 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 1256      4320342E 
+ 1256      312E3100 
+ 1257              	.LASF6:
+ 1258 00c9 65786365 		.ascii	"exceptionHandlerFiq\000"
+ 1258      7074696F 
+ 1258      6E48616E 
+ 1258      646C6572 
+ 1258      46697100 
+ 1259              	.LASF4:
+ 1260 00dd 76616C75 		.ascii	"value\000"
+ 1260      6500
+ 1261              	.LASF8:
+ 1262 00e3 65786365 		.ascii	"exceptionHandlerPabort\000"
+ 1262      7074696F 
+ 1262      6E48616E 
+ 1262      646C6572 
+ 1262      5061626F 
+ 1263              	.LASF13:
+ 1264 00fa 756E7369 		.ascii	"unsigned char\000"
+ 1264      676E6564 
+ 1264      20636861 
+ 1264      7200
  1265              	.LASF14:
- 1266 0106 70486561 		.ascii	"pHeapEnd\000"
+ 1266 0108 70486561 		.ascii	"pHeapEnd\000"
  1266      70456E64 
  1266      00
  1267              	.LASF15:
- 1268 010f 63686172 		.ascii	"char\000"
+ 1268 0111 63686172 		.ascii	"char\000"
  1268      00
  1269              	.LASF3:
- 1270 0114 70726F67 		.ascii	"programCounter\000"
+ 1270 0116 70726F67 		.ascii	"programCounter\000"
  1270      72616D43 
  1270      6F756E74 
  1270      657200
  1271              	.LASF10:
- 1272 0123 65786365 		.ascii	"exceptionHandlerUndef\000"
+ 1272 0125 65786365 		.ascii	"exceptionHandlerUndef\000"
  1272      7074696F 
  1272      6E48616E 
  1272      646C6572 
  1272      556E6465 
  1273              	.LASF9:
- 1274 0139 65786365 		.ascii	"exceptionHandlerSwi\000"
+ 1274 013b 65786365 		.ascii	"exceptionHandlerSwi\000"
  1274      7074696F 
  1274      6E48616E 
  1274      646C6572 
  1274      53776900 
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 30
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 30
 
 
  1275              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s 			page 31
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s 			page 31
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 framework.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:13     .text:00000000 exceptionHandlerInit
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:22     .text:00000000 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:59     .text:00000050 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:224    .text:00000188 exceptionHandlerIrq
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:13     .text:00000000 exceptionHandlerInit
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:22     .text:00000000 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:59     .text:00000050 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:224    .text:00000188 exceptionHandlerIrq
                             *COM*:00000004 pHeapStart
                             *COM*:00000004 pHeapEnd
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:424    .text:0000028c exceptionHandlerUndef
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:384    .text:00000258 exceptionHandlerSwi
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:344    .text:00000224 exceptionHandlerPabort
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:304    .text:000001f0 exceptionHandlerDabort
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:264    .text:000001bc exceptionHandlerFiq
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:74     .text:00000078 lowLevelInit
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:81     .text:00000078 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:164    .text:00000120 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:172    .text:0000012c InicjalizacjaKonsoli
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:178    .text:0000012c $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:213    .text:00000180 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:230    .text:00000188 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:254    .text:000001b8 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:270    .text:000001bc $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:294    .text:000001ec $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:310    .text:000001f0 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:334    .text:00000220 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:350    .text:00000224 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:374    .text:00000254 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:390    .text:00000258 $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:414    .text:00000288 $d
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:430    .text:0000028c $a
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccJ1ozy1.s:454    .text:000002bc $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:424    .text:0000028c exceptionHandlerUndef
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:384    .text:00000258 exceptionHandlerSwi
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:344    .text:00000224 exceptionHandlerPabort
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:304    .text:000001f0 exceptionHandlerDabort
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:264    .text:000001bc exceptionHandlerFiq
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:74     .text:00000078 lowLevelInit
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:81     .text:00000078 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:164    .text:00000120 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:172    .text:0000012c InicjalizacjaKonsoli
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:178    .text:0000012c $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:213    .text:00000180 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:230    .text:00000188 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:254    .text:000001b8 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:270    .text:000001bc $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:294    .text:000001ec $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:310    .text:000001f0 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:334    .text:00000220 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:350    .text:00000224 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:374    .text:00000254 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:390    .text:00000258 $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:414    .text:00000288 $d
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:430    .text:0000028c $a
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccuih1ow.s:454    .text:000002bc $d
 
 UNDEFINED SYMBOLS
 end

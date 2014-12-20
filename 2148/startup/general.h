@@ -53,6 +53,7 @@
  *
  *****************************************************************************/
 
+
 #ifndef _GENERAL_H
 #define _GENERAL_H
 
@@ -64,10 +65,8 @@
 #define NULL (0)
 #endif
 
-#ifndef FALSE
-#define FALSE 0
-#define TRUE  1
-#endif
+//#define FALSE 0
+//#define TRUE  1
 
 typedef unsigned char tU8;
 typedef unsigned short tU16;
@@ -75,31 +74,7 @@ typedef unsigned int tU32;
 typedef signed char tS8;
 typedef signed short tS16;
 typedef signed int tS32;
-typedef unsigned char tBool;
-
-/* This type should be used for characters  (MISRA-C2 6.1)*/
-typedef unsigned char char_t;
-
-/* integer types (MISRA-C2 6.2, 6.3 */
-typedef signed char int8_t;
-typedef unsigned char uint8_t;
-typedef signed char int8;
-typedef unsigned char uint8;
-
-typedef signed short int16_t;
-typedef unsigned short uint16_t;
-typedef signed short int16;
-typedef unsigned short uint16;
-
-typedef signed int int32;
-typedef unsigned int uint32;
-
-typedef signed long long int64_t;
-typedef unsigned long long uint64_t;
-typedef signed long long int64;
-typedef unsigned long long uint64;
-
-static uint8 SEMAFOR_SPI = 0;
+//typedef unsigned char tBool;
 
 #endif
 

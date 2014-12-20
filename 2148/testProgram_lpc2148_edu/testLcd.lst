@@ -1,4 +1,4 @@
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 1
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s 			page 1
 
 
    1              		.code	16
@@ -26,28 +26,28 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 1
   19 000c 00000000 		.4byte	.Ldebug_line0
   20 0010 00000000 		.4byte	.Letext0
   21 0014 00000000 		.4byte	.Ltext0
-  22 0018 9D000000 		.4byte	.LASF8
+  22 0018 5D000000 		.4byte	.LASF8
   23 001c 01       		.byte	0x1
-  24 001d CD000000 		.4byte	.LASF9
-  25 0021 00000000 		.4byte	.LASF10
+  24 001d 8D000000 		.4byte	.LASF9
+  25 0021 97000000 		.4byte	.LASF10
   26 0025 02       		.uleb128 0x2
-  27 0026 53000000 		.4byte	.LASF0
+  27 0026 13000000 		.4byte	.LASF0
   28 002a 01       		.byte	0x1
   29 002b 08       		.byte	0x8
   30 002c 02       		.uleb128 0x2
-  31 002d 40000000 		.4byte	.LASF1
+  31 002d 00000000 		.4byte	.LASF1
   32 0031 02       		.byte	0x2
   33 0032 07       		.byte	0x7
   34 0033 02       		.uleb128 0x2
-  35 0034 79000000 		.4byte	.LASF2
+  35 0034 39000000 		.4byte	.LASF2
   36 0038 04       		.byte	0x4
   37 0039 07       		.byte	0x7
   38 003a 02       		.uleb128 0x2
-  39 003b D7000000 		.4byte	.LASF3
+  39 003b D9000000 		.4byte	.LASF3
   40 003f 01       		.byte	0x1
   41 0040 06       		.byte	0x6
   42 0041 02       		.uleb128 0x2
-  43 0042 C3000000 		.4byte	.LASF4
+  43 0042 83000000 		.4byte	.LASF4
   44 0046 02       		.byte	0x2
   45 0047 05       		.byte	0x5
   46 0048 03       		.uleb128 0x3
@@ -55,29 +55,29 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 1
   48 004d 04       		.byte	0x4
   49 004e 05       		.byte	0x5
   50 004f 04       		.uleb128 0x4
-  51 0050 73000000 		.4byte	.LASF11
+  51 0050 33000000 		.4byte	.LASF11
   52 0054 01       		.byte	0x1
-  53 0055 58       		.byte	0x58
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 2
+  53 0055 57       		.byte	0x57
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s 			page 2
 
 
   54 0056 25000000 		.4byte	0x25
   55 005a 02       		.uleb128 0x2
-  56 005b A9000000 		.4byte	.LASF5
+  56 005b 69000000 		.4byte	.LASF5
   57 005f 08       		.byte	0x8
   58 0060 05       		.byte	0x5
   59 0061 02       		.uleb128 0x2
-  60 0062 86000000 		.4byte	.LASF6
+  60 0062 46000000 		.4byte	.LASF6
   61 0066 08       		.byte	0x8
   62 0067 07       		.byte	0x7
   63 0068 02       		.uleb128 0x2
-  64 0069 61000000 		.4byte	.LASF7
+  64 0069 21000000 		.4byte	.LASF7
   65 006d 04       		.byte	0x4
   66 006e 07       		.byte	0x7
   67 006f 05       		.uleb128 0x5
-  68 0070 B7000000 		.4byte	.LASF12
+  68 0070 77000000 		.4byte	.LASF12
   69 0074 01       		.byte	0x1
-  70 0075 67       		.byte	0x67
+  70 0075 66       		.byte	0x66
   71 0076 4F000000 		.4byte	0x4f
   72 007a 00       		.byte	0x0
   73 007b 00       		.byte	0x0
@@ -118,7 +118,7 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 1
  108 0021 03       		.uleb128 0x3
  109 0022 08       		.uleb128 0x8
  110 0023 0B       		.uleb128 0xb
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s 			page 3
 
 
  111 0024 0B       		.uleb128 0xb
@@ -156,81 +156,81 @@ ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 1
  143 0044 00       		.byte	0x0
  144 0045 00       		.byte	0x0
  145              		.section	.debug_str,"MS",%progbits,1
- 146              	.LASF10:
- 147 0000 2F637967 		.ascii	"/cygdrive/g/servers/github/SysWbud/2148/testProgram"
- 147      64726976 
- 147      652F672F 
- 147      73657276 
- 147      6572732F 
- 148 0033 5F6C7063 		.ascii	"_lpc2148_edu\000"
- 148      32313438 
- 148      5F656475 
- 148      00
- 149              	.LASF1:
- 150 0040 73686F72 		.ascii	"short unsigned int\000"
- 150      7420756E 
- 150      7369676E 
- 150      65642069 
- 150      6E7400
- 151              	.LASF0:
- 152 0053 756E7369 		.ascii	"unsigned char\000"
- 152      676E6564 
- 152      20636861 
- 152      7200
- 153              	.LASF7:
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 4
+ 146              	.LASF1:
+ 147 0000 73686F72 		.ascii	"short unsigned int\000"
+ 147      7420756E 
+ 147      7369676E 
+ 147      65642069 
+ 147      6E7400
+ 148              	.LASF0:
+ 149 0013 756E7369 		.ascii	"unsigned char\000"
+ 149      676E6564 
+ 149      20636861 
+ 149      7200
+ 150              	.LASF7:
+ 151 0021 6C6F6E67 		.ascii	"long unsigned int\000"
+ 151      20756E73 
+ 151      69676E65 
+ 151      6420696E 
+ 151      7400
+ 152              	.LASF11:
+ 153 0033 75696E74 		.ascii	"uint8\000"
+ 153      3800
+ 154              	.LASF2:
+ 155 0039 756E7369 		.ascii	"unsigned int\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s 			page 4
 
 
- 154 0061 6C6F6E67 		.ascii	"long unsigned int\000"
- 154      20756E73 
- 154      69676E65 
- 154      6420696E 
- 154      7400
- 155              	.LASF11:
- 156 0073 75696E74 		.ascii	"uint8\000"
- 156      3800
- 157              	.LASF2:
- 158 0079 756E7369 		.ascii	"unsigned int\000"
- 158      676E6564 
- 158      20696E74 
- 158      00
- 159              	.LASF6:
- 160 0086 6C6F6E67 		.ascii	"long long unsigned int\000"
- 160      206C6F6E 
- 160      6720756E 
- 160      7369676E 
- 160      65642069 
- 161              	.LASF8:
- 162 009d 474E5520 		.ascii	"GNU C 4.1.1\000"
- 162      4320342E 
- 162      312E3100 
- 163              	.LASF5:
- 164 00a9 6C6F6E67 		.ascii	"long long int\000"
- 164      206C6F6E 
- 164      6720696E 
- 164      7400
- 165              	.LASF12:
- 166 00b7 53454D41 		.ascii	"SEMAFOR_SPI\000"
- 166      464F525F 
- 166      53504900 
- 167              	.LASF4:
- 168 00c3 73686F72 		.ascii	"short int\000"
- 168      7420696E 
- 168      7400
- 169              	.LASF9:
- 170 00cd 74657374 		.ascii	"testLcd.c\000"
- 170      4C63642E 
- 170      6300
+ 155      676E6564 
+ 155      20696E74 
+ 155      00
+ 156              	.LASF6:
+ 157 0046 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 157      206C6F6E 
+ 157      6720756E 
+ 157      7369676E 
+ 157      65642069 
+ 158              	.LASF8:
+ 159 005d 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 159      4320342E 
+ 159      312E3100 
+ 160              	.LASF5:
+ 161 0069 6C6F6E67 		.ascii	"long long int\000"
+ 161      206C6F6E 
+ 161      6720696E 
+ 161      7400
+ 162              	.LASF12:
+ 163 0077 53454D41 		.ascii	"SEMAFOR_SPI\000"
+ 163      464F525F 
+ 163      53504900 
+ 164              	.LASF4:
+ 165 0083 73686F72 		.ascii	"short int\000"
+ 165      7420696E 
+ 165      7400
+ 166              	.LASF9:
+ 167 008d 74657374 		.ascii	"testLcd.c\000"
+ 167      4C63642E 
+ 167      6300
+ 168              	.LASF10:
+ 169 0097 2F637967 		.ascii	"/cygdrive/h/servers/github/MP3Player/2148/testProgr"
+ 169      64726976 
+ 169      652F682F 
+ 169      73657276 
+ 169      6572732F 
+ 170 00ca 616D5F6C 		.ascii	"am_lpc2148_edu\000"
+ 170      70633231 
+ 170      34385F65 
+ 170      647500
  171              	.LASF3:
- 172 00d7 7369676E 		.ascii	"signed char\000"
+ 172 00d9 7369676E 		.ascii	"signed char\000"
  172      65642063 
  172      68617200 
  173              		.ident	"GCC: (GNU) 4.1.1"
-ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s 			page 5
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 testLcd.c
-/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccyTnmWj.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccdgNX1b.s:1      .text:00000000 $t
 
 NO UNDEFINED SYMBOLS

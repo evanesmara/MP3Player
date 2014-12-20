@@ -66,8 +66,8 @@ uint32 filesList (CHAR* path, CHAR* list)
 				continue;
 			} else
 			{
-				if (fno.fname[9] != 'w' || fno.fname[10] != 'a' || fno.fname[11] != 'v')
-					continue;
+//				if (fno.fname[9] != 'W' || fno.fname[10] != 'A' || fno.fname[11] != 'V')
+//					continue;
 				if (i >= 256)
 				{
 					break;

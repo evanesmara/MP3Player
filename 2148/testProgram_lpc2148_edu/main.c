@@ -1,7 +1,7 @@
 #include "../pre_emptive_os/api/osapi.h"
 #include "../pre_emptive_os/api/general.h"
 
-#include <printf_P.h>
+//#include <printf_P.h>
 #include <ea_init.h>
 #include <lpc2xxx.h>
 #include <consol.h>
@@ -21,22 +21,23 @@
 #include "pff2/src/pff.h"
 
 #include "functions.h"
+#include "wave.h"
 
-static void ProcMain (void* arg);
+static void ProcMain(void* arg);
 #define STACK_SIZE_MAIN  400
 static tU8 stack_Main[STACK_SIZE_MAIN];
 
-static void ProcLCD2x16 (void* arg);
+static void ProcLCD2x16(void* arg);
 #define STACK_SIZE_LCD2X16 2048
 static tU8 stack_LCD2x16[STACK_SIZE_LCD2X16];
 static tU8 pid_lcd2x16;
 
-static void ProcRest (void* arg);
+static void ProcRest(void* arg);
 #define STACK_SIZE_REST 2048
 
-static void WyswietlMenuGlowne (int nrTekstu);
-static void WyswietlTekstNaLCD128x128 (char *s, BOOL czyZgasic);
-static void OdtwarzajDzwiek ();
+static void WyswietlMenuGlowne(int nrTekstu);
+static void WyswietlTekstNaLCD128x128(char *s, BOOL czyZgasic);
+static void OdtwarzajDzwiek();
 
 /*
  * 0 - ok
@@ -61,8 +62,7 @@ char listaPlikow[256 * 12];
 /*
  * Funkcja wejœciowa programu.
  */
-int main (void)
-{
+int main(void) {
 	tU8 error;
 	tU8 pid_main;
 
@@ -70,12 +70,13 @@ int main (void)
 	IODIR0 |= 0x00000080;
 	IOSET0 = 0x00000080;
 
-	osInit ();
+	osInit();
 
-	osCreateProcess (ProcMain, stack_Main, STACK_SIZE_MAIN, &pid_main, 1, NULL, &error);
-	osStartProcess (pid_main, &error);
+	osCreateProcess(ProcMain, stack_Main, STACK_SIZE_MAIN, &pid_main, 1, NULL,
+			&error);
+	osStartProcess(pid_main, &error);
 
-	osStart ();
+	osStart();
 
 	return 0;
 }
@@ -83,36 +84,33 @@ int main (void)
 /*
  * Procedura g³ówna programu odpalaj¹ca pozosta³e procedury.
  */
-static void ProcMain (void* arg)
-{
+static void ProcMain(void* arg) {
 	tU8 error;
 
 	// Inicjalizacja ekranu LCD i ustawienie kolorów wyœwietlacza i tekstu.
-	WyswietlTekstNaLCD128x128 ("Inicjalizacja", TRUE);
+	WyswietlTekstNaLCD128x128("Inicjalizacja", TRUE);
 
 	// Wyœwietlacz LCD 2x16 znaków
-	osCreateProcess (ProcLCD2x16, stack_LCD2x16, STACK_SIZE_LCD2X16, &pid_lcd2x16, 3, NULL, &error);
-	osStartProcess (pid_lcd2x16, &error);
+	osCreateProcess(ProcLCD2x16, stack_LCD2x16, STACK_SIZE_LCD2X16,
+			&pid_lcd2x16, 3, NULL, &error);
+	osStartProcess(pid_lcd2x16, &error);
 
 	// Inicjalizacja joystick'a.
-	initKeyProc ();
+	initKeyProc();
 
 	// Reszta procesu g³ównego - obs³uga mp3.
-	ProcRest (0);
+	ProcRest(0);
 
 	// Zakoñczenie procesów.
-	osDeleteProcess ();
+	osDeleteProcess();
 }
 
-static void ProcLCD2x16 (void* arg)
-{
-	WyswietlTekstNaLcd ();
+static void ProcLCD2x16(void* arg) {
+	WyswietlTekstNaLcd();
 }
 
-static char* KomunikatInicjalizacji (FRESULT komunikat)
-{
-	switch (komunikat)
-	{
+static char* KomunikatInicjalizacji(FRESULT komunikat) {
+	switch (komunikat) {
 	case 0:
 		return "FR_OK";
 	case 1:
@@ -133,54 +131,49 @@ static char* KomunikatInicjalizacji (FRESULT komunikat)
 		return "";
 	}
 }
-static void ProcRest (void *arg)
-{
+static void ProcRest(void *arg) {
 	int menuGlowne = 0;
 	int niepowodzenie = 0;
 
-	StatusOdtwarzania *status;
-	status = ZATRZYMAJ;
+	PlayerStatus *status;
+	status = Player_Stoped;
 
 	// Inicjalizacja Karty.
-	do
-	{
-		wynikInicjalizacjiSd = pf_mount (&fatfs);
-		osSleep (300);
+	do {
+		wynikInicjalizacjiSd = pf_mount(&fatfs);
+		osSleep(100);
 
-		if (wynikInicjalizacjiSd != FR_OK)
-		{
+		if (wynikInicjalizacjiSd != FR_OK) {
 			niepowodzenie += 1;
 		}
 
 		kolorDiody = niepowodzenie % 3;
-		ZapalajDiode (kolorDiody, 0);
+		ZapalajDiode(kolorDiody, 0);
 
 	} while (niepowodzenie < 15 && wynikInicjalizacjiSd != FR_OK);
 
-	if (wynikInicjalizacjiSd == FR_OK)
-	{
+	if (wynikInicjalizacjiSd == FR_OK) {
 		kolorDiody = 2;
-		WyswietlTekstNaLCD128x128 ("Powodzenie.", 0);
+		WyswietlTekstNaLCD128x128("Powodzenie.", 0);
 
-		filesList ("/", listaPlikow); // stwórz liste plików
+		//		wynikInicjalizacjiSd = listDir("/", TRUE);
 
-	} else
-	{
+		filesList("/", listaPlikow); // stwórz liste plików
+
+	} else {
 		kolorDiody = 1;
-		WyswietlTekstNaLCD128x128 (KomunikatInicjalizacji (wynikInicjalizacjiSd), 0);
+		WyswietlTekstNaLCD128x128(KomunikatInicjalizacji(wynikInicjalizacjiSd),
+				0);
 	}
 
-	ZapalajDiode (kolorDiody, 0);
-	osSleep (500);
+	ZapalajDiode(kolorDiody, 0);
+	osSleep(500);
 
-	while (wynikInicjalizacjiSd == FR_OK)
-	{
-		tU8 ruchJoysticka = checkKey ();
+	while (wynikInicjalizacjiSd == FR_OK) {
+		tU8 ruchJoysticka = checkKey();
 
-		if (ruchJoysticka != KEY_NOTHING)
-		{
-			switch (ruchJoysticka)
-			{
+		if (ruchJoysticka != KEY_NOTHING) {
+			switch (ruchJoysticka) {
 			case KEY_UP:
 				menuGlowne = (++menuGlowne % 3);
 				break;
@@ -191,131 +184,96 @@ static void ProcRest (void *arg)
 
 			case KEY_RIGHT:
 
-				if (menuGlowne == 1)
-				{
-					if (status == ZATRZYMAJ)
-					{
-						status = GRAJ;
-					} else
-					{
-						status = ZATRZYMAJ;
+				if (menuGlowne == 1) {
+					if (status == Player_Stoped) {
+						status = Player_Playing;
+					} else {
+						status = Player_Stoped;
 					}
-					OdtwarzajDzwiek (status);
+					OdtwarzajDzwiek(status);
 				}
 				break;
 			}
-			WyswietlMenuGlowne (menuGlowne);
+			WyswietlMenuGlowne(menuGlowne);
 		}
 
-		osSleep (100);
+		osSleep(100);
 	}
 }
 
-static void OdtwarzajDzwiek (StatusOdtwarzania *status)
-{
-	tU32 cnt = 0;
-	tU32 i;
+static void OdtwarzajDzwiek(PlayerStatus *status) {
 
-	IODIR |= 0x00000380;
-	IOCLR = 0x00000380;
+	TimerStatus timerStatus;
+	timerStatus = Timer_UP;
 
-	//
-	//Initialize DAC: AOUT = P0.25
-	//
-	PINSEL1 &= ~0x000C0000;
-	PINSEL1 |= 0x00080000;
+	char nazwa[12];
+	strncpy(nazwa, &listaPlikow[0 * 12], 12);
+	rc = pf_open(nazwa);
+	osSleep(100);
 
-	cnt = 0;
-	while (cnt++ < 0xF500/*0xF890*/&& status == GRAJ)
-	{
-		tS32 val;
+	if (playerInit()) { //inicjacja nag³ówków wave
 
-		val = EAvoice[cnt] - 128;
-		val = val * 2;
-		if (val > 127)
-		{
-			val = 127;
-		} else if (val < -127)
-		{
-			val = -127;
-		}
-
-		DACR = ((val + 128) << 8) | // actual value to output
-				(1 << 16); // BIAS = 1, 2.5uS settling time
-
-		// delay 125 us = 850 for 8kHz, 600 for 11 kHz
-		i = 0;
-		for (i = 0; i < 850; i++)
-		{
-			asm volatile (" nop");
-		}
-	}
-	status = ZATRZYMAJ;
-
-}
-
-static void WyswietlTekstNaLCD128x128 (char *s, BOOL czyZgasic)
-{
-	lcdInit ();
-	lcdColor (0xff, 0x00);
-	lcdClrscr ();
-	lcdGotoxy (0, 30);
-	lcdPuts (s);
-
-	if (czyZgasic)
-	{
-		osSleep (200);
-		lcdClrscr ();
+		playWave(&status, &timerStatus); //odtwarzamy
 	}
 }
 
-static void WyswietlMenuGlowne (int nrTekstu)
-{
+static void WyswietlTekstNaLCD128x128(char *s, BOOL czyZgasic) {
+	lcdInit();
+	lcdColor(0xff, 0x00);
+	lcdClrscr();
+	lcdGotoxy(0, 30);
+	lcdPuts(s);
+
+	if (czyZgasic) {
+		osSleep(200);
+		lcdClrscr();
+	}
+}
+
+static void WyswietlMenuGlowne(int nrTekstu) {
 	int i;
 
-	lcdInit ();
-	lcdColor (0x00, 0xff);
-	lcdClrscr ();
+	lcdInit();
+	lcdColor(0x00, 0xff);
+	lcdClrscr();
 
-	switch (nrTekstu)
-	{
+	switch (nrTekstu) {
 	case 0:
 
-		for (i = 0; i < 3; ++i)
-		{
-			lcdGotoxy (0, 30);
-			lcdPuts (listaPlikow[i * 12]);
+		for (i = 0; i < 1; ++i) {
+			lcdGotoxy(0, 30);
+			char nazwa[12];
+			strncpy(nazwa, &listaPlikow[i * 12], 12);
+			lcdPuts(nazwa);
 		}
 
 		break;
 
 	case 1:
-		lcdGotoxy (0, 30);
-		lcdPuts ("Odtwarzanie - P");
-		lcdGotoxy (0, 60);
-		lcdPuts ("Zatrzymanie - L");
+		lcdGotoxy(0, 30);
+		lcdPuts("Odtwarzanie - P");
+		lcdGotoxy(0, 60);
+		lcdPuts("Zatrzymanie - L");
 
 		break;
 
 	}
 }
 
-static void WyswietlOdtwarzanie (int nrTekstu)
-{
-	lcdInit ();
-	lcdColor (0x00, 0xff);
-	lcdClrscr ();
+static void WyswietlOdtwarzanie(int nrTekstu) {
+	lcdInit();
+	lcdColor(0x00, 0xff);
+	lcdClrscr();
 
-	switch (nrTekstu)
-	{
+	switch (nrTekstu) {
 	case 0:
-		lcdGotoxy (0, 30);
-		lcdPuts ("Pause");
+		lcdGotoxy(0, 30);
+		lcdPuts("Pause");
 		break;
 
 	case 1:
-		lcdGotoxy (0, 30);
-		lcdPuts ("Playing");
+		lcdGotoxy(0, 30);
+		lcdPuts("Playing");
 		break;
 
 	}
@@ -333,7 +291,6 @@ static void WyswietlOdtwarzanie (int nrTekstu)
  *    [in] elapsedTime - The number of elapsed milliseconds since last call.
  *
  ****************************************************************************/
-void appTick (tU32 elapsedTime)
-{
+void appTick(tU32 elapsedTime) {
 	msClock += elapsedTime;
 }

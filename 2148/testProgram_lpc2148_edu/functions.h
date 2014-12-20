@@ -3,18 +3,26 @@
 #include "pff2/src/pff.h"
 #include "inttypes.h"
 
-typedef enum
-{ // wybrany stan odtwarzania
-	ZATRZYMAJ = 0, GRAJ
-} StatusOdtwarzania;
+typedef enum { // wybrany stan odtwarzania
+	Player_Stoped = 0,
+	Player_Playing,
+	Player_Paused,
+	Player_Prev,
+	Player_Next,
+	Player_Random
+} PlayerStatus;
 
-typedef enum
-{
+typedef enum { //okreœla metode prezentacji czasu odtwarzania
+	Timer_UP = 0, //odliczanie ile mine³o
+	Timer_DOWN
+//odliczanie ile pozosta³o
+} TimerStatus;
+
+typedef enum {
 	M_Lista = 0, M_Odtwarzanie
 };
 
-typedef enum
-{
+typedef enum {
 	O_INICJALIZUJ_KARTE, O_PODEJRZYJ_LISTE_PLIKOW
 } OPCJE_MENU;
 
