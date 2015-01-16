@@ -5,13 +5,17 @@
  *
  *****************************************************************************/
 
+#include "irq_timer1.h"
+
 #include "../../pre_emptive_os/api/general.h"
+#include "../startup/lpc2xxx.h"
+#include "../startup/general.h"
+#include "../startup/config.h"
 #include <lpc2xxx.h>
 
 #define  SPI_CS   0x00008000  //<= new board, old board = 0x00800000
 
 extern tU8 pattern[8];
-
 
 /*****************************************************************************
  *
@@ -54,4 +58,3 @@ void ledMatrix(void)
   T1IR        = 0xff;        //reset all IRQ flags
   VICVectAddr = 0x00;        //dummy write to VIC to signal end of interrupt
 }
-

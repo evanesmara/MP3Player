@@ -36,7 +36,8 @@ static FATFS *FatFs; /* Pointer to the file system object (logical drive) */
 /*-----------------------------------------------------------------------*/
 
 /* Fill memory */
-static void mem_set (void* dst, int val, int cnt)
+static
+void mem_set (void* dst, int val, int cnt)
 {
 	char *d = (char*) dst;
 	while (cnt--)
@@ -44,7 +45,8 @@ static void mem_set (void* dst, int val, int cnt)
 }
 
 /* Compare memory to memory */
-static int mem_cmp (const void* dst, const void* src, int cnt)
+static
+int mem_cmp (const void* dst, const void* src, int cnt)
 {
 	const char *d = (const char *) dst, *s = (const char *) src;
 	int r = 0;
@@ -200,7 +202,9 @@ static FRESULT dir_find (DIR *dj /* Pointer to the directory object linked to th
 
 	res = dir_rewind (dj); /* Rewind directory object */
 	if (res != FR_OK)
+	{
 		return res;
+	}
 
 	dir = FatFs->buf;
 	do
@@ -208,7 +212,9 @@ static FRESULT dir_find (DIR *dj /* Pointer to the directory object linked to th
 		res = disk_readp (dir, dj->sect, (WORD) ((dj->index % 16) * 32), 32) /* Read an entry */
 		? FR_DISK_ERR : FR_OK;
 		if (res != FR_OK)
+		{
 			break;
+		}
 		c = dir[DIR_Name]; /* First character */
 		if (c == 0)
 		{
@@ -216,7 +222,9 @@ static FRESULT dir_find (DIR *dj /* Pointer to the directory object linked to th
 			break;
 		} /* Reached to end of table */
 		if (!(dir[DIR_Attr] & AM_VOL) && !mem_cmp (dir, dj->fn, 11)) /* Is it a valid entry? */
+		{
 			break;
+		}
 		res = dir_next (dj); /* Next entry */
 	} while (res == FR_OK);
 
@@ -239,24 +247,36 @@ static FRESULT dir_read (DIR *dj /* Pointer to the directory object to store rea
 	{
 		res = disk_readp (dir, dj->sect, (WORD) ((dj->index % 16) * 32), 32) /* Read an entry */
 		? FR_DISK_ERR : FR_OK;
+
 		if (res != FR_OK)
+		{
 			break;
+		}
 		c = dir[DIR_Name];
+
 		if (c == 0)
 		{
 			res = FR_NO_FILE;
 			break;
 		} /* Reached to end of table */
 		a = dir[DIR_Attr] & AM_MASK;
+
 		if (c != 0xE5 && c != '.' && !(a & AM_VOL)) /* Is it a valid entry? */
+		{
 			break;
+		}
+
 		res = dir_next (dj); /* Next entry */
 		if (res != FR_OK)
+		{
 			break;
+		}
 	}
 
 	if (res != FR_OK)
+	{
 		dj->sect = 0;
+	}
 
 	return res;
 }
@@ -283,15 +303,21 @@ const char **path /* Pointer to pointer to the segment in the path string */
 	si = i = 0;
 	ni = 8;
 	p = *path;
+
 	for (;;)
 	{
 		c = p[si++];
 		if (c <= ' ' || c == '/')
+		{
 			break; /* Break on end of segment */
+		}
+
 		if (c == '.' || i >= ni)
 		{
 			if (ni != 8 || c != '.')
+			{
 				break;
+			}
 			i = 8;
 			ni = 11;
 			continue;
@@ -308,7 +334,9 @@ const char **path /* Pointer to pointer to the segment in the path string */
 		} else
 		{ /* Single byte code */
 			if (IsLower(c))
+			{
 				c -= 0x20; /* toupper */
+			}
 			sfn[i++] = c;
 		}
 	}
@@ -340,9 +368,14 @@ FILINFO *fno /* Pointer to store the file information */
 		{ /* Copy file name body */
 			c = dir[i];
 			if (c == ' ')
+			{
 				break;
+			}
+
 			if (c == 0x05)
+			{
 				c = 0xE5;
+			}
 			*p++ = c;
 		}
 		if (dir[8] != ' ')
@@ -352,7 +385,9 @@ FILINFO *fno /* Pointer to store the file information */
 			{
 				c = dir[i];
 				if (c == ' ')
+				{
 					break;
+				}
 				*p++ = c;
 			}
 		}
@@ -378,9 +413,14 @@ const char *path /* Full-path string to find a file or directory */
 	BYTE *dir;
 
 	while (*path == ' ')
+	{
 		path++; /* Skip leading spaces */
+	}
+
 	if (*path == '/')
+	{
 		path++; /* Strip heading separator */
+	}
 	dj->sclust = 0; /* Set start directory (always root dir) */
 
 	if ((BYTE) *path <= ' ')
@@ -394,16 +434,23 @@ const char *path /* Full-path string to find a file or directory */
 		{
 			res = create_name (dj, &path); /* Get a segment */
 			if (res != FR_OK)
+			{
 				break;
+			}
 			res = dir_find (dj); /* Find it */
 			if (res != FR_OK)
 			{ /* Could not find the object */
 				if (res == FR_NO_FILE && !*(dj->fn + 11))
+				{
 					res = FR_NO_PATH;
+				}
 				break;
 			}
 			if (*(dj->fn + 11))
+			{
 				break; /* Last segment match. Function completed. */
+			}
+
 			dir = FatFs->buf; /* There is next segment. Follow the sub directory */
 			if (!(dir[DIR_Attr] & AM_DIR))
 			{ /* Cannot follow because it is a file */
@@ -431,15 +478,25 @@ DWORD sect /* Sector# (lba) to check if it is an FAT boot record or not */
 )
 {
 	if (disk_readp (buf, sect, 510, 2)) /* Read the boot sector */
+	{
 		return 3;
+	}
+
 	if (LD_WORD(buf) != 0xAA55) /* Check record signature */
+	{
 		return 2;
+	}
 
 	if (!disk_readp (buf, sect, BS_FilSysType, 2) && LD_WORD(buf) == 0x4146) /* Check FAT12/16 */
+	{
 		return 0;
+	}
+
 #if _FS_FAT32
 	if (!disk_readp (buf, sect, BS_FilSysType32, 2) && LD_WORD(buf) == 0x4146) /* Check FAT32 */
+	{
 		return 0;
+	}
 #endif
 	return 1;
 }
@@ -462,10 +519,14 @@ FRESULT pf_mount (FATFS *fs /* Pointer to new file system object (NULL: Unmount)
 
 	FatFs = 0;
 	if (!fs)
+	{
 		return FR_OK; /* Unregister fs object */
+	}
 
 	if (disk_initialize () & STA_NOINIT) /* Check if the drive is ready or not */
+	{
 		return FR_NOT_READY;
+	}
 
 	/* Search FAT partition on the drive */
 	bsect = 0;
@@ -486,35 +547,53 @@ FRESULT pf_mount (FATFS *fs /* Pointer to new file system object (NULL: Unmount)
 		}
 	}
 	if (fmt == 3)
+	{
 		return FR_DISK_ERR;
+	}
+
 	if (fmt)
+	{
 		return FR_NO_FILESYSTEM; /* No valid FAT patition is found */
+	}
 
 	/* Initialize the file system object */
 	if (disk_readp (buf, bsect, 13, sizeof(buf)))
+	{
 		return FR_DISK_ERR;
+	}
 
 	fsize = LD_WORD(buf+BPB_FATSz16-13); /* Number of sectors per FAT */
 	if (!fsize)
+	{
 		fsize = LD_DWORD(buf+BPB_FATSz32-13);
+	}
 
 	fsize *= buf[BPB_NumFATs - 13]; /* Number of sectors in FAT area */
 	fs->fatbase = bsect + LD_WORD(buf+BPB_RsvdSecCnt-13); /* FAT start sector (lba) */
 	fs->csize = buf[BPB_SecPerClus - 13]; /* Number of sectors per cluster */
 	fs->n_rootdir = LD_WORD(buf+BPB_RootEntCnt-13); /* Nmuber of root directory entries */
 	tsect = LD_WORD(buf+BPB_TotSec16-13); /* Number of sectors on the file system */
+
 	if (!tsect)
+	{
 		tsect = LD_DWORD(buf+BPB_TotSec32-13);
+	}
+
 	mclst = (tsect /* Last cluster# + 1 */
 	- LD_WORD(buf+BPB_RsvdSecCnt-13) - fsize - fs->n_rootdir / 16) / fs->csize + 2;
 	fs->max_clust = (CLUST) mclst;
 
 	fmt = FS_FAT12; /* Determine the FAT sub type */
 	if (mclst >= 0xFF7)
+	{
 		fmt = FS_FAT16; /* Number of clusters >= 0xFF5 */
+	}
+
 	if (mclst >= 0xFFF7) /* Number of clusters >= 0xFFF5 */
 #if _FS_FAT32
+	{
 		fmt = FS_FAT32;
+	}
 #else
 	return FR_NO_FILESYSTEM;
 #endif
@@ -522,10 +601,14 @@ FRESULT pf_mount (FATFS *fs /* Pointer to new file system object (NULL: Unmount)
 	fs->fs_type = fmt; /* FAT sub-type */
 #if _FS_FAT32
 	if (fmt == FS_FAT32)
+	{
 		fs->dirbase = LD_DWORD(buf+(BPB_RootClus-13)); /* Root directory start cluster */
-	else
+	} else
 #endif
+	{
 		fs->dirbase = fs->fatbase + fsize; /* Root directory start sector (lba) */
+	}
+
 	fs->database = fs->fatbase + fsize + fs->n_rootdir / 16; /* Data start sector (lba) */
 
 	fs->flag = 0;
@@ -547,16 +630,23 @@ FRESULT pf_open (const char *path /* Pointer to the file name */
 	FATFS *fs = FatFs;
 
 	if (!fs) /* Check file system */
+	{
 		return FR_NOT_ENABLED;
+	}
 
 	fs->flag = 0;
 	fs->buf = dir;
 	dj.fn = sp;
 	res = follow_path (&dj, path); /* Follow the file path */
 	if (res != FR_OK)
+	{
 		return res; /* Follow failed */
+	}
+
 	if (!dir[0] || (dir[DIR_Attr] & AM_DIR)) /* It is a directory */
+	{
 		return FR_NO_FILE;
+	}
 
 	fs->org_clust = /* File start cluster */
 #if _FS_FAT32
@@ -596,13 +686,20 @@ WORD* br /* Pointer to number of bytes read */
 
 	*br = 0;
 	if (!fs)
+	{
 		return FR_NOT_ENABLED; /* Check file system */
+	}
+
 	if (!(fs->flag & FA_OPENED)) /* Check if opened */
+	{
 		return FR_NOT_OPENED;
+	}
 
 	remain = fs->fsize - fs->fptr;
 	if (btr > remain)
+	{
 		btr = (WORD) remain; /* Truncate btr by remaining bytes */
+	}
 
 	while (btr)
 	{ /* Repeat until all data transferred */
@@ -612,22 +709,40 @@ WORD* br /* Pointer to number of bytes read */
 			{ /* On the cluster boundary? */
 				clst = (fs->fptr == 0) ? /* On the top of the file? */
 				fs->org_clust : get_fat (fs->curr_clust);
+
 				if (clst <= 1)
+				{
 					goto fr_abort;
+				}
+
 				fs->curr_clust = clst; /* Update current cluster */
 				fs->csect = 0; /* Reset sector offset in the cluster */
 			}
+
 			sect = clust2sect (fs->curr_clust); /* Get current sector */
+
 			if (!sect)
+			{
 				goto fr_abort;
+			}
+
 			fs->dsect = sect + fs->csect++;
 		}
+
 		rcnt = 512 - ((WORD) fs->fptr % 512); /* Get partial sector data from sector buffer */
+
 		if (rcnt > btr)
+		{
 			rcnt = btr;
+		}
+
 		dr = disk_readp (!buff ? 0 : rbuff, fs->dsect, (WORD) (fs->fptr % 512), rcnt);
+
 		if (dr)
+		{
 			goto fr_abort;
+		}
+
 		fs->fptr += rcnt;
 		rbuff += rcnt; /* Update pointers and counters */
 		btr -= rcnt;

@@ -1,0 +1,435 @@
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 1
+
+
+   1              		.code	16
+   2              		.file	"timer.c"
+   3              		.section	.debug_abbrev,"",%progbits
+   4              	.Ldebug_abbrev0:
+   5              		.section	.debug_info,"",%progbits
+   6              	.Ldebug_info0:
+   7              		.section	.debug_line,"",%progbits
+   8              	.Ldebug_line0:
+   9 0000 5C000000 		.text
+   9      02004100 
+   9      00000201 
+   9      FB0E0D00 
+   9      01010101 
+  10              	.Ltext0:
+  11              		.align	2
+  12              		.global	zegarek
+  13              		.code 16
+  14              		.thumb_func
+  15              		.type	zegarek, %function
+  16              	zegarek:
+  17              	.LFB2:
+  18              		.file 1 "timer.c"
+   1:timer.c       **** #include "timer.h"
+   2:timer.c       **** 
+   3:timer.c       **** 
+   4:timer.c       **** /*Delays program for passed amount of microseconds*/
+   5:timer.c       **** void zegarek(uint32 delayInUs){
+  19              		.loc 1 5 0
+  20              	.LVL0:
+   6:timer.c       ****     T1TCR = 0x02;          //stop and reset timer 1
+  21              		.loc 1 6 0
+  22 0000 0E49     		ldr	r1, .L8
+  23 0002 0223     		mov	r3, #2
+  24 0004 0B60     		str	r3, [r1]
+   7:timer.c       ****     T1PR  = 0x00;          //set prescaler to zero
+  25              		.loc 1 7 0
+  26 0006 0E4B     		ldr	r3, .L8+4
+  27 0008 0022     		mov	r2, #0
+  28 000a 1A60     		str	r2, [r3]
+   8:timer.c       ****     //set match register to desire microseconds delay
+   9:timer.c       **** 	T1MR0 = (delayInUs - 36)*
+  29              		.loc 1 9 0
+  30 000c 0301     		lsl	r3, r0, #4
+  31 000e 0D4A     		ldr	r2, .L8+8
+  32 0010 1B1A     		sub	r3, r3, r0
+  33 0012 9B00     		lsl	r3, r3, #2
+  34 0014 9B18     		add	r3, r3, r2
+  35 0016 0C4A     		ldr	r2, .L8+12
+  36 0018 1360     		str	r3, [r2]
+  10:timer.c       **** 			((CRYSTAL_FREQUENCY * PLL_FACTOR)/ (1000000 * VPBDIV_FACTOR));
+  11:timer.c       ****     T1IR  = 0xff;          //reset all interrrupt flags
+  37              		.loc 1 11 0
+  38 001a 0C4B     		ldr	r3, .L8+16
+  39 001c FF22     		mov	r2, #255
+  40 001e 1A60     		str	r2, [r3]
+  12:timer.c       ****     T1MCR = 0x04;          //set match behavior to stop timer on match
+  41              		.loc 1 12 0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 2
+
+
+  42 0020 0422     		mov	r2, #4
+  43 0022 1433     		add	r3, r3, #20
+  44 0024 1A60     		str	r2, [r3]
+  13:timer.c       ****     T1TCR = 0x01;          //start timer
+  45              		.loc 1 13 0
+  46 0026 0122     		mov	r2, #1
+  47 0028 0A60     		str	r2, [r1]
+  14:timer.c       **** 
+  15:timer.c       ****     //wait until delay time has elapsed
+  16:timer.c       ****     //if time has elapsed T1TCR will be 0x00(disabled)
+  17:timer.c       **** 	while (T1TCR & 0x01) asm("NOP");
+  48              		.loc 1 17 0
+  49 002a 0B68     		ldr	r3, [r1]
+  50              		.loc 1 5 0
+  51              		@ lr needed for prologue
+  52              		.loc 1 17 0
+  53 002c 1342     		tst	r3, r2
+  54 002e 04D0     		beq	.L4
+  55              	.L5:
+  56 0030 C046     		NOP
+  57              		.code	16
+  58 0032 024B     		ldr	r3, .L8
+  59 0034 1B68     		ldr	r3, [r3]
+  60 0036 DA07     		lsl	r2, r3, #31
+  61 0038 FAD4     		bmi	.L5
+  62              	.L4:
+  18:timer.c       **** }
+  63              		.loc 1 18 0
+  64              		@ sp needed for prologue
+  65 003a 7047     		bx	lr
+  66              	.L9:
+  67              		.align	2
+  68              	.L8:
+  69 003c 048000E0 		.word	-536838140
+  70 0040 0C8000E0 		.word	-536838132
+  71 0044 90F7FFFF 		.word	-2160
+  72 0048 188000E0 		.word	-536838120
+  73 004c 008000E0 		.word	-536838144
+  74              	.LFE2:
+  75              		.size	zegarek, .-zegarek
+  76              		.section	.debug_frame,"",%progbits
+  77              	.Lframe0:
+  78 0000 0C000000 		.4byte	.LECIE0-.LSCIE0
+  79              	.LSCIE0:
+  80 0004 FFFFFFFF 		.4byte	0xffffffff
+  81 0008 01       		.byte	0x1
+  82 0009 00       		.ascii	"\000"
+  83 000a 01       		.uleb128 0x1
+  84 000b 7C       		.sleb128 -4
+  85 000c 0E       		.byte	0xe
+  86 000d 0C       		.byte	0xc
+  87 000e 0D       		.uleb128 0xd
+  88 000f 00       		.uleb128 0x0
+  89              		.align	2
+  90              	.LECIE0:
+  91              	.LSFDE0:
+  92 0010 0C000000 		.4byte	.LEFDE0-.LASFDE0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 3
+
+
+  93              	.LASFDE0:
+  94 0014 00000000 		.4byte	.Lframe0
+  95 0018 00000000 		.4byte	.LFB2
+  96 001c 50000000 		.4byte	.LFE2-.LFB2
+  97              		.align	2
+  98              	.LEFDE0:
+  99              		.file 2 "../pre_emptive_os/api/general.h"
+ 100              		.text
+ 101              	.Letext0:
+ 102              		.section	.debug_info
+ 103 0000 A1000000 		.4byte	0xa1
+ 104 0004 0200     		.2byte	0x2
+ 105 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 106 000a 04       		.byte	0x4
+ 107 000b 01       		.uleb128 0x1
+ 108 000c 00000000 		.4byte	.Ldebug_line0
+ 109 0010 50000000 		.4byte	.Letext0
+ 110 0014 00000000 		.4byte	.Ltext0
+ 111 0018 5D000000 		.4byte	.LASF9
+ 112 001c 01       		.byte	0x1
+ 113 001d 55000000 		.4byte	.LASF10
+ 114 0021 9E000000 		.4byte	.LASF11
+ 115 0025 02       		.uleb128 0x2
+ 116 0026 47000000 		.4byte	.LASF0
+ 117 002a 01       		.byte	0x1
+ 118 002b 08       		.byte	0x8
+ 119 002c 02       		.uleb128 0x2
+ 120 002d 69000000 		.4byte	.LASF1
+ 121 0031 02       		.byte	0x2
+ 122 0032 07       		.byte	0x7
+ 123 0033 02       		.uleb128 0x2
+ 124 0034 16000000 		.4byte	.LASF2
+ 125 0038 04       		.byte	0x4
+ 126 0039 07       		.byte	0x7
+ 127 003a 02       		.uleb128 0x2
+ 128 003b 7C000000 		.4byte	.LASF3
+ 129 003f 01       		.byte	0x1
+ 130 0040 06       		.byte	0x6
+ 131 0041 02       		.uleb128 0x2
+ 132 0042 94000000 		.4byte	.LASF4
+ 133 0046 02       		.byte	0x2
+ 134 0047 05       		.byte	0x5
+ 135 0048 03       		.uleb128 0x3
+ 136 0049 696E7400 		.ascii	"int\000"
+ 137 004d 04       		.byte	0x4
+ 138 004e 05       		.byte	0x5
+ 139 004f 04       		.uleb128 0x4
+ 140 0050 2A000000 		.4byte	.LASF5
+ 141 0054 02       		.byte	0x2
+ 142 0055 57       		.byte	0x57
+ 143 0056 25000000 		.4byte	0x25
+ 144 005a 04       		.uleb128 0x4
+ 145 005b 23000000 		.4byte	.LASF6
+ 146 005f 02       		.byte	0x2
+ 147 0060 5F       		.byte	0x5f
+ 148 0061 33000000 		.4byte	0x33
+ 149 0065 02       		.uleb128 0x2
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 4
+
+
+ 150 0066 00000000 		.4byte	.LASF7
+ 151 006a 08       		.byte	0x8
+ 152 006b 05       		.byte	0x5
+ 153 006c 02       		.uleb128 0x2
+ 154 006d 30000000 		.4byte	.LASF8
+ 155 0071 08       		.byte	0x8
+ 156 0072 07       		.byte	0x7
+ 157 0073 05       		.uleb128 0x5
+ 158 0074 98000000 		.4byte	0x98
+ 159 0078 01       		.byte	0x1
+ 160 0079 0E000000 		.4byte	.LASF12
+ 161 007d 01       		.byte	0x1
+ 162 007e 05       		.byte	0x5
+ 163 007f 01       		.byte	0x1
+ 164 0080 00000000 		.4byte	.LFB2
+ 165 0084 50000000 		.4byte	.LFE2
+ 166 0088 01       		.byte	0x1
+ 167 0089 5D       		.byte	0x5d
+ 168 008a 06       		.uleb128 0x6
+ 169 008b D1000000 		.4byte	.LASF13
+ 170 008f 01       		.byte	0x1
+ 171 0090 05       		.byte	0x5
+ 172 0091 5A000000 		.4byte	0x5a
+ 173 0095 01       		.byte	0x1
+ 174 0096 50       		.byte	0x50
+ 175 0097 00       		.byte	0x0
+ 176 0098 07       		.uleb128 0x7
+ 177 0099 88000000 		.4byte	.LASF14
+ 178 009d 02       		.byte	0x2
+ 179 009e 66       		.byte	0x66
+ 180 009f 4F000000 		.4byte	0x4f
+ 181 00a3 00       		.byte	0x0
+ 182 00a4 00       		.byte	0x0
+ 183              		.section	.debug_abbrev
+ 184 0000 01       		.uleb128 0x1
+ 185 0001 11       		.uleb128 0x11
+ 186 0002 01       		.byte	0x1
+ 187 0003 10       		.uleb128 0x10
+ 188 0004 06       		.uleb128 0x6
+ 189 0005 12       		.uleb128 0x12
+ 190 0006 01       		.uleb128 0x1
+ 191 0007 11       		.uleb128 0x11
+ 192 0008 01       		.uleb128 0x1
+ 193 0009 25       		.uleb128 0x25
+ 194 000a 0E       		.uleb128 0xe
+ 195 000b 13       		.uleb128 0x13
+ 196 000c 0B       		.uleb128 0xb
+ 197 000d 03       		.uleb128 0x3
+ 198 000e 0E       		.uleb128 0xe
+ 199 000f 1B       		.uleb128 0x1b
+ 200 0010 0E       		.uleb128 0xe
+ 201 0011 00       		.byte	0x0
+ 202 0012 00       		.byte	0x0
+ 203 0013 02       		.uleb128 0x2
+ 204 0014 24       		.uleb128 0x24
+ 205 0015 00       		.byte	0x0
+ 206 0016 03       		.uleb128 0x3
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 5
+
+
+ 207 0017 0E       		.uleb128 0xe
+ 208 0018 0B       		.uleb128 0xb
+ 209 0019 0B       		.uleb128 0xb
+ 210 001a 3E       		.uleb128 0x3e
+ 211 001b 0B       		.uleb128 0xb
+ 212 001c 00       		.byte	0x0
+ 213 001d 00       		.byte	0x0
+ 214 001e 03       		.uleb128 0x3
+ 215 001f 24       		.uleb128 0x24
+ 216 0020 00       		.byte	0x0
+ 217 0021 03       		.uleb128 0x3
+ 218 0022 08       		.uleb128 0x8
+ 219 0023 0B       		.uleb128 0xb
+ 220 0024 0B       		.uleb128 0xb
+ 221 0025 3E       		.uleb128 0x3e
+ 222 0026 0B       		.uleb128 0xb
+ 223 0027 00       		.byte	0x0
+ 224 0028 00       		.byte	0x0
+ 225 0029 04       		.uleb128 0x4
+ 226 002a 16       		.uleb128 0x16
+ 227 002b 00       		.byte	0x0
+ 228 002c 03       		.uleb128 0x3
+ 229 002d 0E       		.uleb128 0xe
+ 230 002e 3A       		.uleb128 0x3a
+ 231 002f 0B       		.uleb128 0xb
+ 232 0030 3B       		.uleb128 0x3b
+ 233 0031 0B       		.uleb128 0xb
+ 234 0032 49       		.uleb128 0x49
+ 235 0033 13       		.uleb128 0x13
+ 236 0034 00       		.byte	0x0
+ 237 0035 00       		.byte	0x0
+ 238 0036 05       		.uleb128 0x5
+ 239 0037 2E       		.uleb128 0x2e
+ 240 0038 01       		.byte	0x1
+ 241 0039 01       		.uleb128 0x1
+ 242 003a 13       		.uleb128 0x13
+ 243 003b 3F       		.uleb128 0x3f
+ 244 003c 0C       		.uleb128 0xc
+ 245 003d 03       		.uleb128 0x3
+ 246 003e 0E       		.uleb128 0xe
+ 247 003f 3A       		.uleb128 0x3a
+ 248 0040 0B       		.uleb128 0xb
+ 249 0041 3B       		.uleb128 0x3b
+ 250 0042 0B       		.uleb128 0xb
+ 251 0043 27       		.uleb128 0x27
+ 252 0044 0C       		.uleb128 0xc
+ 253 0045 11       		.uleb128 0x11
+ 254 0046 01       		.uleb128 0x1
+ 255 0047 12       		.uleb128 0x12
+ 256 0048 01       		.uleb128 0x1
+ 257 0049 40       		.uleb128 0x40
+ 258 004a 0A       		.uleb128 0xa
+ 259 004b 00       		.byte	0x0
+ 260 004c 00       		.byte	0x0
+ 261 004d 06       		.uleb128 0x6
+ 262 004e 05       		.uleb128 0x5
+ 263 004f 00       		.byte	0x0
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 6
+
+
+ 264 0050 03       		.uleb128 0x3
+ 265 0051 0E       		.uleb128 0xe
+ 266 0052 3A       		.uleb128 0x3a
+ 267 0053 0B       		.uleb128 0xb
+ 268 0054 3B       		.uleb128 0x3b
+ 269 0055 0B       		.uleb128 0xb
+ 270 0056 49       		.uleb128 0x49
+ 271 0057 13       		.uleb128 0x13
+ 272 0058 02       		.uleb128 0x2
+ 273 0059 0A       		.uleb128 0xa
+ 274 005a 00       		.byte	0x0
+ 275 005b 00       		.byte	0x0
+ 276 005c 07       		.uleb128 0x7
+ 277 005d 34       		.uleb128 0x34
+ 278 005e 00       		.byte	0x0
+ 279 005f 03       		.uleb128 0x3
+ 280 0060 0E       		.uleb128 0xe
+ 281 0061 3A       		.uleb128 0x3a
+ 282 0062 0B       		.uleb128 0xb
+ 283 0063 3B       		.uleb128 0x3b
+ 284 0064 0B       		.uleb128 0xb
+ 285 0065 49       		.uleb128 0x49
+ 286 0066 13       		.uleb128 0x13
+ 287 0067 1C       		.uleb128 0x1c
+ 288 0068 0B       		.uleb128 0xb
+ 289 0069 00       		.byte	0x0
+ 290 006a 00       		.byte	0x0
+ 291 006b 00       		.byte	0x0
+ 292              		.section	.debug_pubnames,"",%progbits
+ 293 0000 1A000000 		.4byte	0x1a
+ 294 0004 0200     		.2byte	0x2
+ 295 0006 00000000 		.4byte	.Ldebug_info0
+ 296 000a A5000000 		.4byte	0xa5
+ 297 000e 73000000 		.4byte	0x73
+ 298 0012 7A656761 		.ascii	"zegarek\000"
+ 298      72656B00 
+ 299 001a 00000000 		.4byte	0x0
+ 300              		.section	.debug_aranges,"",%progbits
+ 301 0000 1C000000 		.4byte	0x1c
+ 302 0004 0200     		.2byte	0x2
+ 303 0006 00000000 		.4byte	.Ldebug_info0
+ 304 000a 04       		.byte	0x4
+ 305 000b 00       		.byte	0x0
+ 306 000c 0000     		.2byte	0x0
+ 307 000e 0000     		.2byte	0x0
+ 308 0010 00000000 		.4byte	.Ltext0
+ 309 0014 50000000 		.4byte	.Letext0-.Ltext0
+ 310 0018 00000000 		.4byte	0x0
+ 311 001c 00000000 		.4byte	0x0
+ 312              		.section	.debug_str,"MS",%progbits,1
+ 313              	.LASF7:
+ 314 0000 6C6F6E67 		.ascii	"long long int\000"
+ 314      206C6F6E 
+ 314      6720696E 
+ 314      7400
+ 315              	.LASF12:
+ 316 000e 7A656761 		.ascii	"zegarek\000"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 7
+
+
+ 316      72656B00 
+ 317              	.LASF2:
+ 318 0016 756E7369 		.ascii	"unsigned int\000"
+ 318      676E6564 
+ 318      20696E74 
+ 318      00
+ 319              	.LASF6:
+ 320 0023 75696E74 		.ascii	"uint32\000"
+ 320      333200
+ 321              	.LASF5:
+ 322 002a 75696E74 		.ascii	"uint8\000"
+ 322      3800
+ 323              	.LASF8:
+ 324 0030 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 324      206C6F6E 
+ 324      6720756E 
+ 324      7369676E 
+ 324      65642069 
+ 325              	.LASF0:
+ 326 0047 756E7369 		.ascii	"unsigned char\000"
+ 326      676E6564 
+ 326      20636861 
+ 326      7200
+ 327              	.LASF10:
+ 328 0055 74696D65 		.ascii	"timer.c\000"
+ 328      722E6300 
+ 329              	.LASF9:
+ 330 005d 474E5520 		.ascii	"GNU C 4.1.1\000"
+ 330      4320342E 
+ 330      312E3100 
+ 331              	.LASF1:
+ 332 0069 73686F72 		.ascii	"short unsigned int\000"
+ 332      7420756E 
+ 332      7369676E 
+ 332      65642069 
+ 332      6E7400
+ 333              	.LASF3:
+ 334 007c 7369676E 		.ascii	"signed char\000"
+ 334      65642063 
+ 334      68617200 
+ 335              	.LASF14:
+ 336 0088 53454D41 		.ascii	"SEMAFOR_SPI\000"
+ 336      464F525F 
+ 336      53504900 
+ 337              	.LASF4:
+ 338 0094 73686F72 		.ascii	"short int\000"
+ 338      7420696E 
+ 338      7400
+ 339              	.LASF11:
+ 340 009e 2F637967 		.ascii	"/cygdrive/e/MP3Player/2148/testProgram_lpc2148_edu\000"
+ 340      64726976 
+ 340      652F652F 
+ 340      4D503350 
+ 340      6C617965 
+ 341              	.LASF13:
+ 342 00d1 64656C61 		.ascii	"delayInUs\000"
+ 342      79496E55 
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 8
+
+
+ 342      7300
+ 343              		.ident	"GCC: (GNU) 4.1.1"
+ARM GAS  /cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 timer.c
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s:1      .text:00000000 $t
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s:16     .text:00000000 zegarek
+/cygdrive/c/DOCUME~1/mkwapisz/LOCALS~1/Temp/ccROh1qX.s:69     .text:0000003c $d
+
+NO UNDEFINED SYMBOLS

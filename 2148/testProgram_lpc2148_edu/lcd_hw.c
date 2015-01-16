@@ -7,15 +7,20 @@
  *    Send 9-bit data to LCD controller
  *
  ****************************************************************************/
-void sendToLCD(uint8_t firstBit, uint8_t data) {
+void sendToLCD (uint8_t firstBit, uint8_t data)
+{
 	//disable SPI
 	IOCLR0 = LCD_CLK;
 	PINSEL0 &= 0xffffc0ff;
 
 	if (1 == firstBit)
+	{
 		IOSET0 = LCD_MOSI; //set MOSI
+	}
 	else
+	{
 		IOCLR0 = LCD_MOSI; //reset MOSI
+	}
 
 	//Set clock high
 	IOSET0 = LCD_CLK;
@@ -36,7 +41,9 @@ void sendToLCD(uint8_t firstBit, uint8_t data) {
 	//send byte
 	S0SPDR = data;
 	while ((S0SPSR & 0x80) == 0)
-		;
+	{
+		// Nic nie rób.
+	}
 }
 
 /*****************************************************************************
@@ -45,12 +52,13 @@ void sendToLCD(uint8_t firstBit, uint8_t data) {
  *    Initialize the SPI interface for the LCD controller
  *
  ****************************************************************************/
-void initSpiForLcd(void) {
+void initSpiForLcd (void)
+{
 	//make SPI slave chip select an output and set signal high
 	IODIR0 |= (LCD_CS | LCD_CLK | LCD_MOSI);
 
 	//deselect controller
-	selectLCD(FALSE);
+	selectLCD (FALSE);
 
 	//connect SPI bus to IO-pins
 	PINSEL0 |= 0x00001500;
@@ -66,9 +74,13 @@ void initSpiForLcd(void) {
  *    Select/deselect LCD controller (by controlling chip select signal)
  *
  ****************************************************************************/
-void selectLCD(tBool select) {
+void selectLCD (tBool select)
+{
 	if (TRUE == select)
+	{
 		IOCLR0 = LCD_CS;
-	else
+	} else
+	{
 		IOSET0 = LCD_CS;
+	}
 }

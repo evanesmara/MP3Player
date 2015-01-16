@@ -15,7 +15,7 @@
 #define SPI_SCK_PIN    4   /* Clock*/
 #define SPI_MISO_PIN   5   /* from Card*/
 #define SPI_MOSI_PIN   6   /* to Card*/
-#define SPI_SS_PIN	   11   /* Card-Select*/
+#define SPI_SS_PIN	   11  /* Card-Select*/
 
 #define SPI_PINSEL     PINSEL0
 #define SPI_SCK_FUNCBIT   8
@@ -26,8 +26,8 @@
 #define SPI_PRESCALE_REG  S0SPCCR
 #define SPI_PRESCALE_MIN  64
 
-#define SELECT_CARD()   IOCLR0 = (1<<SPI_SS_PIN)
-#define UNSELECT_CARD()	IOSET0 = (1<<SPI_SS_PIN)
+#define SELECT_CARD()   IOCLR0 = (1 << SPI_SS_PIN)
+#define UNSELECT_CARD()	IOSET0 = (1 << SPI_SS_PIN)
 
 //inicjuj SPI
 void initSpi (void);

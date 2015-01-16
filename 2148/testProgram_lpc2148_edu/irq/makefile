@@ -50,8 +50,9 @@ EFLAGS  = -mthumb-interwork
 CODE    = ARM
 
 # List C source files here.
-CSRCS   = irq_timer1.c \
-          irqUart.c
+CSRCS   = irq_timer1.c	\
+          irqUart.c		\
+          wave.c
 
 # List assembler source files here
 ASRCS   = 

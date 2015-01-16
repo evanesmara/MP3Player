@@ -63,10 +63,17 @@ static void ZapalajDiode (tU8 kolor, int ifInit)
 		PWM_LER = 0x01;
 		break;
 
-	case 3: // z³ó³ty
+	case 3: // ¿ó³ty
 		PWM_MR2 = 100;
 		PWM_MR4 = 0;
 		PWM_MR6 = 100;
+		PWM_LER = 0x01;
+		break;
+
+	case 4:
+		PWM_MR2 = 75;
+		PWM_MR4 = 0;
+		PWM_MR6 = 25;
 		PWM_LER = 0x01;
 		break;
 

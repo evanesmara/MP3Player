@@ -2,9 +2,7 @@
 #define WAVE_H
 
 #include "../pre_emptive_os/api/general.h"
-#include "functions.h"
-
-
+#include "../functions.h"
 
 typedef struct { //g³ówny nag³ówek, okreœlamy jaki uk³ad bitów
 	uint32 chunkId; //big
@@ -23,7 +21,6 @@ typedef struct {
 	uint16 bitsPerSample; //little
 } FmtChunk; //fmt
 
-
 typedef struct {
 	uint32 subChunkId; //big [data]
 	uint32 subChunkSize; //little //data/samples size
@@ -37,6 +34,12 @@ tBool playerInit(void);
 //rozpocznij granie
 tBool playWave(PlayerStatus *status, TimerStatus *timer);
 
+//Inne
+static void timer0ISR (void) __attribute__ ((interrupt));
+static void irqIni (tU16 czestotliwosc, void(*pCallback) ());
+static void zatrzymajIrq ();
+static void callback1 (void);
 
+static void (*pDelayCallback) (void) = NULL;
 
 #endif // WAVE_H

@@ -86,6 +86,32 @@
 #define IODIR3         (*((volatile unsigned long *) 0xE0028038))
 #define IOCLR3         (*((volatile unsigned long *) 0xE002803C))
 
+/* General Purpose Input/Output (GPIO) */
+#define IOPIN          (*((volatile unsigned long *) 0xE0028000))
+#define IOSET          (*((volatile unsigned long *) 0xE0028004))
+#define IODIR          (*((volatile unsigned long *) 0xE0028008))
+#define IOCLR          (*((volatile unsigned long *) 0xE002800C))
+
+#define IOPIN0         (*((volatile unsigned long *) 0xE0028000))
+#define IOSET0         (*((volatile unsigned long *) 0xE0028004))
+#define IODIR0         (*((volatile unsigned long *) 0xE0028008))
+#define IOCLR0         (*((volatile unsigned long *) 0xE002800C))
+
+#define IOPIN1         (*((volatile unsigned long *) 0xE0028010))
+#define IOSET1         (*((volatile unsigned long *) 0xE0028014))
+#define IODIR1         (*((volatile unsigned long *) 0xE0028018))
+#define IOCLR1         (*((volatile unsigned long *) 0xE002801C))
+
+#define IO0PIN         (*((volatile unsigned long *) 0xE0028000))
+#define IO0SET         (*((volatile unsigned long *) 0xE0028004))
+#define IO0DIR         (*((volatile unsigned long *) 0xE0028008))
+#define IO0CLR         (*((volatile unsigned long *) 0xE002800C))
+
+#define IO1PIN         (*((volatile unsigned long *) 0xE0028010))
+#define IO1SET         (*((volatile unsigned long *) 0xE0028014))
+#define IO1DIR         (*((volatile unsigned long *) 0xE0028018))
+#define IO1CLR         (*((volatile unsigned long *) 0xE002801C))
+
 /* Fast I/O setup */
 #define FIO_BASE_ADDR		0x3FFFC000
 #define FIO0DIR        (*((volatile unsigned long *) 0x3FFFC000)) 

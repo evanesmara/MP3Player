@@ -46,24 +46,6 @@ void setSpiSpeed (BYTE speed)
 
 BYTE my_spiSend (BYTE outgoing)
 {
-	//	while (1) {
-	//		if (SEMAFOR_SPI == 0) {
-	//			SEMAFOR_SPI = 1;
-	//			BYTE incoming;
-	//
-	//			S0SPDR = outgoing;
-	//			while (!(S0SPSR & (1 << SPIF)))
-	//				;
-	//			incoming = S0SPDR;
-	//
-	//			SEMAFOR_SPI = 0;
-	//			return (incoming);
-	//			//			return 1;
-	//		} else {
-	//			SEMAFOR_SPI = 0;
-	//			return 0;
-	//		}
-	//	}
 	BYTE incoming;
 
 	S0SPDR = outgoing;
@@ -78,27 +60,11 @@ BYTE incoming;
 
 BYTE spiSend (BYTE toSend)
 {
-	//	while (1) {
-	//		if (SEMAFOR_SPI == 0) {
-	//			SEMAFOR_SPI = 1;
-	//			S0SPDR = toSend;
-	//			while (!(S0SPSR & (1 << SPIF)))
-	//				;
-	//
-	//			incoming = S0SPDR;
-	//
-	//			SEMAFOR_SPI = 0;
-	//			return incoming;
-	//		} else
-	//			return 0;
-	//	}
 	S0SPDR = toSend;
 	while (!(S0SPSR & (1 << SPIF)))
 		;
 
 	incoming = S0SPDR;
-
-//	UNSELECT_CARD();
 
 	return incoming;
 }

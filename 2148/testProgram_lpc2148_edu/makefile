@@ -40,7 +40,7 @@ DEBUG   = 1
 
 # Optimization setting
 # (-Os for small code size, -O2 for speed)
-OFLAGS  = -Os
+OFLAGS  = -O2
 
 # Extra general flags
 # For example, compile for ARM / THUMB interworking (EFLAGS = -mthumb-interwork)
@@ -51,20 +51,23 @@ EFLAGS  = -mthumb-interwork
 CODE    = THUMB
 
 # List C source files here.
-CSRCS   = main.c		\
-          eeprom.c		\
-          i2c.c			\
-          uart.c		\
-          testAdc.c		\
-          testLcd.c		\
-          testRGB.c		\
-          lcd.c			\
-          lcd_hw.c		\
-          key.c       	\
-          functions.c   \
-          wave.c        \
-          timer.c       \
-          led.c             
+CSRCS = main.c\
+	eeprom.c\
+	i2c.c\
+	uart.c\
+	testAdc.c\
+	testLcd.c\
+	testRGB.c\
+	lcd.c\
+	lcd_hw.c\
+	key.c\
+	functions.c\
+	timer.c\
+	wave.c\
+	led.c\
+	startupSound.c         
+
+#SRCARM = 
 
 # List assembler source files here
 ASRCS   = 

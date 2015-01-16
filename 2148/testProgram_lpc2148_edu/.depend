@@ -2,8 +2,9 @@ main.o: main.c ../pre_emptive_os/api/osapi.h \
   ../pre_emptive_os/api/../api/general.h ../pre_emptive_os/api/general.h \
   ../startup/ea_init.h ../startup/lpc2xxx.h ../startup/consol.h testLcd.c \
   ../startup/printf_P.h ../startup/config.h ../startup/consol.h testRGB.c \
-  EAvoice.c i2c.h key.h usb/lpc_usb.h usb/lpc_hid.h usb/lpc_usb.h \
-  pff2/src/diskio.h pff2/src/integer.h pff2/src/pff.h functions.h wave.h
+  i2c.h key.h usb/lpc_usb.h usb/lpc_hid.h usb/lpc_usb.h pff2/src/diskio.h \
+  pff2/src/integer.h pff2/src/pff.h functions.h irq/wave.h \
+  ../startup/../pre_emptive_os/api/general.h irq/../functions.h
 eeprom.o: eeprom.c ../pre_emptive_os/api/general.h i2c.h
 i2c.o: i2c.c ../pre_emptive_os/api/general.h i2c.h ../startup/lpc2xxx.h
 uart.o: uart.c ../pre_emptive_os/api/general.h ../startup/lpc2xxx.h \
@@ -31,9 +32,7 @@ key.o: key.c ../pre_emptive_os/api/osapi.h \
 functions.o: functions.c functions.h pff2/src/pff.h pff2/src/integer.h \
   ../startup/lpc2xxx.h lcd.h ../pre_emptive_os/api/general.h \
   ../startup/printf_P.h ../startup/config.h ../startup/consol.h
-wave.o: wave.c wave.h ../pre_emptive_os/api/general.h functions.h \
-  pff2/src/pff.h pff2/src/integer.h ../startup/lpc2xxx.h \
-  ../startup/general.h ../startup/config.h timer.h led.h lcd.h
 timer.o: timer.c timer.h ../startup/lpc2xxx.h \
   ../pre_emptive_os/api/general.h ../startup/config.h
 led.o: led.c ../startup/lpc2xxx.h led.h
+startupSound.o: startupSound.c
